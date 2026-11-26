@@ -17,6 +17,7 @@ import { MEDICATION_CATEGORIES } from '../data/medications';
 import { SAMPLE_PRESCRIPTIONS, type SamplePrescription } from '../data/samplePrescriptions';
 import {
   createCustomMedication,
+  normalizeText,
   parsePrescriptionText,
   searchMedications,
   type ParsedMedicationMatch,
@@ -85,6 +86,8 @@ export function AdicionarView({
   const [customColor, setCustomColor] = useState<'teal' | 'pink' | 'blue' | 'amber' | 'purple'>('teal');
 
   const resultsSectionRef = useRef<HTMLElement | null>(null);
+  const scanRequestIdRef = useRef(0);
+  const [scrollTrigger, setScrollTrigger] = useState(0);
 
   useEffect(() => {
     return () => {
@@ -94,18 +97,33 @@ export function AdicionarView({
 
   useEffect(() => {
     return () => {
+      scanRequestIdRef.current += 1;
       stopVoiceRef.current?.();
     };
   }, []);
 
-  const scrollResultsIntoView = () => {
-    requestAnimationFrame(() => {
+  useEffect(() => {
+    if (scrollTrigger === 0) return;
+    const frameId = requestAnimationFrame(() => {
       resultsSectionRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
     });
+    return () => cancelAnimationFrame(frameId);
+  }, [scrollTrigger]);
+
+  const requestScrollResults = () => {
+    setScrollTrigger((c) => c + 1);
+  };
+
+  const handleSelectMode = (nextMode: AddMode) => {
+    if (nextMode !== 'voz' && isListening) {
+      stopVoiceRef.current?.();
+      setIsListening(false);
+    }
+    setMode(nextMode);
   };
 
   const processImageFile = async (file: File) => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    const requestId = ++scanRequestIdRef.current;
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     setScanning(true);
@@ -114,12 +132,16 @@ export function AdicionarView({
     setScanNotice(null);
     setScanMatches([]);
     setAddedFeedbackIds([]);
-    scrollResultsIntoView();
+    setVoiceError(null);
+    requestScrollResults();
 
     const result = await scanImageForMedications(file, catalog, (pct, stage) => {
+      if (scanRequestIdRef.current !== requestId) return;
       setScanProgress(pct);
       setScanStage(stage);
     });
+
+    if (scanRequestIdRef.current !== requestId) return;
 
     setScanning(false);
     setExtractedText(result.extractedText);
@@ -157,7 +179,7 @@ export function AdicionarView({
           const file = item.getAsFile();
           if (file) {
             e.preventDefault();
-            setMode('print');
+            handleSelectMode('print');
             void processImageFile(file);
             return;
           }
@@ -167,13 +189,15 @@ export function AdicionarView({
   };
 
   const handleAnalyzePastedText = (textToParse: string) => {
+    scanRequestIdRef.current += 1;
+    setScanning(false);
     setPreviewUrl(null);
     setVoiceError(null);
     setExtractedText(textToParse);
     const matches = parsePrescriptionText(textToParse, catalog);
     setScanMatches(matches);
     setAddedFeedbackIds([]);
-    scrollResultsIntoView();
+    requestScrollResults();
     if (matches.length > 0) {
       setScanNotice(`Identificamos ${matches.length} remédio(s) no texto da receita!`);
       onSpeakSection(
@@ -188,9 +212,57 @@ export function AdicionarView({
   };
 
   const handleUseSample = (sample: SamplePrescription) => {
-    setPreviewUrl(null);
     setPastedText(sample.extractedText);
     handleAnalyzePastedText(sample.extractedText);
+  };
+
+  const applyVoiceSearchResult = (transcript: string) => {
+    scanRequestIdRef.current += 1;
+    setScanning(false);
+    setPreviewUrl(null);
+    setExtractedText('');
+    setAddedFeedbackIds([]);
+    setVoiceError(null);
+    setVoiceTranscript(transcript);
+
+    const matches = parsePrescriptionText(transcript, catalog);
+    const meaningfulTokens = normalizeText(transcript)
+      .split(' ')
+      .filter((t) => t.length >= 2);
+    const fallbackList =
+      meaningfulTokens.length > 0 ? searchMedications(catalog, transcript) : [];
+
+    if (matches.length > 0) {
+      setScanMatches(matches);
+      setScanNotice(
+        `Encontramos ${matches.length} ${matches.length === 1 ? 'remédio' : 'remédios'} pelo que você falou!`
+      );
+      requestScrollResults();
+      onSpeakSection(
+        'voice-match',
+        `Ouvi ${transcript}. Encontrei ${matches.map((m) => m.medication.name).join(' e ')}. Toque para abrir.`
+      );
+    } else if (fallbackList.length > 0) {
+      setScanMatches([
+        {
+          medication: fallbackList[0],
+          matchedTerm: transcript,
+          detectedTimes: fallbackList[0].howToTake.defaultTimes,
+          detectedDosage: fallbackList[0].howToTake.defaultDosage,
+          confidence: 'media',
+        },
+      ]);
+      setScanNotice(`Encontramos ${fallbackList[0].name} pelo que você falou!`);
+      requestScrollResults();
+      onSpeakSection(
+        'voice-match',
+        `Ouvi ${transcript}. Encontrei ${fallbackList[0].name}. Toque para abrir.`
+      );
+    } else {
+      setScanMatches([]);
+      setScanNotice(null);
+      setVoiceError(`Ouvi "${transcript}", mas não achei no catálogo. Você pode cadastrar abaixo.`);
+    }
   };
 
   const handleToggleMic = () => {
@@ -200,50 +272,11 @@ export function AdicionarView({
       return;
     }
 
+    onStopSpeaking();
     setVoiceError(null);
     setIsListening(true);
     const stopFn = speechService.startVoiceSearch({
-      onResult: (transcript) => {
-        setPreviewUrl(null);
-        setExtractedText('');
-        setAddedFeedbackIds([]);
-        setVoiceError(null);
-        setVoiceTranscript(transcript);
-        setSearchQuery(transcript);
-        const matches = parsePrescriptionText(transcript, catalog);
-        const fallbackList = searchMedications(catalog, transcript);
-        if (matches.length > 0) {
-          setScanMatches(matches);
-          setScanNotice(
-            `Encontramos ${matches.length} ${matches.length === 1 ? 'remédio' : 'remédios'} pelo que você falou!`
-          );
-          scrollResultsIntoView();
-          onSpeakSection(
-            'voice-match',
-            `Ouvi ${transcript}. Encontrei ${matches.map((m) => m.medication.name).join(' e ')}. Toque para abrir.`
-          );
-        } else if (fallbackList.length > 0) {
-          setScanMatches([
-            {
-              medication: fallbackList[0],
-              matchedTerm: transcript,
-              detectedTimes: fallbackList[0].howToTake.defaultTimes,
-              detectedDosage: fallbackList[0].howToTake.defaultDosage,
-              confidence: 'media',
-            },
-          ]);
-          setScanNotice(`Encontramos ${fallbackList[0].name} pelo que você falou!`);
-          scrollResultsIntoView();
-          onSpeakSection(
-            'voice-match',
-            `Ouvi ${transcript}. Encontrei ${fallbackList[0].name}. Toque para abrir.`
-          );
-        } else {
-          setScanMatches([]);
-          setScanNotice(null);
-          setVoiceError(`Ouvi "${transcript}", mas não achei no catálogo. Você pode cadastrar abaixo.`);
-        }
-      },
+      onResult: applyVoiceSearchResult,
       onError: (msg) => {
         setVoiceError(msg);
       },
@@ -330,7 +363,7 @@ export function AdicionarView({
           type="button"
           role="tab"
           aria-selected={mode === 'foto'}
-          onClick={() => setMode('foto')}
+          onClick={() => handleSelectMode('foto')}
           className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-center gap-3 ${
             mode === 'foto'
               ? 'border-[#0D9488] bg-teal-50/80 shadow-xs'
@@ -350,7 +383,7 @@ export function AdicionarView({
           type="button"
           role="tab"
           aria-selected={mode === 'print'}
-          onClick={() => setMode('print')}
+          onClick={() => handleSelectMode('print')}
           className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-center gap-3 ${
             mode === 'print'
               ? 'border-[#0D9488] bg-teal-50/80 shadow-xs'
@@ -370,7 +403,7 @@ export function AdicionarView({
           type="button"
           role="tab"
           aria-selected={mode === 'voz'}
-          onClick={() => setMode('voz')}
+          onClick={() => handleSelectMode('voz')}
           className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-center gap-3 ${
             mode === 'voz'
               ? 'border-[#0D9488] bg-teal-50/80 shadow-xs'
@@ -390,7 +423,7 @@ export function AdicionarView({
           type="button"
           role="tab"
           aria-selected={mode === 'catalogo'}
-          onClick={() => setMode('catalogo')}
+          onClick={() => handleSelectMode('catalogo')}
           className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-center gap-3 ${
             mode === 'catalogo'
               ? 'border-[#0D9488] bg-teal-50/80 shadow-xs'
@@ -685,10 +718,7 @@ export function AdicionarView({
                   <button
                     key={label}
                     type="button"
-                    onClick={() => {
-                      setVoiceTranscript(label);
-                      handleAnalyzePastedText(label);
-                    }}
+                    onClick={() => applyVoiceSearchResult(label)}
                     className="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-teal-100 text-slate-800 text-xs font-extrabold cursor-pointer"
                   >
                     {label}
