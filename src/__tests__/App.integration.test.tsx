@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import * as ocrScanner from '../services/ocrScanner';
+import { MEDICATIONS_CATALOG } from '../data/medications';
 
 // Mock Web Speech API cleanly for jsdom
 function installSpeechMocks() {
@@ -204,5 +206,261 @@ describe('Meu Remédio — Integration Flows', () => {
     await user.click(within(dialog).getByRole('button', { name: /Salvar Alarme/i }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.getByText('Puran T4')).toBeInTheDocument();
+  });
+
+  it('allows switching voice speed (Normal/Devagar) in the header before speaking and toggles MedicineCabinetView playback cleanly', async () => {
+    const user = userEvent.setup();
+    const { speakMock, cancelMock } = installSpeechMocks();
+    render(<App />);
+
+    // Speed control is accessible BEFORE any speech starts
+    const speedBtn = screen.getByRole('button', { name: /Velocidade da voz: Normal/i });
+    expect(speedBtn).toHaveAttribute('aria-pressed', 'false');
+    await user.click(speedBtn);
+
+    expect(
+      screen.getByRole('button', { name: /Velocidade da voz: Devagar/i })
+    ).toHaveAttribute('aria-pressed', 'true');
+
+    // Subsequent speech immediately uses slow rate (0.8)
+    await user.click(screen.getByRole('button', { name: /OUVIR TUDO EM VOZ ALTA/i }));
+    expect(speakMock).toHaveBeenCalled();
+    expect(speakMock.mock.calls[0][0].rate).toBe(0.8);
+
+    // Toggling speed back to normal while speaking restarts active utterance at normal rate (0.98)
+    await user.click(screen.getByRole('button', { name: /Velocidade da voz: Devagar/i }));
+    const latestUtterance = speakMock.mock.calls[speakMock.mock.calls.length - 1][0];
+    expect(latestUtterance.rate).toBe(0.98);
+
+    // Turning voice OFF hides the speed pill; turning it back ON restores it
+    await user.click(screen.getByRole('button', { name: /Desativar leitura em voz alta/i }));
+    expect(screen.queryByRole('button', { name: /Velocidade da voz/i })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Ativar leitura em voz alta/i }));
+    expect(screen.getByRole('button', { name: /Velocidade da voz/i })).toBeInTheDocument();
+
+    // Open Meus Remédios cabinet and verify SpeakButton starts AND toggles stop (not restart)
+    await user.click(screen.getByRole('button', { name: /Voltar para Meus Remédios/i }));
+    expect(screen.getByText('Sua Caixinha de Remédios')).toBeInTheDocument();
+
+    speakMock.mockClear();
+    cancelMock.mockClear();
+
+    const cabinetSpeakBtn = screen.getByRole('button', { name: /Ouvir lista dos meus remédios/i });
+    await user.click(cabinetSpeakBtn);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(speakMock.mock.calls[0][0].text).toContain('Iumi');
+
+    const cabinetStopBtn = screen.getByRole('button', {
+      name: /Parar leitura: Ouvir lista dos meus remédios/i,
+    });
+    await user.click(cabinetStopBtn);
+    expect(cancelMock).toHaveBeenCalled();
+    // Clicking while already playing MUST stop rather than calling speak() again
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(
+      screen.getByRole('button', { name: /^Ouvir lista dos meus remédios$/i })
+    ).toBeInTheDocument();
+  });
+
+  it('provides per-dose SpeakButtons on Horários Hoje and adherence SpeakButtons on Histórico', async () => {
+    const user = userEvent.setup();
+    const { speakMock, cancelMock } = installSpeechMocks();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /Horários/i }));
+    speakMock.mockClear();
+    cancelMock.mockClear();
+
+    // Individual dose card SpeakButton in Hoje tab reads medicine, dosage, time, and status
+    const iumiDoseSpeakBtn = screen.getByRole('button', { name: /Ouvir dose de Iumi às 21:00/i });
+    await user.click(iumiDoseSpeakBtn);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    const doseSpeechText: string = speakMock.mock.calls[0][0].text;
+    expect(doseSpeechText).toContain('Iumi');
+    expect(doseSpeechText).toContain('1 comprimido');
+    expect(doseSpeechText).toContain('21:00');
+
+    // Clicking again stops instead of restarting
+    await user.click(
+      screen.getByRole('button', { name: /Parar leitura: Ouvir dose de Iumi às 21:00/i })
+    );
+    expect(cancelMock).toHaveBeenCalled();
+    expect(speakMock).toHaveBeenCalledTimes(1);
+
+    // Mark Iumi dose taken and verify its SpeakButton now announces taken status
+    const takeButtons = screen.getAllByRole('button', { name: /TOMEI AGORA/i });
+    await user.click(takeButtons[takeButtons.length - 1]);
+    speakMock.mockClear();
+
+    await user.click(screen.getByRole('button', { name: /Ouvir dose de Iumi às 21:00/i }));
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(speakMock.mock.calls[0][0].text).toMatch(/Já foi tomado às \d{2}:\d{2}/);
+
+    // Switch to Histórico tab and verify both 7-day and selected-day SpeakButtons
+    await user.click(screen.getByRole('tab', { name: 'Histórico' }));
+    speakMock.mockClear();
+    cancelMock.mockClear();
+
+    const weekSpeakBtn = screen.getByRole('button', {
+      name: /Ouvir resumo de adesão dos últimos 7 dias/i,
+    });
+    await user.click(weekSpeakBtn);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(speakMock.mock.calls[0][0].text).toMatch(/últimos 7 dias/i);
+    expect(speakMock.mock.calls[0][0].text).toMatch(/doses programadas/i);
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /Parar leitura: Ouvir resumo de adesão dos últimos 7 dias/i,
+      })
+    );
+    expect(cancelMock).toHaveBeenCalled();
+    expect(speakMock).toHaveBeenCalledTimes(1);
+
+    const daySpeakBtn = screen.getByRole('button', { name: /Ouvir registro de doses do dia/i });
+    await user.click(daySpeakBtn);
+    expect(speakMock).toHaveBeenCalledTimes(2);
+    expect(speakMock.mock.calls[1][0].text).toMatch(/Registro do dia/i);
+    expect(speakMock.mock.calls[1][0].text).toContain('Iumi');
+  });
+
+  it('clears stale photo preview/extracted text on voice search, sets scanNotice, and scrolls results into view', async () => {
+    const user = userEvent.setup();
+    installSpeechMocks();
+
+    const origCreateObjectURL = Object.getOwnPropertyDescriptor(URL, 'createObjectURL');
+    const origRevokeObjectURL = Object.getOwnPropertyDescriptor(URL, 'revokeObjectURL');
+    const createObjectUrlMock = vi.fn(() => 'blob:mock-photo-preview');
+    const revokeObjectUrlMock = vi.fn();
+    Object.defineProperty(URL, 'createObjectURL', {
+      value: createObjectUrlMock,
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      value: revokeObjectUrlMock,
+      configurable: true,
+      writable: true,
+    });
+
+    const scrollIntoViewMock = vi.fn();
+    const origScrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = scrollIntoViewMock;
+
+    const rafSpy = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((cb: FrameRequestCallback) => {
+        cb(0);
+        return 1;
+      });
+
+    const iumiMed = MEDICATIONS_CATALOG.find((m) => m.id === 'iumi')!;
+    const ocrSpy = vi.spyOn(ocrScanner, 'scanImageForMedications').mockResolvedValue({
+      extractedText: 'Receita foto antiga: Iumi 21:00',
+      matches: [
+        {
+          medication: iumiMed,
+          matchedTerm: 'iumi',
+          detectedTimes: ['21:00'],
+          detectedDosage: '1 comprimido',
+          confidence: 'alta',
+        },
+      ],
+      usedOcr: true,
+    });
+
+    let nextTranscript = 'Dipirona 1g 6/6h';
+    class FakeSpeechRecognition {
+      lang = '';
+      continuous = false;
+      interimResults = false;
+      maxAlternatives = 1;
+      onresult: ((e: { results: Array<Array<{ transcript: string }>> }) => void) | null = null;
+      onerror: ((e: { error?: string }) => void) | null = null;
+      onend: (() => void) | null = null;
+      start() {
+        this.onresult?.({ results: [[{ transcript: nextTranscript }]] });
+        this.onend?.();
+      }
+      stop() {
+        this.onend?.();
+      }
+    }
+
+    const origRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition;
+    Object.defineProperty(window, 'SpeechRecognition', {
+      value: FakeSpeechRecognition,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      render(<App />);
+      await user.click(screen.getByRole('button', { name: /Adicionar/i }));
+
+      // Step 1: Upload a photo so previewUrl, extractedText, and photo scanNotice are populated
+      const photoInput = screen.getByLabelText(/Escolher foto ou print da galeria/i);
+      const fakeFile = new File(['fake-image'], 'receita.jpg', { type: 'image/jpeg' });
+      await user.upload(photoInput, fakeFile);
+
+      expect(await screen.findByAltText(/Imagem enviada para leitura/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ver texto lido da receita/i)).toBeInTheDocument();
+      expect(screen.getByText(/Encontramos 1 remédio\(s\) na imagem!/i)).toBeInTheDocument();
+
+      // Step 2: Switch to voice mode and run voice search
+      await user.click(screen.getByRole('tab', { name: /Falar o Nome/i }));
+      scrollIntoViewMock.mockClear();
+
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+
+      // Stale photo preview and extracted OCR text MUST be cleared
+      expect(screen.queryByAltText(/Imagem enviada para leitura/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Ver texto lido da receita/i)).not.toBeInTheDocument();
+      expect(revokeObjectUrlMock).toHaveBeenCalledWith('blob:mock-photo-preview');
+
+      // Clear voice scanNotice, new match, and scrollIntoView must all be triggered
+      expect(screen.getByText(/Encontramos 1 remédio pelo que você falou!/i)).toBeInTheDocument();
+      expect(screen.getByText('Novalgina')).toBeInTheDocument();
+      expect(screen.getByText(/06:00 · 12:00 · 18:00 · 00:00/)).toBeInTheDocument();
+      expect(scrollIntoViewMock).toHaveBeenCalled();
+
+      // Step 3: Voice search hitting fallback searchMedications ("pressao" -> Losartana)
+      scrollIntoViewMock.mockClear();
+      nextTranscript = 'pressao';
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+      expect(
+        screen.getByText(/Encontramos Aradois \/ Losartana pelo que você falou!/i)
+      ).toBeInTheDocument();
+      expect(scrollIntoViewMock).toHaveBeenCalled();
+
+      // Step 4: Voice search with no match clears stale scanNotice & matches cleanly
+      nextTranscript = 'RemedioInexistenteXYZ';
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+      expect(
+        screen.queryByText(/Encontramos .* pelo que você falou!/i)
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/Ouvi "RemedioInexistenteXYZ", mas não achei no catálogo/i)
+      ).toBeInTheDocument();
+    } finally {
+      ocrSpy.mockRestore();
+      if (origCreateObjectURL) {
+        Object.defineProperty(URL, 'createObjectURL', origCreateObjectURL);
+      } else {
+        delete (URL as unknown as Record<string, unknown>).createObjectURL;
+      }
+      if (origRevokeObjectURL) {
+        Object.defineProperty(URL, 'revokeObjectURL', origRevokeObjectURL);
+      } else {
+        delete (URL as unknown as Record<string, unknown>).revokeObjectURL;
+      }
+      rafSpy.mockRestore();
+      Element.prototype.scrollIntoView = origScrollIntoView;
+      Object.defineProperty(window, 'SpeechRecognition', {
+        value: origRecognition,
+        configurable: true,
+        writable: true,
+      });
+    }
   });
 });

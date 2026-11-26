@@ -167,6 +167,8 @@ export function AdicionarView({
   };
 
   const handleAnalyzePastedText = (textToParse: string) => {
+    setPreviewUrl(null);
+    setVoiceError(null);
     setExtractedText(textToParse);
     const matches = parsePrescriptionText(textToParse, catalog);
     setScanMatches(matches);
@@ -202,15 +204,23 @@ export function AdicionarView({
     setIsListening(true);
     const stopFn = speechService.startVoiceSearch({
       onResult: (transcript) => {
+        setPreviewUrl(null);
+        setExtractedText('');
+        setAddedFeedbackIds([]);
+        setVoiceError(null);
         setVoiceTranscript(transcript);
         setSearchQuery(transcript);
         const matches = parsePrescriptionText(transcript, catalog);
         const fallbackList = searchMedications(catalog, transcript);
         if (matches.length > 0) {
           setScanMatches(matches);
+          setScanNotice(
+            `Encontramos ${matches.length} ${matches.length === 1 ? 'remédio' : 'remédios'} pelo que você falou!`
+          );
+          scrollResultsIntoView();
           onSpeakSection(
             'voice-match',
-            `Ouvi ${transcript}. Encontrei ${matches[0].medication.name}. Toque para abrir.`
+            `Ouvi ${transcript}. Encontrei ${matches.map((m) => m.medication.name).join(' e ')}. Toque para abrir.`
           );
         } else if (fallbackList.length > 0) {
           setScanMatches([
@@ -222,12 +232,15 @@ export function AdicionarView({
               confidence: 'media',
             },
           ]);
+          setScanNotice(`Encontramos ${fallbackList[0].name} pelo que você falou!`);
+          scrollResultsIntoView();
           onSpeakSection(
             'voice-match',
             `Ouvi ${transcript}. Encontrei ${fallbackList[0].name}. Toque para abrir.`
           );
         } else {
           setScanMatches([]);
+          setScanNotice(null);
           setVoiceError(`Ouvi "${transcript}", mas não achei no catálogo. Você pode cadastrar abaixo.`);
         }
       },

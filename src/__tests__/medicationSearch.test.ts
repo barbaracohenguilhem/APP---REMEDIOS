@@ -108,4 +108,81 @@ describe('medicationSearch service', () => {
     expect(sameLineRx.find((m) => m.medication.id === 'lexapro')?.detectedTimes).toEqual(['08:00']);
     expect(sameLineRx.find((m) => m.medication.id === 'lipitor')?.detectedTimes).toEqual(['22:00']);
   });
+
+  it('preserves slash intervals (4/4h, 6/6h, 8/8h, 12/12h) when multiple medications share the same line', () => {
+    const multiSlash = parsePrescriptionText(
+      'Dipirona 1g 6/6h e Amoxicilina 500mg 8/8h',
+      MEDICATIONS_CATALOG
+    );
+    expect(multiSlash.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(multiSlash.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+
+    const tripleSlash = parsePrescriptionText(
+      'Dipirona 500mg 4/4h, Amoxicilina 500mg 8/8h e Glifage XR 12/12h',
+      MEDICATIONS_CATALOG
+    );
+    expect(tripleSlash.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '10:00',
+      '14:00',
+      '18:00',
+      '22:00',
+    ]);
+    expect(tripleSlash.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+    expect(tripleSlash.find((m) => m.medication.id === 'glifage-xr')?.detectedTimes).toEqual([
+      '08:00',
+      '20:00',
+    ]);
+
+    // Reversed order, spaced slashes, leading unrelated clock time, and hyphenated/accented names
+    const complexLine = parsePrescriptionText(
+      'Receita 14:00 - AMOXICILINA 500mg 8 / 8h e Dipirona 1g 6/6h',
+      MEDICATIONS_CATALOG
+    );
+    expect(complexLine.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+    expect(complexLine.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+
+    const mixedHyphenAndSlash = parsePrescriptionText(
+      'Puran-T4 50mcg às 06:30 e Novalgina 1g 6/6h',
+      MEDICATIONS_CATALOG
+    );
+    expect(mixedHyphenAndSlash.find((m) => m.medication.id === 'puran-t4')?.detectedTimes).toEqual([
+      '06:30',
+    ]);
+    expect(
+      mixedHyphenAndSlash.find((m) => m.medication.id === 'novalgina')?.detectedTimes
+    ).toEqual(['06:00', '12:00', '18:00', '00:00']);
+
+    // Direct extractTimesFromSnippet edge cases with spaced slashes & "6h/6h"
+    expect(extractTimesFromSnippet('Dipirona 6 / 6h')).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(extractTimesFromSnippet('Tomar 12 / 12 horas')).toEqual(['08:00', '20:00']);
+    expect(extractTimesFromSnippet('Dipirona 6h/6h')).toEqual(['06:00', '12:00', '18:00', '00:00']);
+  });
 });

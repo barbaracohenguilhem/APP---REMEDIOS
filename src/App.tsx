@@ -524,6 +524,7 @@ export function App() {
                 setActiveTab('adicionar');
               }}
               onSpeakText={handleSpeakSection}
+              onStopSpeaking={() => speechService.stop()}
               speakingId={speakingId}
             />
           ) : activeTab === 'entender' ? (

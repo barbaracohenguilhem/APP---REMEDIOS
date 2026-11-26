@@ -113,12 +113,35 @@ export function HorariosView({
     return summaryParts.join(' ');
   };
 
-  const handleSpeakToday = () => {
-    if (speakingId === 'horarios-hoje') {
+  const handleToggleSpeak = (id: string, text: string) => {
+    if (speakingId === id) {
       onStopSpeaking();
     } else {
-      onSpeakSection('horarios-hoje', buildTodaySpokenSummary());
+      onSpeakSection(id, text);
     }
+  };
+
+  const handleSpeakToday = () => {
+    handleToggleSpeak('horarios-hoje', buildTodaySpokenSummary());
+  };
+
+  const buildDoseSpokenText = (dose: ScheduledDoseInstance): string => {
+    const medName = dose.medication?.name ?? 'Medicamento';
+    const punctuality = dose.log ? formatPunctualityLabel(dose.log.delayMinutes) : null;
+    let statusText = 'Ainda vai chegar a hora de tomar.';
+    if (dose.status === 'taken') {
+      const takenAt = dose.log?.takenTimeDisplay ? ` às ${dose.log.takenTimeDisplay}` : '';
+      const punctNote = punctuality ? `, ${punctuality.label.replace(' ✓', '')}` : '';
+      statusText = `Já foi tomado${takenAt}${punctNote}.`;
+    } else if (dose.status === 'skipped') {
+      statusText = 'Esta dose foi marcada como pulada.';
+    } else if (dose.status === 'late') {
+      statusText = 'Está atrasado. Se ainda puder tomar, toque no botão verde Tomei Agora.';
+    } else if (dose.status === 'due_now') {
+      statusText = 'Está na hora de tomar agora!';
+    }
+    const notesText = dose.notes ? ` Observação: ${dose.notes}` : '';
+    return `${medName}, ${dose.dosage}, horário previsto às ${dose.scheduledTime}. ${statusText}${notesText}`;
   };
 
   const periods: DayPeriod[] = ['manha', 'tarde', 'noite'];
@@ -140,6 +163,53 @@ export function HorariosView({
     selectedDayDate,
     now
   );
+
+  const formattedActiveHistoryDate = activeHistoryDateStr.split('-').reverse().join('/');
+  const selectedDaySummary = last7Days.find((d) => d.dateStr === activeHistoryDateStr);
+
+  const buildLast7DaysSpokenSummary = (): string => {
+    const totalTaken7d = last7Days.reduce((acc, day) => acc + day.takenCount, 0);
+    const totalScheduled7d = last7Days.reduce((acc, day) => acc + day.totalScheduled, 0);
+    const completeDays7d = last7Days.filter((day) => day.status === 'complete').length;
+
+    if (totalScheduled7d === 0) {
+      return 'Resumo dos últimos 7 dias: você não teve doses programadas neste período.';
+    }
+
+    const selectedPart = selectedDaySummary
+      ? ` No dia selecionado, ${formattedActiveHistoryDate}, foram tomadas ${selectedDaySummary.takenCount} de ${selectedDaySummary.totalScheduled} doses.`
+      : '';
+
+    return `Resumo dos últimos 7 dias: você tomou ${totalTaken7d} de ${totalScheduled7d} doses programadas, com ${completeDays7d} ${completeDays7d === 1 ? 'dia completo' : 'dias completos'}.${selectedPart}`;
+  };
+
+  const buildSelectedDaySpokenSummary = (): string => {
+    if (selectedHistoryDoses.length === 0) {
+      return `Registro do dia ${formattedActiveHistoryDate}: nenhuma dose programada neste dia.`;
+    }
+    const takenCount = selectedHistoryDoses.filter((d) => d.status === 'taken').length;
+    const details = selectedHistoryDoses.map((dose) => {
+      const medName = dose.medication?.name ?? 'Medicamento';
+      if (dose.status === 'taken') {
+        const punct = dose.log ? formatPunctualityLabel(dose.log.delayMinutes) : null;
+        const takenAt = dose.log?.takenTimeDisplay ? ` às ${dose.log.takenTimeDisplay}` : '';
+        const punctText = punct ? `, ${punct.label.replace(' ✓', '')}` : '';
+        return `${medName}, previsto às ${dose.scheduledTime}, tomado${takenAt}${punctText}`;
+      }
+      if (dose.status === 'skipped') {
+        return `${medName}, previsto às ${dose.scheduledTime}, marcado como pulado`;
+      }
+      if (dose.status === 'upcoming') {
+        return `${medName}, agendado para às ${dose.scheduledTime}`;
+      }
+      if (dose.status === 'due_now') {
+        return `${medName}, previsto às ${dose.scheduledTime}, está na hora agora`;
+      }
+      return `${medName}, previsto às ${dose.scheduledTime}, não registrado`;
+    });
+
+    return `Registro do dia ${formattedActiveHistoryDate}: ${takenCount} de ${selectedHistoryDoses.length} doses tomadas. ${details.join('. ')}.`;
+  };
 
   return (
     <div className="px-4 py-3.5 space-y-4 pb-12">
@@ -236,22 +306,38 @@ export function HorariosView({
       {/* SUBVIEW 1: HOJE */}
       {subView === 'hoje' && (
         <div className="space-y-4">
-          {pausedCyclesToday.map(({ schedule, cycle, med }) => (
-            <div
-              key={`pause-${schedule.id}`}
-              className="rounded-2xl bg-pink-50 border border-pink-200 p-3.5 flex items-center gap-3"
-            >
-              {med && <MedicinePackArt pack={med.pack} size="sm" />}
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-extrabold text-pink-950">
-                  🌸 {med?.name ?? 'Cartela'} — Dia de pausa ({cycle.dayInPhase} de {cycle.phaseLength})
-                </p>
-                <p className="text-xs text-pink-900/80 mt-0.5">
-                  Hoje não precisa tomar comprimido. O alarme volta automaticamente na próxima cartela.
-                </p>
+          {pausedCyclesToday.map(({ schedule, cycle, med }) => {
+            const pauseSpeakId = `pause-${schedule.id}`;
+            return (
+              <div
+                key={pauseSpeakId}
+                className={`rounded-2xl bg-pink-50 border border-pink-200 p-3.5 flex items-center gap-3 ${
+                  speakingId === pauseSpeakId ? 'ring-2 ring-blue-500' : ''
+                }`}
+              >
+                {med && <MedicinePackArt pack={med.pack} size="sm" />}
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-extrabold text-pink-950">
+                    🌸 {med?.name ?? 'Cartela'} — Dia de pausa ({cycle.dayInPhase} de {cycle.phaseLength})
+                  </p>
+                  <p className="text-xs text-pink-900/80 mt-0.5">
+                    Hoje não precisa tomar comprimido. O alarme volta automaticamente na próxima cartela.
+                  </p>
+                </div>
+                <SpeakButton
+                  size="sm"
+                  isSpeaking={speakingId === pauseSpeakId}
+                  onClick={() =>
+                    handleToggleSpeak(
+                      pauseSpeakId,
+                      `${med?.name ?? 'Sua cartela'}: hoje é dia de pausa, dia ${cycle.dayInPhase} de ${cycle.phaseLength}. Hoje não precisa tomar comprimido. O alarme volta automaticamente na próxima cartela.`
+                    )
+                  }
+                  ariaLabel={`Ouvir aviso de pausa de ${med?.name ?? 'cartela'}`}
+                />
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {dosesToday.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center border border-slate-100 space-y-3">
@@ -297,6 +383,8 @@ export function HorariosView({
                       ? formatPunctualityLabel(dose.log.delayMinutes)
                       : null;
 
+                    const doseSpeakId = `dose-${dose.key}`;
+
                     return (
                       <div
                         key={dose.key}
@@ -308,7 +396,7 @@ export function HorariosView({
                               : isDueNow
                                 ? 'bg-amber-50/90 border-amber-400 shadow-sm'
                                 : 'bg-white border-slate-100 shadow-xs'
-                        }`}
+                        } ${speakingId === doseSpeakId ? 'ring-2 ring-blue-500' : ''}`}
                       >
                         <div className="flex items-center gap-3">
                           <button
@@ -327,7 +415,7 @@ export function HorariosView({
                           </button>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
                               <span className="inline-flex items-center gap-1 text-xl font-extrabold text-slate-900">
                                 <Clock className="w-4 h-4 text-teal-700" />
                                 {dose.scheduledTime}
@@ -356,10 +444,20 @@ export function HorariosView({
                               )}
                             </div>
 
-                            <h4 className="text-base font-extrabold text-slate-900 truncate mt-0.5">
-                              {dose.medication?.name ?? 'Medicamento'}
-                            </h4>
-                            <p className="text-xs font-semibold text-slate-600">{dose.dosage}</p>
+                            <div className="flex items-start justify-between gap-2 mt-0.5">
+                              <div className="min-w-0 flex-1">
+                                <h4 className="text-base font-extrabold text-slate-900 truncate">
+                                  {dose.medication?.name ?? 'Medicamento'}
+                                </h4>
+                                <p className="text-xs font-semibold text-slate-600">{dose.dosage}</p>
+                              </div>
+                              <SpeakButton
+                                size="sm"
+                                isSpeaking={speakingId === doseSpeakId}
+                                onClick={() => handleToggleSpeak(doseSpeakId, buildDoseSpokenText(dose))}
+                                ariaLabel={`Ouvir dose de ${dose.medication?.name ?? 'medicamento'} às ${dose.scheduledTime}`}
+                              />
+                            </div>
                             {dose.notes && (
                               <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">
                                 {dose.notes}
@@ -422,12 +520,28 @@ export function HorariosView({
       {/* SUBVIEW 2: HISTÓRICO (7-day adherence & exact timestamps) */}
       {subView === 'historico' && (
         <section aria-label="Histórico de adesão" className="space-y-4">
-          <div className="bg-white rounded-2xl p-4 shadow-xs border border-slate-100">
-            <div className="flex items-center gap-2 mb-3">
-              <CalendarDays className="w-5 h-5 text-[#0D9488]" />
-              <h3 className="text-sm font-extrabold text-slate-900">
-                Últimos 7 dias (Toque no dia para ver horários)
-              </h3>
+          <div
+            className={`bg-white rounded-2xl p-4 shadow-xs border transition-all ${
+              speakingId === 'horarios-historico-semana'
+                ? 'border-blue-400 ring-2 ring-blue-200'
+                : 'border-slate-100'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <CalendarDays className="w-5 h-5 text-[#0D9488] shrink-0" />
+                <h3 className="text-sm font-extrabold text-slate-900 leading-snug">
+                  Últimos 7 dias (Toque no dia para ver horários)
+                </h3>
+              </div>
+              <SpeakButton
+                size="sm"
+                isSpeaking={speakingId === 'horarios-historico-semana'}
+                onClick={() =>
+                  handleToggleSpeak('horarios-historico-semana', buildLast7DaysSpokenSummary())
+                }
+                ariaLabel="Ouvir resumo de adesão dos últimos 7 dias"
+              />
             </div>
 
             <div className="grid grid-cols-7 gap-1.5">
@@ -446,7 +560,10 @@ export function HorariosView({
                   <button
                     key={day.dateStr}
                     type="button"
-                    onClick={() => setSelectedHistoryDateStr(day.dateStr)}
+                    onClick={() => {
+                      if (speakingId === 'horarios-historico-dia') onStopSpeaking();
+                      setSelectedHistoryDateStr(day.dateStr);
+                    }}
                     className={`flex flex-col items-center py-2 px-1 rounded-xl border-2 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-[#0D9488] bg-teal-50/70'
@@ -471,10 +588,26 @@ export function HorariosView({
           </div>
 
           {/* Selected Day Log Details */}
-          <div className="bg-white rounded-2xl p-4 shadow-xs border border-slate-100 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900">
-              Registro do dia {activeHistoryDateStr.split('-').reverse().join('/')}
-            </h4>
+          <div
+            className={`bg-white rounded-2xl p-4 shadow-xs border space-y-3 transition-all ${
+              speakingId === 'horarios-historico-dia'
+                ? 'border-blue-400 ring-2 ring-blue-200'
+                : 'border-slate-100'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <h4 className="text-sm font-extrabold text-slate-900">
+                Registro do dia {formattedActiveHistoryDate}
+              </h4>
+              <SpeakButton
+                size="sm"
+                isSpeaking={speakingId === 'horarios-historico-dia'}
+                onClick={() =>
+                  handleToggleSpeak('horarios-historico-dia', buildSelectedDaySpokenSummary())
+                }
+                ariaLabel={`Ouvir registro de doses do dia ${formattedActiveHistoryDate}`}
+              />
+            </div>
 
             {selectedHistoryDoses.length === 0 ? (
               <p className="text-sm text-slate-500">Nenhuma dose programada neste dia.</p>

@@ -18,6 +18,213 @@ export function normalizeText(text: string): string {
     .trim();
 }
 
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const PRESCRIPTION_ABBREVIATIONS = new Set([
+  'comp',
+  'cp',
+  'caps',
+  'gts',
+  'dr',
+  'dra',
+  'mg',
+  'ml',
+  'mcg',
+  'cx',
+  'fr',
+  'un',
+  'amp',
+  'env',
+  'obs',
+  'ex',
+  'lab',
+]);
+
+const NON_DRUG_STOPWORDS = new Set([
+  'dor',
+  'sono',
+  'gotas',
+  'febre',
+  'gripe',
+  'pressao',
+  'estomago',
+  'alergia',
+  'diabetes',
+  'tireoide',
+  'infeccao',
+  'ansiedade',
+  'colesterol',
+  'anticoncepcional',
+  'antibiotico',
+  // Pharmaceutical salt / generic descriptor prefixes that are not unique active ingredients
+  'cloridrato',
+  'oxalato',
+  'maleato',
+  'sulfato',
+  'tartarato',
+  'fosfato',
+  'mesilato',
+  'besilato',
+  'sodio',
+  'sodico',
+  'sodica',
+  'potassica',
+  'calcica',
+  'medicamento',
+]);
+
+function splitPrescriptionLines(rawText: string): string[] {
+  const result: string[] = [];
+  // First split on hard delimiters (newlines, semicolons, and numbered list items like "1) " / "2. ")
+  const blocks = rawText
+    .split(/\n|;|(?=(?:^|\s)\d+\s*[).]\s+)/)
+    .map((b) => b.trim())
+    .filter(Boolean);
+
+  for (const block of blocks) {
+    let start = 0;
+    const sentenceBreakRegex = /([.!?])\s+/g;
+    let m: RegExpExecArray | null;
+    while ((m = sentenceBreakRegex.exec(block)) !== null) {
+      const punct = m[1];
+      if (punct === '.') {
+        const beforeDot = block.slice(start, m.index);
+        const lastTokenMatch = /([A-Za-zÀ-ÿ0-9]+)$/.exec(beforeDot);
+        const lastTokenNorm = lastTokenMatch
+          ? lastTokenMatch[1]
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+          : '';
+        // Do not split after list numbers ("1. Losartana") or Portuguese prescription abbreviations ("1 comp. 6/6h")
+        if (
+          PRESCRIPTION_ABBREVIATIONS.has(lastTokenNorm) ||
+          (/^\d+$/.test(lastTokenNorm) && beforeDot.trim() === lastTokenNorm)
+        ) {
+          continue;
+        }
+      }
+
+      const piece = block.slice(start, m.index + 1).trim();
+      if (piece) result.push(piece);
+      start = m.index + m[0].length;
+    }
+
+    const tail = block.slice(start).trim();
+    if (tail) result.push(tail);
+  }
+
+  return result;
+}
+
+function findClauseSplitOffset(between: string): number | null {
+  // Find candidate clause separators between two medications on the same line:
+  // commas, standalone conjunctions ("e", "ou"), pipes/pluses, spaced dashes, or non-interval slashes
+  const sepRegex = /,|\||\+|\s+[-–—]\s+|\s+(?:e|ou)\s+|\s*\/\s*/gi;
+  let lastSplit: number | null = null;
+  let match: RegExpExecArray | null;
+
+  while ((match = sepRegex.exec(between)) !== null) {
+    const token = match[0];
+    const startIdx = match.index;
+    const endIdx = startIdx + token.length;
+    const left = between.slice(0, startIdx);
+    const right = between.slice(endIdx);
+
+    if (token.includes('/')) {
+      // Never split inside slash intervals like "6/6h", "8 / 8h", "8h / 8h" or dates like "8/8/2026"
+      const leftEndsIntervalNum = /\b(?:4|6|8|12|24)\s*(?:h|hs|horas?)?$/i.test(left.trimEnd());
+      const rightStartsIntervalNum = /^(?:4|6|8|12|24)(?:\s*(?:h|hs|horas?)\b|\b)/i.test(
+        right.trimStart()
+      );
+      const betweenDigits = /\d$/.test(left.trimEnd()) && /^\d/.test(right.trimStart());
+      if ((leftEndsIntervalNum && rightStartsIntervalNum) || (betweenDigits && !right.trimStart().includes(':'))) {
+        continue;
+      }
+    }
+
+    if (/^\s+(?:e|ou)\s+$/i.test(token)) {
+      // Do not split a paired clock time belonging to the left medication (e.g., "08:00 e 20:00 Amoxicilina 8/8h")
+      const leftEndsClockTime = /\b(?:[01]?\d|2[0-3])\s*(?::[0-5]\d|h(?:[0-5]\d)?)\s*$/i.test(left);
+      const rightIsBareClockTimeOnly =
+        /^(?:[01]?\d|2[0-3])\s*(?::[0-5]\d|h(?:[0-5]\d)?)\s*$/i.test(right.trim());
+      if (leftEndsClockTime && rightIsBareClockTimeOnly) {
+        continue;
+      }
+    }
+
+    lastSplit = endIdx;
+  }
+
+  return lastSplit;
+}
+
+function stripLeadingPrescriptionHeader(prefix: string): string {
+  // Remove leading metadata headers like "Receita 14:00 - " before the first drug so header timestamps
+  // aren't misread as medication times, while keeping true pre-drug schedules like "Às 09:00 " or "08:00 - ".
+  const dashIdx = prefix.search(/\s+[-–—]\s+/);
+  if (dashIdx >= 0) {
+    const beforeDash = normalizeText(prefix.slice(0, dashIdx));
+    if (/\b(?:receita|prescricao|data|emitida|emitido|consulta|paciente|crm)\b/.test(beforeDash)) {
+      return prefix.slice(dashIdx).replace(/^\s+[-–—]\s+/, '');
+    }
+  }
+  return prefix;
+}
+
+function buildNormalizedWithIndexMap(raw: string): { norm: string; indexMap: number[] } {
+  let norm = '';
+  const indexMap: number[] = [];
+  let prevWasSpace = true;
+
+  for (let i = 0; i < raw.length; i++) {
+    const base = raw[i]
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    if (!base) continue;
+
+    for (let j = 0; j < base.length; j++) {
+      const ch = base[j];
+      if (/[a-z0-9:]/.test(ch)) {
+        norm += ch;
+        indexMap.push(i);
+        prevWasSpace = false;
+      } else if (!prevWasSpace) {
+        norm += ' ';
+        indexMap.push(i);
+        prevWasSpace = true;
+      }
+    }
+  }
+
+  if (norm.endsWith(' ')) {
+    norm = norm.slice(0, -1);
+    indexMap.pop();
+  }
+
+  return { norm, indexMap };
+}
+
+function findNormalizedTermPos(normText: string, term: string): number {
+  if (!term) return -1;
+  const escaped = escapeRegExp(term);
+  const wordBoundaryMatch = new RegExp(`\\b${escaped}\\b`).exec(normText);
+  if (wordBoundaryMatch) return wordBoundaryMatch.index;
+
+  const tokenBoundaryMatch = new RegExp(`(?:^|[^a-z0-9])(${escaped})(?=$|[^a-z0-9])`).exec(
+    normText
+  );
+  if (tokenBoundaryMatch) {
+    return tokenBoundaryMatch.index + tokenBoundaryMatch[0].indexOf(tokenBoundaryMatch[1]);
+  }
+
+  return -1;
+}
+
 function levenshtein(a: string, b: string): number {
   if (a === b) return 0;
   if (a.length === 0) return b.length;
@@ -121,13 +328,15 @@ export function extractTimesFromSnippet(text: string): string[] {
   const explicitRegex = /\b([01]?\d|2[0-3])\s*(?::|h|hs|horas?)\s*([0-5]\d)?\b/gi;
   let match: RegExpExecArray | null;
   while ((match = explicitRegex.exec(text)) !== null) {
-    // Avoid capturing intervals/durations like "8 em 8h", "6/6h", "até 4h", "por 4h", "após 2h"
-    const rawPrefix = text.slice(Math.max(0, match.index - 12), match.index);
+    // Avoid capturing intervals/durations like "8 em 8h", "6/6h", "até 4h", "por 4h", "durante 4h", "após 2h"
+    const rawPrefix = text.slice(Math.max(0, match.index - 14), match.index);
     const normPrefix = rawPrefix
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
-    if (/(?:em\s*|\/|cada\s*|ate\s*|por\s*|apos\s*|depois\s*de\s*)$/.test(normPrefix)) continue;
+    if (/(?:em\s*|\/\s*|cada\s*|ate\s*|por\s*|durante\s*|apos\s*|depois\s*de\s*)$/.test(normPrefix)) {
+      continue;
+    }
 
     // Also skip "de 6 em 6h", "6/6h", and relative durations without ":" like "2h antes" or "4h depois"
     // (Keep explicit clock times with ":" like "07:00 antes do café"!)
@@ -152,16 +361,31 @@ export function extractTimesFromSnippet(text: string): string[] {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
 
-    if (/\b(?:4\s*h?\s*(?:em|\/)\s*4|cada\s+4)\s*(?:h|hs|horas?)?\b/.test(lowerNoAccents)) {
+    const hasInterval = (n: number): boolean => {
+      const unit = '(?:h|hs|horas?)';
+      // Explicit unit form: "6/6h", "6h/6h", "6hs/6hs", "6 horas / 6 horas", "6 em 6h", "cada 6h"
+      const withUnit = new RegExp(
+        `\\b(?:${n}\\s*${unit}?\\s*(?:em|\\/)\\s*${n}|cada\\s+${n})\\s*${unit}\\b`
+      );
+      if (withUnit.test(lowerNoAccents)) return true;
+
+      // Unitless form: "6/6", "6 em 6", "cada 6" — guard against calendar dates like "8/8/2026"
+      const withoutUnit = new RegExp(
+        `(?<!\\d\\s*\\/)\\b(?:${n}\\s*(?:em|\\/)\\s*${n}|cada\\s+${n})\\b(?!\\s*\\/\\s*\\d)`
+      );
+      return withoutUnit.test(lowerNoAccents);
+    };
+
+    if (hasInterval(4)) {
       return ['06:00', '10:00', '14:00', '18:00', '22:00'];
     }
-    if (/\b(?:6\s*h?\s*(?:em|\/)\s*6|cada\s+6)\s*(?:h|hs|horas?)?\b/.test(lowerNoAccents)) {
+    if (hasInterval(6)) {
       return ['06:00', '12:00', '18:00', '00:00'];
     }
-    if (/\b(?:8\s*h?\s*(?:em|\/)\s*8|cada\s+8)\s*(?:h|hs|horas?)?\b/.test(lowerNoAccents)) {
+    if (hasInterval(8)) {
       return ['07:00', '15:00', '23:00'];
     }
-    if (/\b(?:12\s*h?\s*(?:em|\/)\s*12|cada\s+12)\s*(?:h|hs|horas?)?\b/.test(lowerNoAccents)) {
+    if (hasInterval(12)) {
       return ['08:00', '20:00'];
     }
 
@@ -195,10 +419,7 @@ export function parsePrescriptionText(
 ): ParsedMedicationMatch[] {
   if (!rawText || !rawText.trim()) return [];
 
-  const lines = rawText
-    .split(/\n|;|(?<=[.!?])\s+|(?=\d+\s*[).]\s+)/)
-    .map((l) => l.trim())
-    .filter(Boolean);
+  const lines = splitPrescriptionLines(rawText);
 
   const normalizedFull = normalizeText(rawText);
   const rawMatches: Array<{
@@ -215,13 +436,13 @@ export function parsePrescriptionText(
         ...med.aliases.map(normalizeText),
         normalizeText(med.activeIngredient.split(' ')[0] ?? ''),
       ])
-    ).filter((t) => t.length >= 4 && !['dor', 'sono', 'gotas', 'febre', 'gripe', 'pressao', 'estomago', 'alergia', 'diabetes', 'tireoide', 'infeccao', 'ansiedade', 'colesterol', 'anticoncepcional', 'antibiotico'].includes(t));
+    ).filter((t) => t.length >= 4 && !NON_DRUG_STOPWORDS.has(t));
 
     let bestMatchedTerm: string | null = null;
     let confidence: 'alta' | 'media' = 'media';
 
     for (const term of terms) {
-      const regex = new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      const regex = new RegExp(`\\b${escapeRegExp(term)}\\b`, 'i');
       if (regex.test(normalizedFull)) {
         bestMatchedTerm = term;
         confidence = 'alta';
@@ -254,42 +475,84 @@ export function parsePrescriptionText(
     }
   }
 
-  const normalizedLines = lines.map((l) => normalizeText(l));
+  const indexedLines = lines.map((rawLine) => ({
+    rawLine,
+    ...buildNormalizedWithIndexMap(rawLine),
+  }));
   const results: ParsedMedicationMatch[] = [];
 
   for (const item of rawMatches) {
-    const lineIdx = normalizedLines.findIndex((nl) => nl.includes(item.matchedTerm));
-    let snippet = lineIdx >= 0 ? lines[lineIdx] : rawText;
+    const lineIdx = indexedLines.findIndex(
+      ({ norm }) => findNormalizedTermPos(norm, item.matchedTerm) >= 0
+    );
 
-    // If multiple matched medications share the same sentence/line, isolate this medication's clause
+    let lineTimes: string[] = [];
+
     if (lineIdx >= 0) {
-      const normLine = normalizedLines[lineIdx];
+      const { rawLine, norm: normLine, indexMap } = indexedLines[lineIdx];
       const siblingsOnLine = rawMatches
-        .map((m) => ({ id: m.medication.id, pos: normLine.indexOf(m.matchedTerm) }))
-        .filter((s) => s.pos >= 0)
-        .sort((a, b) => a.pos - b.pos);
+        .map((m) => {
+          const normStart = findNormalizedTermPos(normLine, m.matchedTerm);
+          if (normStart < 0) return { id: m.medication.id, rawStart: -1, rawEnd: -1 };
+          const rawStart = indexMap[normStart];
+          const normEndIdx = Math.min(indexMap.length - 1, normStart + m.matchedTerm.length - 1);
+          let rawEnd = (indexMap[normEndIdx] ?? rawStart) + 1;
+          while (rawEnd < rawLine.length && /[\u0300-\u036f]/.test(rawLine[rawEnd])) {
+            rawEnd += 1;
+          }
+          return { id: m.medication.id, rawStart, rawEnd };
+        })
+        .filter((s) => s.rawStart >= 0)
+        .sort((a, b) => a.rawStart - b.rawStart);
 
       if (siblingsOnLine.length > 1) {
         const myIdx = siblingsOnLine.findIndex((s) => s.id === item.medication.id);
         if (myIdx >= 0) {
-          const startPos = siblingsOnLine[myIdx].pos;
-          const endPos =
-            myIdx + 1 < siblingsOnLine.length ? siblingsOnLine[myIdx + 1].pos : normLine.length;
-          snippet = normLine.slice(startPos, endPos);
+          // Compute raw clause boundaries between adjacent medications so both post-drug
+          // ("Dipirona 6/6h e Amoxicilina 8/8h") and pre-drug ("Às 09:00 Losartana e às 18:00 Amoxicilina")
+          // schedules stay scoped to the right medication while preserving raw punctuation like "/".
+          const boundaries: number[] = [0];
+          for (let k = 0; k < siblingsOnLine.length - 1; k++) {
+            const leftEnd = Math.min(siblingsOnLine[k].rawEnd, siblingsOnLine[k + 1].rawStart);
+            const rightStart = siblingsOnLine[k + 1].rawStart;
+            const between = rawLine.slice(leftEnd, rightStart);
+            const splitOffset = findClauseSplitOffset(between);
+            boundaries.push(splitOffset !== null ? leftEnd + splitOffset : rightStart);
+          }
+          boundaries.push(rawLine.length);
+
+          const my = siblingsOnLine[myIdx];
+          const clauseStart = boundaries[myIdx];
+          const clauseEnd = boundaries[myIdx + 1];
+
+          // Prefer times written after the drug name within its clause; if none, check its pre-drug prefix.
+          const afterDrug = rawLine.slice(my.rawStart, Math.max(my.rawStart, clauseEnd));
+          lineTimes = extractTimesFromSnippet(afterDrug);
+
+          if (lineTimes.length === 0 && my.rawStart > clauseStart) {
+            const rawPrefix = rawLine.slice(clauseStart, my.rawStart);
+            const cleanPrefix =
+              myIdx === 0 ? stripLeadingPrescriptionHeader(rawPrefix) : rawPrefix;
+            lineTimes = extractTimesFromSnippet(cleanPrefix);
+          }
         }
+      } else {
+        lineTimes = extractTimesFromSnippet(stripLeadingPrescriptionHeader(rawLine));
       }
+    } else {
+      lineTimes = extractTimesFromSnippet(rawText);
     }
 
-    let lineTimes = extractTimesFromSnippet(snippet);
-
     // Classic Brazilian 2-line prescription: drug name on line N, dosage/time on line N+1
-    if (lineTimes.length === 0 && lineIdx >= 0 && lineIdx + 1 < lines.length) {
-      const nextNormLine = normalizedLines[lineIdx + 1];
+    if (lineTimes.length === 0 && lineIdx >= 0 && lineIdx + 1 < indexedLines.length) {
+      const nextLine = indexedLines[lineIdx + 1];
       const nextLineMentionsOtherMed = rawMatches.some(
-        (other) => other.medication.id !== item.medication.id && nextNormLine.includes(other.matchedTerm)
+        (other) =>
+          other.medication.id !== item.medication.id &&
+          findNormalizedTermPos(nextLine.norm, other.matchedTerm) >= 0
       );
       if (!nextLineMentionsOtherMed) {
-        lineTimes = extractTimesFromSnippet(lines[lineIdx + 1]);
+        lineTimes = extractTimesFromSnippet(nextLine.rawLine);
       }
     }
 
