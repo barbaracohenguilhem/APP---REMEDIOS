@@ -501,6 +501,7 @@ export function MeuRemedioApp() {
         <main className="flex-1 overflow-y-auto">
           {isGuided ? (
             <VoiceGuidedOverlay
+              activeMedication={activeMedication}
               nextDose={nextUntakenDose}
               playback={playback}
               onSpeak={speak}

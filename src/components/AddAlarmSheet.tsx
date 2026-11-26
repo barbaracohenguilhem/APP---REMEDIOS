@@ -69,42 +69,39 @@ export function AddAlarmSheet({
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-alarm-sheet-title"
-      className="fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-50 bg-[#111827]/55 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5"
+        className="w-full max-w-[430px] max-h-[90dvh] overflow-y-auto bg-[#F7F6F2] rounded-t-[30px] sm:rounded-[30px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 id="add-alarm-sheet-title" className="text-[20px] font-bold text-[#1C1917]">
-            Novo lembrete
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Fechar"
-            className="w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+            <h2 id="add-alarm-sheet-title" className="text-[22px] font-extrabold text-[#111827]">
+              Criar alarme
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Fechar"
+              className="w-11 h-11 rounded-full bg-white border border-slate-300 text-[#111827] inline-flex items-center justify-center cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Med selector */}
-          <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
-            {medications.map((med) => {
-              const active = med.id === selectedMedId;
-              return (
-                <button
-                  key={med.id}
-                  type="button"
-                  onClick={() => handlePickMed(med)}
-                  className={`shrink-0 px-3.5 py-2.5 rounded-[20px] border flex items-center gap-2.5 transition-all cursor-pointer ${
-                    active
-                      ? 'bg-[#1C1917] text-white border-[#1C1917]'
-                      : 'bg-white text-[#1C1917] border-black/[0.06]'
-                  }`}
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+              {medications.map((med) => {
+                const active = med.id === selectedMedId;
+                return (
+                  <button
+                    key={med.id}
+                    type="button"
+                    onClick={() => handlePickMed(med)}
+                            ? 'bg-[#111827] text-white border-[#111827]'
+                            : 'bg-white text-[#111827] border-slate-300'
+                        }`}
                 >
                   <MedicationAvatar
                     medication={med}
@@ -112,33 +109,32 @@ export function AddAlarmSheet({
                     size="sm"
                     className="w-8 h-8 rounded-xl"
                   />
-                  <span className="text-[13.5px] font-semibold">{med.name}</span>
+                  <span className="text-[15px] font-extrabold">{med.name}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Quick presets */}
-          <div className="bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-3">
-            <p className="text-[13px] font-semibold text-[#57534E]">Horários</p>
+          <div className="bg-white rounded-[22px] p-4 border-2 border-slate-200 space-y-3">
+            <p className="text-[15.5px] font-extrabold text-[#111827]">Escolha os horários</p>
             <div className="grid grid-cols-2 gap-2">
               {PRESETS.map((p) => (
                 <button
                   key={p.label}
                   type="button"
                   onClick={() => setTimes([...p.times])}
-                  className="py-2.5 px-3 rounded-xl bg-[#F6F4EF] hover:bg-[#E6F2EF] text-[13px] font-semibold text-[#1C1917] text-left cursor-pointer"
+                  className="min-h-[46px] px-3 rounded-xl bg-[#F7F6F2] hover:bg-[#DCFCE7] border border-slate-300 text-[14.5px] font-extrabold text-[#111827] text-left cursor-pointer"
                 >
                   {p.label}
                 </button>
               ))}
             </div>
 
-            <div className="space-y-2 pt-1">
+            <div className="space-y-2.5 pt-1">
               {times.map((t, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <div className="flex-1 flex items-center gap-2.5 rounded-2xl bg-[#F6F4EF] px-4 py-2.5">
-                    <Clock className="w-4.5 h-4.5 text-[#146356]" />
+                  <div className="flex-1 min-h-[54px] flex items-center gap-3 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 px-4">
+                    <Clock className="w-5 h-5 text-[#047857]" />
                     <input
                       type="time"
                       aria-label={`Horário ${idx + 1}`}
@@ -146,7 +142,7 @@ export function AddAlarmSheet({
                       onChange={(e) =>
                         setTimes((prev) => prev.map((v, i) => (i === idx ? e.target.value : v)))
                       }
-                      className="flex-1 bg-transparent text-[18px] font-bold text-[#1C1917] focus:outline-none"
+                      className="flex-1 bg-transparent text-[22px] font-extrabold text-[#111827] focus:outline-none"
                     />
                   </div>
                   {times.length > 1 && (
@@ -154,9 +150,9 @@ export function AddAlarmSheet({
                       type="button"
                       onClick={() => setTimes((prev) => prev.filter((_, i) => i !== idx))}
                       aria-label="Remover horário"
-                      className="w-10 h-10 rounded-full bg-[#FEECEF] text-[#BE123C] inline-flex items-center justify-center cursor-pointer"
+                      className="w-12 h-12 rounded-2xl bg-[#FEF2F2] text-[#B91C1C] inline-flex items-center justify-center cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
                 </div>
@@ -170,18 +166,17 @@ export function AddAlarmSheet({
                     '15:00';
                   setTimes((prev) => [...prev, next]);
                 }}
-                className="w-full py-2.5 rounded-xl border border-dashed border-[#146356]/35 text-[#146356] text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full min-h-[46px] rounded-xl border-2 border-dashed border-[#047857]/50 text-[#047857] text-[14.5px] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-5 h-5" />
                 <span>Outro horário no dia</span>
               </button>
             </div>
           </div>
 
-          {/* Dose & cycle */}
-          <div className="bg-white rounded-[24px] p-4 border border-black/[0.05] grid grid-cols-2 gap-3">
+          <div className="bg-white rounded-[22px] p-4 border-2 border-slate-200 grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="al-dose" className="block text-[12.5px] font-semibold text-[#57534E] mb-1">
+              <label htmlFor="al-dose" className="block text-[14px] font-extrabold text-[#111827] mb-1">
                 Dose
               </label>
               <input
@@ -189,18 +184,18 @@ export function AddAlarmSheet({
                 type="text"
                 value={dosage}
                 onChange={(e) => setDosage(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none"
+                className="w-full min-h-[48px] px-3.5 rounded-xl bg-[#F7F6F2] border-2 border-slate-300 text-[15px] font-bold text-[#111827] focus:outline-none"
               />
             </div>
             <div>
-              <label htmlFor="al-cycle" className="block text-[12.5px] font-semibold text-[#57534E] mb-1">
+              <label htmlFor="al-cycle" className="block text-[14px] font-extrabold text-[#111827] mb-1">
                 Frequência
               </label>
               <select
                 id="al-cycle"
                 value={cycleMode}
                 onChange={(e) => setCycleMode(e.target.value as MedicationSchedule['cycleMode'])}
-                className="w-full px-3 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none"
+                className="w-full min-h-[48px] px-3 rounded-xl bg-[#F7F6F2] border-2 border-slate-300 text-[15px] font-bold text-[#111827] focus:outline-none"
               >
                 <option value="daily">Todos os dias</option>
                 <option value="24_4">24d + 4 pausa</option>
@@ -211,9 +206,9 @@ export function AddAlarmSheet({
 
           <button
             type="submit"
-            className="w-full py-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-bold text-[15px] cursor-pointer"
+            className="w-full min-h-[56px] rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-extrabold text-[17px] cursor-pointer"
           >
-            Salvar lembrete
+            Salvar alarme
           </button>
         </form>
       </div>

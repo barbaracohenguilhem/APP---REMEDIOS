@@ -79,32 +79,34 @@ var __TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$i
 ;
 ;
 const metadata = {
-    title: 'Meu Remédio — Bula calma, genéricos e horários com voz humana',
-    description: 'Aplicativo brasileiro feito para entender qualquer remédio com clareza, ouvir em voz natural, comparar diferenças reais entre genéricos e controlar seus horários.',
+    title: 'Meu Remédio — Bula fácil, genéricos e horários com voz humana',
+    description: 'Aplicativo brasileiro acessível feito para entender qualquer remédio com clareza, ouvir em voz natural, comparar diferenças reais entre genéricos e controlar seus horários.',
     manifest: '/manifest.webmanifest'
 };
 const viewport = {
     width: 'device-width',
     initialScale: 1,
     maximumScale: 5,
-    themeColor: '#F6F4EF'
+    themeColor: '#F7F6F2'
 };
 function RootLayout({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
         lang: "pt-BR",
+        suppressHydrationWarning: true,
         className: `${__TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$plus_jakarta_sans_cb96c97f$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"].variable} ${__TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$inter_a9dd00d3$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"].variable}`,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
-            className: "antialiased bg-[#ECE8E0] text-[#1C1917] font-sans selection:bg-[#146356]/15 selection:text-[#146356]",
+            suppressHydrationWarning: true,
+            className: "antialiased bg-[#ECE8E0] text-[#111827] font-sans selection:bg-[#0F766E]/15 selection:text-[#0F766E]",
             children: children
         }, void 0, false, {
             fileName: "[project]/src/app/layout.tsx",
-            lineNumber: 40,
-            columnNumber: 7
+            lineNumber: 44,
+            columnNumber: 11
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/layout.tsx",
         lineNumber: 39,
-        columnNumber: 5
+        columnNumber: 9
     }, this);
 }
 }),

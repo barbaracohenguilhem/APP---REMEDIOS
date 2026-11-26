@@ -860,1740 +860,17 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/src/components/AddAlarmSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/components/AddAlarmSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "AddAlarmSheet",
-    ()=>AddAlarmSheet
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-client] (ecmascript) <export default as Plus>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-client] (ecmascript) <export default as Trash2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/MedicationAvatar.tsx [app-client] (ecmascript)");
-;
-var _s = __turbopack_context__.k.signature();
-'use client';
-;
-;
-;
-const PRESETS = [
-    {
-        label: 'Manhã (08:00)',
-        times: [
-            '08:00'
-        ]
-    },
-    {
-        label: 'Noite (21:00)',
-        times: [
-            '21:00'
-        ]
-    },
-    {
-        label: '12 em 12h',
-        times: [
-            '08:00',
-            '20:00'
-        ]
-    },
-    {
-        label: '8 em 8h',
-        times: [
-            '07:00',
-            '15:00',
-            '23:00'
-        ]
-    }
-];
-function AddAlarmSheet({ medications, medicationPhotos, initialMedicationId, onSave, onClose }) {
-    _s();
-    const initial = medications.find((m)=>m.id === initialMedicationId) ?? medications[0];
-    const [selectedMedId, setSelectedMedId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initial?.id ?? '');
-    const [dosage, setDosage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initial?.howToTake.defaultDosage ?? '1 comprimido');
-    const [times, setTimes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initial?.howToTake.defaultTimes?.length ? [
-        ...initial.howToTake.defaultTimes
-    ] : [
-        '08:00'
-    ]);
-    const [cycleMode, setCycleMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initial?.category === 'anticoncepcional' ? '24_4' : 'daily');
-    const [notes, setNotes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initial?.howToTake.summary ?? '');
-    const handlePickMed = (med)=>{
-        setSelectedMedId(med.id);
-        setDosage(med.howToTake.defaultDosage);
-        setTimes(med.howToTake.defaultTimes.length ? [
-            ...med.howToTake.defaultTimes
-        ] : [
-            '08:00'
-        ]);
-        setCycleMode(med.category === 'anticoncepcional' ? '24_4' : 'daily');
-        setNotes(med.howToTake.summary);
-    };
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        const cleanTimes = Array.from(new Set(times.map((t)=>t.trim()).filter((t)=>/^\d{2}:\d{2}$/.test(t)))).sort();
-        if (!selectedMedId || cleanTimes.length === 0) return;
-        onSave({
-            medicationId: selectedMedId,
-            dosage: dosage.trim() || '1 comprimido',
-            times: cleanTimes,
-            daysOfWeek: [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
-            ],
-            cycleMode,
-            enabled: true,
-            notes: notes.trim() || undefined
-        });
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "add-alarm-sheet-title",
-        className: "fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4",
-        onClick: onClose,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            onClick: (e)=>e.stopPropagation(),
-            className: "w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center justify-between",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            id: "add-alarm-sheet-title",
-                            className: "text-[20px] font-bold text-[#1C1917]",
-                            children: "Novo lembrete"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 80,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: onClose,
-                            "aria-label": "Fechar",
-                            className: "w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                className: "w-5 h-5"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                lineNumber: 89,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 83,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                    lineNumber: 79,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                    onSubmit: handleSubmit,
-                    className: "space-y-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex gap-2.5 overflow-x-auto no-scrollbar pb-1",
-                            children: medications.map((med)=>{
-                                const active = med.id === selectedMedId;
-                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>handlePickMed(med),
-                                    className: `shrink-0 px-3.5 py-2.5 rounded-[20px] border flex items-center gap-2.5 transition-all cursor-pointer ${active ? 'bg-[#1C1917] text-white border-[#1C1917]' : 'bg-white text-[#1C1917] border-black/[0.06]'}`,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MedicationAvatar"], {
-                                            medication: med,
-                                            photoOverride: medicationPhotos[med.id],
-                                            size: "sm",
-                                            className: "w-8 h-8 rounded-xl"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 109,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-[13.5px] font-semibold",
-                                            children: med.name
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 115,
-                                            columnNumber: 19
-                                        }, this)
-                                    ]
-                                }, med.id, true, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 99,
-                                    columnNumber: 17
-                                }, this);
-                            })
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 95,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-3",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[13px] font-semibold text-[#57534E]",
-                                    children: "Horários"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 123,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "grid grid-cols-2 gap-2",
-                                    children: PRESETS.map((p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            type: "button",
-                                            onClick: ()=>setTimes([
-                                                    ...p.times
-                                                ]),
-                                            className: "py-2.5 px-3 rounded-xl bg-[#F6F4EF] hover:bg-[#E6F2EF] text-[13px] font-semibold text-[#1C1917] text-left cursor-pointer",
-                                            children: p.label
-                                        }, p.label, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 126,
-                                            columnNumber: 17
-                                        }, this))
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 124,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-2 pt-1",
-                                    children: [
-                                        times.map((t, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex items-center gap-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex-1 flex items-center gap-2.5 rounded-2xl bg-[#F6F4EF] px-4 py-2.5",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                                                className: "w-4.5 h-4.5 text-[#146356]"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                                lineNumber: 141,
-                                                                columnNumber: 21
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                                type: "time",
-                                                                "aria-label": `Horário ${idx + 1}`,
-                                                                value: t,
-                                                                onChange: (e)=>setTimes((prev)=>prev.map((v, i)=>i === idx ? e.target.value : v)),
-                                                                className: "flex-1 bg-transparent text-[18px] font-bold text-[#1C1917] focus:outline-none"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                                lineNumber: 142,
-                                                                columnNumber: 21
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                        lineNumber: 140,
-                                                        columnNumber: 19
-                                                    }, this),
-                                                    times.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        type: "button",
-                                                        onClick: ()=>setTimes((prev)=>prev.filter((_, i)=>i !== idx)),
-                                                        "aria-label": "Remover horário",
-                                                        className: "w-10 h-10 rounded-full bg-[#FEECEF] text-[#BE123C] inline-flex items-center justify-center cursor-pointer",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
-                                                            className: "w-4 h-4"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                            lineNumber: 159,
-                                                            columnNumber: 23
-                                                        }, this)
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                        lineNumber: 153,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                ]
-                                            }, idx, true, {
-                                                fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                lineNumber: 139,
-                                                columnNumber: 17
-                                            }, this)),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            type: "button",
-                                            onClick: ()=>{
-                                                const next = [
-                                                    '12:00',
-                                                    '18:00',
-                                                    '20:00',
-                                                    '08:00',
-                                                    '14:00'
-                                                ].find((c)=>!times.includes(c)) ?? '15:00';
-                                                setTimes((prev)=>[
-                                                        ...prev,
-                                                        next
-                                                    ]);
-                                            },
-                                            className: "w-full py-2.5 rounded-xl border border-dashed border-[#146356]/35 text-[#146356] text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                                    className: "w-4 h-4"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                    lineNumber: 175,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    children: "Outro horário no dia"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                    lineNumber: 176,
-                                                    columnNumber: 17
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 165,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 137,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 122,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[24px] p-4 border border-black/[0.05] grid grid-cols-2 gap-3",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "al-dose",
-                                            className: "block text-[12.5px] font-semibold text-[#57534E] mb-1",
-                                            children: "Dose"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 184,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                            id: "al-dose",
-                                            type: "text",
-                                            value: dosage,
-                                            onChange: (e)=>setDosage(e.target.value),
-                                            className: "w-full px-3.5 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 187,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 183,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "al-cycle",
-                                            className: "block text-[12.5px] font-semibold text-[#57534E] mb-1",
-                                            children: "Frequência"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 196,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                            id: "al-cycle",
-                                            value: cycleMode,
-                                            onChange: (e)=>setCycleMode(e.target.value),
-                                            className: "w-full px-3 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "daily",
-                                                    children: "Todos os dias"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                    lineNumber: 205,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "24_4",
-                                                    children: "24d + 4 pausa"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                    lineNumber: 206,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "21_7",
-                                                    children: "21d + 7 pausa"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                                    lineNumber: 207,
-                                                    columnNumber: 17
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                            lineNumber: 199,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                                    lineNumber: 195,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 182,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "submit",
-                            className: "w-full py-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-bold text-[15px] cursor-pointer",
-                            children: "Salvar lembrete"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                            lineNumber: 212,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddAlarmSheet.tsx",
-                    lineNumber: 93,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/components/AddAlarmSheet.tsx",
-            lineNumber: 75,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/components/AddAlarmSheet.tsx",
-        lineNumber: 68,
-        columnNumber: 5
-    }, this);
-}
-_s(AddAlarmSheet, "7xEAU4eosyRueEEaFpzx4oPkQII=");
-_c = AddAlarmSheet;
-var _c;
-__turbopack_context__.k.register(_c, "AddAlarmSheet");
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
-}
+var e = new Error("Could not parse module '[project]/src/components/AddAlarmSheet.tsx'\n\nExpected '</', got '?'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
-"[project]/src/components/AddMedicationSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/components/AddMedicationSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "AddMedicationSheet",
-    ()=>AddMedicationSheet
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$alarm$2d$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__AlarmClock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/alarm-clock.js [app-client] (ecmascript) <export default as AlarmClock>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/arrow-left.js [app-client] (ecmascript) <export default as ArrowLeft>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/camera.js [app-client] (ecmascript) <export default as Camera>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/check.js [app-client] (ecmascript) <export default as Check>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$image$2d$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ImagePlus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/image-plus.js [app-client] (ecmascript) <export default as ImagePlus>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-client] (ecmascript) <export default as Loader2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/mic.js [app-client] (ecmascript) <export default as Mic>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MicOff$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/mic-off.js [app-client] (ecmascript) <export default as MicOff>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-client] (ecmascript) <export default as Plus>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/search.js [app-client] (ecmascript) <export default as Search>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$data$2f$samplePrescriptions$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/data/samplePrescriptions.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/medicationSearch.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$aiClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/aiClient.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$voiceEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/voiceEngine.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/MedicationAvatar.tsx [app-client] (ecmascript)");
-;
-var _s = __turbopack_context__.k.signature();
-'use client';
-;
-;
-;
-;
-;
-;
-;
-async function fileToCompressedDataUrl(file) {
-    return new Promise((resolve, reject)=>{
-        const reader = new FileReader();
-        reader.onerror = ()=>reject(new Error('Falha ao ler arquivo'));
-        reader.onload = ()=>{
-            const rawUrl = String(reader.result || '');
-            const img = new Image();
-            img.onload = ()=>{
-                const maxDim = 1024;
-                const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
-                const canvas = document.createElement('canvas');
-                canvas.width = Math.max(1, Math.round(img.width * scale));
-                canvas.height = Math.max(1, Math.round(img.height * scale));
-                const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    resolve({
-                        dataUrl: rawUrl,
-                        mimeType: file.type || 'image/jpeg'
-                    });
-                    return;
-                }
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                const compressed = canvas.toDataURL('image/jpeg', 0.82);
-                resolve({
-                    dataUrl: compressed,
-                    mimeType: 'image/jpeg'
-                });
-            };
-            img.onerror = ()=>resolve({
-                    dataUrl: rawUrl,
-                    mimeType: file.type || 'image/jpeg'
-                });
-            img.src = rawUrl;
-        };
-        reader.readAsDataURL(file);
-    });
-}
-function AddMedicationSheet({ catalog, hasGeminiKey, initialStep = 'choose', onClose, onOpenVoiceSettings, onAddExisting, onAddNewMedication, onSpeak }) {
-    _s();
-    const [step, setStep] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initialStep);
-    const cameraRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
-    const galleryRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
-    // Scan / Print state
-    const [photoDataUrl, setPhotoDataUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [scanning, setScanning] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [scanError, setScanError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [scannedItems, setScannedItems] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [showExamples, setShowExamples] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [pastedText, setPastedText] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [resolvingIdx, setResolvingIdx] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Voice state
-    const [listening, setListening] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [voiceHeard, setVoiceHeard] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [voiceError, setVoiceError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Search / AI Lookup state
-    const [query, setQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [lookingUpAi, setLookingUpAi] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [lookupError, setLookupError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Manual form
-    const [manualName, setManualName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [manualDosage, setManualDosage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('1 comprimido');
-    const [manualTime, setManualTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('08:00');
-    const [manualNotes, setManualNotes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const handleImagePicked = async (file)=>{
-        setStep('scan');
-        setScanning(true);
-        setScanError(null);
-        setScannedItems([]);
-        try {
-            const { dataUrl, mimeType } = await fileToCompressedDataUrl(file);
-            setPhotoDataUrl(dataUrl);
-            const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$aiClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["scanPrescriptionImage"])({
-                imageBase64: dataUrl,
-                mimeType
-            });
-            setScanning(false);
-            if (res.error === 'NO_GEMINI_KEY') {
-                // Graceful filename fallback if user hasn't added Gemini key yet
-                const fallbackMatches = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parsePrescriptionText"])(file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' '), catalog);
-                if (fallbackMatches.length > 0) {
-                    setScannedItems(fallbackMatches.map((m)=>({
-                            catalogId: m.medication.id,
-                            name: m.medication.name,
-                            activeIngredient: m.medication.activeIngredient,
-                            dosage: m.detectedDosage,
-                            times: m.detectedTimes,
-                            cycleMode: m.medication.category === 'anticoncepcional' ? '24_4' : 'daily',
-                            notes: m.medication.howToTake.summary
-                        })));
-                    return;
-                }
-                setScanError(res.message || 'Configure a chave Gemini para ler receitas por foto.');
-                return;
-            }
-            if (res.error) {
-                setScanError(res.message || 'Não foi possível ler a imagem.');
-                return;
-            }
-            if (res.items.length === 0) {
-                setScanError('Não identifiquei o nome do remédio nessa imagem. Tente outra foto ou busque pelo nome.');
-                return;
-            }
-            setScannedItems(res.items);
-            onSpeak('scan-done', `Encontrei ${res.items.map((i)=>i.name).join(' e ')}. Toque para salvar e ouvir a bula fácil.`);
-        } catch  {
-            setScanning(false);
-            setScanError('Não consegui processar a imagem. Tente novamente.');
-        }
-    };
-    const handleAnalyzeText = (text)=>{
-        setStep('scan');
-        setPhotoDataUrl(null);
-        setScanError(null);
-        const local = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["parsePrescriptionText"])(text, catalog);
-        if (local.length === 0) {
-            setScannedItems([]);
-            setScanError('Não encontrei nenhum remédio nesse texto. Tente buscar pelo nome.');
-            return;
-        }
-        const items = local.map((m)=>({
-                catalogId: m.medication.id,
-                name: m.medication.name,
-                activeIngredient: m.medication.activeIngredient,
-                dosage: m.detectedDosage,
-                times: m.detectedTimes,
-                cycleMode: m.medication.category === 'anticoncepcional' ? '24_4' : 'daily',
-                notes: m.medication.howToTake.summary
-            }));
-        setScannedItems(items);
-        onSpeak('scan-text-done', `Encontrei ${items.map((i)=>i.name).join(' e ')}. Toque para abrir.`);
-    };
-    const handleConfirmScannedItem = async (item, idx, withAlarm)=>{
-        const existing = item.catalogId ? catalog.find((m)=>m.id === item.catalogId) : undefined;
-        if (existing) {
-            onAddExisting(existing, {
-                createAlarm: withAlarm,
-                alarmTimes: item.times,
-                photoDataUrl: photoDataUrl || undefined,
-                openAfter: true
-            });
-            onClose();
-            return;
-        }
-        // Not in local catalog — fetch complete Brazilian bula & bioequivalent differences via Gemini!
-        setResolvingIdx(idx);
-        const lookup = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$aiClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["lookupAnyBrazilianMedication"])(item.name);
-        setResolvingIdx(null);
-        if (lookup.medication) {
-            onAddNewMedication(lookup.medication, withAlarm ? item.times : undefined, photoDataUrl || undefined);
-            onClose();
-            return;
-        }
-        const custom = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createCustomMedication"])({
-            name: item.name,
-            activeIngredient: item.activeIngredient,
-            dosage: item.dosage,
-            notes: item.notes,
-            colorTheme: 'teal'
-        });
-        onAddNewMedication(custom, withAlarm ? item.times : undefined, photoDataUrl || undefined);
-        onClose();
-    };
-    const handleAiLookupQuery = async (term)=>{
-        const clean = term.trim();
-        if (!clean) return;
-        setLookingUpAi(true);
-        setLookupError(null);
-        const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$aiClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["lookupAnyBrazilianMedication"])(clean);
-        setLookingUpAi(false);
-        if (res.medication) {
-            const existing = catalog.find((m)=>m.id === res.medication.id);
-            if (existing) {
-                onAddExisting(existing, {
-                    createAlarm: false,
-                    openAfter: true
-                });
-            } else {
-                onAddNewMedication(res.medication);
-            }
-            onClose();
-            return;
-        }
-        setLookupError(res.message || 'Não encontrei esse remédio. Você pode cadastrar manualmente abaixo.');
-    };
-    const handleStartVoice = ()=>{
-        setVoiceError(null);
-        setListening(true);
-        const stop = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$voiceEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["voiceEngine"].startListening({
-            onResult: (transcript)=>{
-                setListening(false);
-                setVoiceHeard(transcript);
-                const matches = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["searchMedications"])(catalog, transcript);
-                if (matches.length > 0 && transcript.length >= 3) {
-                    setQuery(transcript);
-                    setStep('search');
-                } else if (hasGeminiKey) {
-                    void handleAiLookupQuery(transcript);
-                } else {
-                    setQuery(transcript);
-                    setStep('search');
-                }
-            },
-            onError: (msg)=>{
-                setListening(false);
-                setVoiceError(msg);
-            },
-            onEnd: ()=>{
-                setListening(false);
-            }
-        });
-        if (!stop) setListening(false);
-    };
-    const localResults = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["searchMedications"])(catalog, query);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "add-sheet-title",
-        className: "fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4",
-        onClick: onClose,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            onClick: (e)=>e.stopPropagation(),
-            className: "w-full max-w-[430px] max-h-[90dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                    ref: cameraRef,
-                    type: "file",
-                    accept: "image/*",
-                    capture: "environment",
-                    className: "hidden",
-                    onChange: (e)=>{
-                        const f = e.target.files?.[0];
-                        if (f) void handleImagePicked(f);
-                        e.target.value = '';
-                    }
-                }, void 0, false, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 318,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                    ref: galleryRef,
-                    type: "file",
-                    accept: "image/*",
-                    className: "hidden",
-                    onChange: (e)=>{
-                        const f = e.target.files?.[0];
-                        if (f) void handleImagePicked(f);
-                        e.target.value = '';
-                    }
-                }, void 0, false, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 330,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center justify-between gap-2",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center gap-2",
-                            children: [
-                                step !== 'choose' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>setStep('choose'),
-                                    "aria-label": "Voltar",
-                                    className: "w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowLeft$3e$__["ArrowLeft"], {
-                                        className: "w-4.5 h-4.5"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 352,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 346,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    id: "add-sheet-title",
-                                    className: "text-[20px] font-bold text-[#1C1917]",
-                                    children: step === 'choose' ? 'Adicionar remédio' : step === 'scan' ? 'Foto ou receita' : step === 'voice' ? 'Falar o nome' : step === 'manual' ? 'Cadastro manual' : 'Buscar remédio'
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 355,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 344,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: onClose,
-                            "aria-label": "Fechar",
-                            className: "w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                className: "w-5 h-5"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 374,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 368,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 343,
-                    columnNumber: 9
-                }, this),
-                step === 'choose' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "space-y-3",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>setStep('scan'),
-                            className: "w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "w-13 h-13 rounded-2xl bg-[#E6F2EF] text-[#146356] flex items-center justify-center shrink-0",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
-                                        className: "w-6 h-6 stroke-[2]"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 387,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 386,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[16px] font-bold text-[#1C1917]",
-                                            children: "Foto da receita ou caixa"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 390,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[13.5px] text-[#6B6560] mt-0.5",
-                                            children: "Lê receita médica, caixinha ou print de WhatsApp"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 391,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 389,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 381,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>setStep('voice'),
-                            className: "w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "w-13 h-13 rounded-2xl bg-[#FEF3DD] text-[#B45309] flex items-center justify-center shrink-0",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {
-                                        className: "w-6 h-6 stroke-[2]"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 403,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 402,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[16px] font-bold text-[#1C1917]",
-                                            children: "Falar o nome do remédio"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 406,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[13.5px] text-[#6B6560] mt-0.5",
-                                            children: "Sem precisar digitar — só falar em voz alta"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 407,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 405,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 397,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>setStep('search'),
-                            className: "w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "w-13 h-13 rounded-2xl bg-[#EFECE6] text-[#44403C] flex items-center justify-center shrink-0",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                        className: "w-6 h-6 stroke-[2]"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 419,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 418,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[16px] font-bold text-[#1C1917]",
-                                            children: "Buscar qualquer remédio"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 422,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[13.5px] text-[#6B6560] mt-0.5",
-                                            children: "Catálogo brasileiro completo ou cadastro manual"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 423,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 421,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 413,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 380,
-                    columnNumber: 11
-                }, this),
-                step === 'scan' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "space-y-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-2 gap-2.5",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>cameraRef.current?.click(),
-                                    className: "py-4 px-4 rounded-[20px] bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
-                                            className: "w-5 h-5"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 440,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Tirar foto"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 441,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 435,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>galleryRef.current?.click(),
-                                    className: "py-4 px-4 rounded-[20px] bg-white border border-black/10 hover:bg-[#F3EFE8] text-[#1C1917] font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$image$2d$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ImagePlus$3e$__["ImagePlus"], {
-                                            className: "w-5 h-5 text-[#146356]"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 448,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Print / Galeria"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 449,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 443,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 434,
-                            columnNumber: 13
-                        }, this),
-                        photoDataUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "rounded-[20px] overflow-hidden bg-white border border-black/[0.06] max-h-44 flex items-center justify-center",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                src: photoDataUrl,
-                                alt: "Foto selecionada",
-                                className: "max-h-44 object-contain"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 455,
-                                columnNumber: 17
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 454,
-                            columnNumber: 15
-                        }, this),
-                        scanning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[20px] p-5 flex items-center gap-3 text-[14px] font-semibold text-[#146356]",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                                    className: "w-5 h-5 animate-spin shrink-0"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 461,
-                                    columnNumber: 17
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: "Lendo receita com visão por IA..."
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 462,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 460,
-                            columnNumber: 15
-                        }, this),
-                        scanError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-[#FFF6F7] border border-[#BE123C]/15 rounded-[20px] p-4 space-y-2.5",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[13.5px] text-[#9F1239] leading-relaxed",
-                                    children: scanError
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 468,
-                                    columnNumber: 17
-                                }, this),
-                                !hasGeminiKey && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>{
-                                        onClose();
-                                        onOpenVoiceSettings();
-                                    },
-                                    className: "py-2 px-4 rounded-full bg-[#146356] text-white text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                            className: "w-3.5 h-3.5"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 478,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Conectar chave Gemini agora"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 479,
-                                            columnNumber: 21
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 470,
-                                    columnNumber: 19
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 467,
-                            columnNumber: 15
-                        }, this),
-                        scannedItems.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "space-y-3",
-                            children: scannedItems.map((item, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "bg-white rounded-[22px] p-4 border border-black/[0.06] space-y-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[16px] font-bold text-[#1C1917]",
-                                                    children: item.name
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 493,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[13px] text-[#6B6560]",
-                                                    children: [
-                                                        item.dosage,
-                                                        " · Horário sugerido: ",
-                                                        item.times.join(', ')
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 494,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 492,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex gap-2",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    type: "button",
-                                                    disabled: resolvingIdx === idx,
-                                                    onClick: ()=>void handleConfirmScannedItem(item, idx, true),
-                                                    className: "flex-1 py-3 px-3 rounded-full bg-[#146356] text-white text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer",
-                                                    children: [
-                                                        resolvingIdx === idx ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                                                            className: "w-4 h-4 animate-spin"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                            lineNumber: 506,
-                                                            columnNumber: 27
-                                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$alarm$2d$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__AlarmClock$3e$__["AlarmClock"], {
-                                                            className: "w-4 h-4"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                            lineNumber: 508,
-                                                            columnNumber: 27
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            children: "Salvar + Alarme"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                            lineNumber: 510,
-                                                            columnNumber: 25
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 499,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    type: "button",
-                                                    disabled: resolvingIdx === idx,
-                                                    onClick: ()=>void handleConfirmScannedItem(item, idx, false),
-                                                    className: "py-3 px-4 rounded-full bg-[#F3EFE8] text-[#1C1917] text-[13px] font-semibold cursor-pointer",
-                                                    children: "Só abrir"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 512,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 498,
-                                            columnNumber: 21
-                                        }, this)
-                                    ]
-                                }, `${item.name}-${idx}`, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 488,
-                                    columnNumber: 19
-                                }, this))
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 486,
-                            columnNumber: 15
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[22px] p-4 border border-black/[0.05] space-y-2.5",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                    htmlFor: "paste-rx",
-                                    className: "text-[13px] font-semibold text-[#57534E]",
-                                    children: "Ou cole o texto de uma receita do WhatsApp"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 528,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                    id: "paste-rx",
-                                    rows: 2,
-                                    value: pastedText,
-                                    onChange: (e)=>setPastedText(e.target.value),
-                                    placeholder: "Ex: Iumi 1 comp às 21:00 e Dipirona 6/6h",
-                                    className: "w-full rounded-2xl bg-[#F6F4EF] px-3.5 py-2.5 text-[14px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 531,
-                                    columnNumber: 15
-                                }, this),
-                                pastedText.trim() && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>handleAnalyzeText(pastedText),
-                                    className: "w-full py-2.5 rounded-full bg-[#1C1917] text-white text-[13px] font-semibold cursor-pointer",
-                                    children: "Ler receita colada"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 540,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 527,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "text-center",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>setShowExamples((v)=>!v),
-                                    className: "text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer",
-                                    children: showExamples ? 'Esconder exemplos' : 'Testar com um exemplo de receita pronto'
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 552,
-                                    columnNumber: 15
-                                }, this),
-                                showExamples && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "mt-3 space-y-2 text-left",
-                                    children: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$data$2f$samplePrescriptions$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SAMPLE_PRESCRIPTIONS"].map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            type: "button",
-                                            onClick: ()=>handleAnalyzeText(s.extractedText),
-                                            className: "w-full p-3.5 rounded-2xl bg-white border border-black/[0.05] hover:bg-[#FAF9F6] cursor-pointer",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[14px] font-bold text-[#1C1917]",
-                                                    children: s.title
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 569,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[12.5px] text-[#78716C] mt-0.5 truncate",
-                                                    children: s.previewLines.slice(1).join(' · ')
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 570,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, s.id, true, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 563,
-                                            columnNumber: 21
-                                        }, this))
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 561,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 551,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 433,
-                    columnNumber: 11
-                }, this),
-                step === 'voice' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-[26px] p-6 border border-black/[0.05] flex flex-col items-center text-center space-y-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[14.5px] text-[#57534E]",
-                            children: "Toque no botão e diga o nome do remédio (ex.: “Iumi”, “Losartana”, “Ozempic”)"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 584,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: handleStartVoice,
-                            "aria-label": listening ? 'Ouvindo' : 'Falar nome do remédio',
-                            className: `w-24 h-24 rounded-full flex items-center justify-center text-white shadow-lg transition-all cursor-pointer ${listening ? 'bg-[#BE123C] ring-[10px] ring-[#BE123C]/20 animate-pulse' : 'bg-[#146356] animate-calm-breathe'}`,
-                            children: listening ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MicOff$3e$__["MicOff"], {
-                                className: "w-10 h-10"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 597,
-                                columnNumber: 28
-                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {
-                                className: "w-10 h-10"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 597,
-                                columnNumber: 63
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 587,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[16px] font-bold text-[#1C1917]",
-                            children: listening ? 'Estou ouvindo...' : 'Toque para falar'
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 599,
-                            columnNumber: 13
-                        }, this),
-                        voiceHeard && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[13.5px] text-[#146356] font-medium",
-                            children: [
-                                "Ouvi: “",
-                                voiceHeard,
-                                "”"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 603,
-                            columnNumber: 15
-                        }, this),
-                        voiceError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[13px] text-[#BE123C]",
-                            children: voiceError
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 607,
-                            columnNumber: 28
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 583,
-                    columnNumber: 11
-                }, this),
-                step === 'search' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "space-y-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "relative",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                    className: "w-4.5 h-4.5 text-[#78716C] absolute left-4 top-1/2 -translate-y-1/2"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 615,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    type: "search",
-                                    autoFocus: true,
-                                    value: query,
-                                    onChange: (e)=>{
-                                        setQuery(e.target.value);
-                                        setLookupError(null);
-                                    },
-                                    placeholder: "Digite qualquer remédio do Brasil...",
-                                    className: "w-full pl-11 pr-4 py-3.5 rounded-full bg-white border border-black/[0.08] text-[15px] text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#146356]"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 616,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 614,
-                            columnNumber: 13
-                        }, this),
-                        query.trim().length >= 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            disabled: lookingUpAi,
-                            onClick: ()=>void handleAiLookupQuery(query),
-                            className: "w-full py-3.5 px-4 rounded-[20px] bg-[#E6F2EF] hover:bg-[#D5EBE5] text-[#0F4F45] font-semibold text-[14px] inline-flex items-center justify-center gap-2 cursor-pointer",
-                            children: lookingUpAi ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                                        className: "w-4 h-4 animate-spin"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 639,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: [
-                                            "Montando bula e genéricos de “",
-                                            query.trim(),
-                                            "”..."
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 640,
-                                        columnNumber: 21
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 638,
-                                columnNumber: 19
-                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                        className: "w-4 h-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 644,
-                                        columnNumber: 21
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: [
-                                            "Consultar “",
-                                            query.trim(),
-                                            "” com IA (qualquer remédio BR)"
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                        lineNumber: 645,
-                                        columnNumber: 21
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                lineNumber: 643,
-                                columnNumber: 19
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 631,
-                            columnNumber: 15
-                        }, this),
-                        lookupError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[13px] text-[#9F1239] bg-[#FFF6F7] rounded-2xl p-3.5",
-                            children: lookupError
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 652,
-                            columnNumber: 15
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[24px] border border-black/[0.05] divide-y divide-black/[0.05] overflow-hidden max-h-72 overflow-y-auto",
-                            children: localResults.map((med)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>{
-                                        onAddExisting(med, {
-                                            createAlarm: false,
-                                            openAfter: true
-                                        });
-                                        onClose();
-                                    },
-                                    className: "w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#FAF9F6] cursor-pointer",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MedicationAvatar"], {
-                                            medication: med,
-                                            size: "sm"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 668,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "min-w-0 flex-1",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[15px] font-bold text-[#1C1917] truncate",
-                                                    children: med.name
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 670,
-                                                    columnNumber: 21
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[12.5px] text-[#78716C] truncate",
-                                                    children: med.activeIngredient
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                                    lineNumber: 671,
-                                                    columnNumber: 21
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 669,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                            className: "w-4 h-4 text-[#146356] opacity-70"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 673,
-                                            columnNumber: 19
-                                        }, this)
-                                    ]
-                                }, med.id, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 659,
-                                    columnNumber: 17
-                                }, this))
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 657,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>{
-                                setManualName(query);
-                                setStep('manual');
-                            },
-                            className: "w-full py-3 rounded-full bg-white border border-black/10 text-[#57534E] text-[13.5px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                    className: "w-4 h-4"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 686,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: "Cadastrar manualmente"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 687,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 678,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 613,
-                    columnNumber: 11
-                }, this),
-                step === 'manual' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                    onSubmit: (e)=>{
-                        e.preventDefault();
-                        if (!manualName.trim()) return;
-                        const med = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$medicationSearch$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createCustomMedication"])({
-                            name: manualName,
-                            dosage: manualDosage,
-                            notes: manualNotes,
-                            colorTheme: 'teal'
-                        });
-                        onAddNewMedication(med, manualTime ? [
-                            manualTime
-                        ] : undefined);
-                        onClose();
-                    },
-                    className: "bg-white rounded-[24px] p-5 border border-black/[0.05] space-y-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                    htmlFor: "man-name",
-                                    className: "block text-[13px] font-semibold text-[#57534E] mb-1.5",
-                                    children: "Nome do remédio"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 710,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    id: "man-name",
-                                    type: "text",
-                                    required: true,
-                                    value: manualName,
-                                    onChange: (e)=>setManualName(e.target.value),
-                                    placeholder: "Ex: Vitamina D 2000 UI",
-                                    className: "w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[15px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 713,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 709,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-2 gap-3",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "man-dose",
-                                            className: "block text-[13px] font-semibold text-[#57534E] mb-1.5",
-                                            children: "Dose"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 726,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                            id: "man-dose",
-                                            type: "text",
-                                            value: manualDosage,
-                                            onChange: (e)=>setManualDosage(e.target.value),
-                                            className: "w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] text-[#1C1917] focus:outline-none"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 729,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 725,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "man-time",
-                                            className: "block text-[13px] font-semibold text-[#57534E] mb-1.5",
-                                            children: "Horário"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 738,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                            id: "man-time",
-                                            type: "time",
-                                            value: manualTime,
-                                            onChange: (e)=>setManualTime(e.target.value),
-                                            className: "w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] font-semibold text-[#1C1917] focus:outline-none"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                            lineNumber: 741,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 737,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 724,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                    htmlFor: "man-notes",
-                                    className: "block text-[13px] font-semibold text-[#57534E] mb-1.5",
-                                    children: "Como tomar (opcional)"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 752,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    id: "man-notes",
-                                    type: "text",
-                                    value: manualNotes,
-                                    onChange: (e)=>setManualNotes(e.target.value),
-                                    placeholder: "Ex: Após o almoço",
-                                    className: "w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] text-[#1C1917] focus:outline-none"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                                    lineNumber: 755,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 751,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "submit",
-                            className: "w-full py-3.5 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[15px] cursor-pointer",
-                            children: "Salvar remédio"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                            lineNumber: 765,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/AddMedicationSheet.tsx",
-                    lineNumber: 694,
-                    columnNumber: 11
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/components/AddMedicationSheet.tsx",
-            lineNumber: 313,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/components/AddMedicationSheet.tsx",
-        lineNumber: 306,
-        columnNumber: 5
-    }, this);
-}
-_s(AddMedicationSheet, "rxBv8KA5MqHbsvfWZ8efaJKwRDU=");
-_c = AddMedicationSheet;
-var _c;
-__turbopack_context__.k.register(_c, "AddMedicationSheet");
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
-}
+var e = new Error("Could not parse module '[project]/src/components/AddMedicationSheet.tsx'\n\nExpected '</', got '?'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/src/components/AlarmRingingModal.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -2619,54 +896,54 @@ function AlarmRingingModal({ dose, photoOverride, onMarkTaken, onSnooze, onDismi
         role: "dialog",
         "aria-modal": "true",
         "aria-labelledby": "alarm-ring-title",
-        className: "fixed inset-0 z-50 bg-[#1C1917]/60 backdrop-blur-sm flex items-center justify-center p-5",
+        className: "fixed inset-0 z-50 bg-[#111827]/75 backdrop-blur-sm flex items-center justify-center p-4",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "w-full max-w-[380px] bg-[#F6F4EF] rounded-[34px] p-6 shadow-2xl border border-white/60 relative animate-sheet-up",
+            className: "w-full max-w-[390px] bg-white rounded-[32px] p-6 shadow-2xl border-4 border-[#047857] relative animate-sheet-up",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                     type: "button",
                     onClick: onDismiss,
                     "aria-label": "Fechar aviso",
-                    className: "absolute top-5 right-5 w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
+                    className: "absolute top-4 right-4 w-11 h-11 rounded-full bg-[#F3F4F6] text-[#111827] inline-flex items-center justify-center cursor-pointer",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                        className: "w-5 h-5"
+                        className: "w-6 h-6"
                     }, void 0, false, {
                         fileName: "[project]/src/components/AlarmRingingModal.tsx",
                         lineNumber: 40,
-                        columnNumber: 11
+                        columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                     lineNumber: 34,
-                    columnNumber: 9
+                    columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex flex-col items-center text-center pt-2",
+                    className: "flex flex-col items-center text-center pt-1",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-14 h-14 rounded-full bg-[#E6F2EF] text-[#146356] flex items-center justify-center animate-calm-breathe",
+                            className: "w-16 h-16 rounded-full bg-[#DCFCE7] text-[#047857] flex items-center justify-center animate-calm-breathe",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2d$ring$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BellRing$3e$__["BellRing"], {
-                                className: "w-7 h-7"
+                                className: "w-9 h-9"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                 lineNumber: 45,
-                                columnNumber: 13
+                                columnNumber: 19
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 44,
-                            columnNumber: 11
+                            columnNumber: 17
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "mt-4 text-[13px] font-semibold uppercase tracking-wide text-[#146356]",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "mt-3 px-4 py-1.5 rounded-full bg-[#FEF3C7] text-[#92400E] text-[15px] font-extrabold uppercase",
                             children: [
-                                "Hora do seu remédio · ",
+                                "HORA DO REMÉDIO · ",
                                 dose.scheduledTime
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 48,
-                            columnNumber: 11
+                            columnNumber: 17
                         }, this),
                         med && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mt-4",
@@ -2674,36 +951,36 @@ function AlarmRingingModal({ dose, photoOverride, onMarkTaken, onSnooze, onDismi
                                 medication: med,
                                 photoOverride: photoOverride,
                                 size: "lg",
-                                className: "w-24 h-24 rounded-[28px]"
+                                className: "w-24 h-24 rounded-[26px]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                 lineNumber: 54,
-                                columnNumber: 15
+                                columnNumber: 21
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 53,
-                            columnNumber: 13
+                            columnNumber: 19
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                             id: "alarm-ring-title",
-                            className: "text-[26px] font-bold text-[#1C1917] mt-4",
+                            className: "text-[28px] font-extrabold text-[#111827] mt-3",
                             children: med?.name ?? 'Seu Remédio'
                         }, void 0, false, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 63,
-                            columnNumber: 11
+                            columnNumber: 19
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[16px] font-semibold text-[#57534E] mt-1",
+                            className: "text-[18px] font-bold text-[#047857] mt-1",
                             children: dose.dosage
                         }, void 0, false, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 66,
-                            columnNumber: 11
+                            columnNumber: 19
                         }, this),
                         dose.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[13.5px] text-[#78716C] mt-1 max-w-[260px]",
+                            className: "text-[15.5px] font-medium text-[#374151] mt-1",
                             children: dose.notes
                         }, void 0, false, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
@@ -2713,98 +990,98 @@ function AlarmRingingModal({ dose, photoOverride, onMarkTaken, onSnooze, onDismi
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: onReplayVoice,
-                            className: "mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[#146356] font-semibold text-[13px] border border-black/[0.06] hover:bg-[#E6F2EF] cursor-pointer",
+                            className: "mt-4 min-h-[46px] px-5 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-extrabold text-[15px] inline-flex items-center gap-2 cursor-pointer",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
-                                    className: "w-4 h-4"
+                                    className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                     lineNumber: 76,
-                                    columnNumber: 13
+                                    columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "Ouvir novamente"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                     lineNumber: 77,
-                                    columnNumber: 13
+                                    columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 71,
-                            columnNumber: 11
+                            columnNumber: 19
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-full space-y-2.5 mt-6",
+                            className: "w-full space-y-3 mt-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: onMarkTaken,
-                                    className: "w-full py-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-bold text-[16px] shadow-[0_8px_22px_rgba(20,99,86,0.28)] inline-flex items-center justify-center gap-2 active:scale-[0.99] transition-all cursor-pointer",
+                                    className: "w-full min-h-[60px] rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-extrabold text-[19px] shadow-lg inline-flex items-center justify-center gap-2.5 active:scale-[0.99] transition-all cursor-pointer",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                            className: "w-5 h-5 stroke-[2.6]"
+                                            className: "w-7 h-7 stroke-[3]"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                             lineNumber: 86,
-                                            columnNumber: 15
+                                            columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Já tomei agora"
+                                            children: "JÁ TOMEI AGORA"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                             lineNumber: 87,
-                                            columnNumber: 15
+                                            columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                     lineNumber: 81,
-                                    columnNumber: 13
+                                    columnNumber: 23
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: onSnooze,
-                                    className: "w-full py-3.5 rounded-full bg-white border border-black/10 hover:bg-[#EFECE6] text-[#1C1917] font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer",
+                                    className: "w-full min-h-[54px] rounded-2xl bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E] font-extrabold text-[16.5px] inline-flex items-center justify-center gap-2 cursor-pointer",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                            className: "w-4.5 h-4.5 text-[#78716C]"
+                                            className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                             lineNumber: 95,
-                                            columnNumber: 15
+                                            columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Lembrar em 15 minutos"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                             lineNumber: 96,
-                                            columnNumber: 15
+                                            columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                                     lineNumber: 90,
-                                    columnNumber: 13
+                                    columnNumber: 23
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/AlarmRingingModal.tsx",
                             lineNumber: 80,
-                            columnNumber: 11
+                            columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/AlarmRingingModal.tsx",
                     lineNumber: 43,
-                    columnNumber: 9
+                    columnNumber: 15
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/AlarmRingingModal.tsx",
             lineNumber: 33,
-            columnNumber: 7
+            columnNumber: 9
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/AlarmRingingModal.tsx",
@@ -3844,298 +2121,11 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/src/components/HistorySheet.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/components/HistorySheet.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "HistorySheet",
-    ()=>HistorySheet
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/check.js [app-client] (ecmascript) <export default as Check>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/scheduleEngine.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/AudioPlayerBar.tsx [app-client] (ecmascript)");
-;
-var _s = __turbopack_context__.k.signature();
-'use client';
-;
-;
-;
-;
-function HistorySheet({ last7Days, initialDateStr, schedules, doseLogs, medications, now, playback, onSpeak, onStopSpeaking, onClose }) {
-    _s();
-    const [selectedDateStr, setSelectedDateStr] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(initialDateStr || last7Days[last7Days.length - 1]?.dateStr || '');
-    const parts = selectedDateStr.split('-').map(Number);
-    const targetDate = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : now;
-    const dayDoses = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getDosesForDate"])(schedules, doseLogs, medications, targetDate, now);
-    const buildSpokenDay = ()=>{
-        const label = selectedDateStr.split('-').reverse().join('/');
-        if (dayDoses.length === 0) {
-            return `No dia ${label}, nenhuma dose estava programada.`;
-        }
-        const items = dayDoses.map((d)=>{
-            const name = d.medication?.name ?? 'Remédio';
-            if (d.status === 'taken' && d.log) {
-                const p = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatPunctualityLabel"])(d.log.delayMinutes);
-                return `${name}, previsto às ${d.scheduledTime}, tomado às ${d.log.takenTimeDisplay}, ${p.label}`;
-            }
-            if (d.status === 'upcoming') return `${name}, agendado para ${d.scheduledTime}`;
-            return `${name}, previsto às ${d.scheduledTime}, não registrado`;
-        }).join('. ');
-        return `Registro do dia ${label}. ${items}.`;
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "history-sheet-title",
-        className: "fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4",
-        onClick: ()=>{
-            onStopSpeaking();
-            onClose();
-        },
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            onClick: (e)=>e.stopPropagation(),
-            className: "w-full max-w-[430px] max-h-[85dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-4",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center justify-between gap-2",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    id: "history-sheet-title",
-                                    className: "text-[20px] font-bold text-[#1C1917]",
-                                    children: "Histórico de horários"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 84,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[13px] text-[#78716C]",
-                                    children: "Toque em qualquer dia para ver se foi tomado certinho"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 87,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 83,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>{
-                                onStopSpeaking();
-                                onClose();
-                            },
-                            "aria-label": "Fechar histórico",
-                            className: "w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                className: "w-5 h-5"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/HistorySheet.tsx",
-                                lineNumber: 100,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 91,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/HistorySheet.tsx",
-                    lineNumber: 82,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-[22px] p-3.5 border border-black/[0.05] grid grid-cols-7 gap-1",
-                    children: last7Days.map((day)=>{
-                        const active = day.dateStr === selectedDateStr;
-                        const dotCls = day.status === 'complete' ? 'bg-[#146356] text-white' : day.status === 'partial' ? 'bg-[#FEF3DD] text-[#B45309]' : day.status === 'missed' ? 'bg-[#FEECEF] text-[#BE123C]' : 'bg-[#F3EFE8] text-[#A8A29E]';
-                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>{
-                                onStopSpeaking();
-                                setSelectedDateStr(day.dateStr);
-                            },
-                            className: `flex flex-col items-center py-1.5 rounded-xl transition-all cursor-pointer ${active ? 'bg-[#E6F2EF]' : 'hover:bg-[#F6F4EF]'}`,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-[11px] font-medium text-[#78716C]",
-                                    children: day.weekdayShort.slice(0, 3)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 129,
-                                    columnNumber: 17
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: `mt-1 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold ${dotCls}`,
-                                    children: day.status === 'complete' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                        className: "w-4 h-4 stroke-[2.6]"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/HistorySheet.tsx",
-                                        lineNumber: 135,
-                                        columnNumber: 48
-                                    }, this) : day.dayNumber
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 132,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, day.dateStr, true, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 118,
-                            columnNumber: 15
-                        }, this);
-                    })
-                }, void 0, false, {
-                    fileName: "[project]/src/components/HistorySheet.tsx",
-                    lineNumber: 105,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-3",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center justify-between gap-2",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: "text-[15px] font-bold text-[#1C1917]",
-                                    children: [
-                                        "Dia ",
-                                        selectedDateStr.split('-').reverse().join('/')
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 145,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["QuietListenButton"], {
-                                    sectionId: "history-day",
-                                    playback: playback,
-                                    onClick: ()=>{
-                                        if (playback.sectionId === 'history-day' && playback.status !== 'idle') {
-                                            onStopSpeaking();
-                                        } else {
-                                            onSpeak('history-day', buildSpokenDay());
-                                        }
-                                    },
-                                    ariaLabel: "Ouvir resumo deste dia"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 148,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 144,
-                            columnNumber: 11
-                        }, this),
-                        dayDoses.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[14px] text-[#78716C] py-2",
-                            children: "Nenhuma dose programada neste dia."
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 163,
-                            columnNumber: 13
-                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "divide-y divide-black/[0.05]",
-                            children: dayDoses.map((dose)=>{
-                                const punct = dose.log ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatPunctualityLabel"])(dose.log.delayMinutes) : null;
-                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "py-3 first:pt-1 last:pb-1 flex items-center justify-between gap-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "min-w-0",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[15px] font-bold text-[#1C1917] truncate",
-                                                    children: dose.medication?.name ?? 'Medicamento'
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                                    lineNumber: 173,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-[13px] text-[#6B6560]",
-                                                    children: [
-                                                        "Previsto ",
-                                                        dose.scheduledTime,
-                                                        dose.status === 'taken' && dose.log && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                                            children: [
-                                                                " · Tomado às ",
-                                                                dose.log.takenTimeDisplay
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/src/components/HistorySheet.tsx",
-                                                            lineNumber: 179,
-                                                            columnNumber: 27
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                                    lineNumber: 176,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/HistorySheet.tsx",
-                                            lineNumber: 172,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: `shrink-0 text-[12px] font-semibold px-3 py-1 rounded-full ${dose.status === 'taken' ? punct?.isOnTime ? 'bg-[#E6F2EF] text-[#146356]' : 'bg-[#FEF3DD] text-[#B45309]' : dose.status === 'upcoming' ? 'bg-[#F3EFE8] text-[#57534E]' : 'bg-[#FEECEF] text-[#BE123C]'}`,
-                                            children: dose.status === 'taken' ? punct?.isOnTime ? 'Certinho ✓' : punct?.label : dose.status === 'upcoming' ? 'Agendado' : 'Não registrado'
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/HistorySheet.tsx",
-                                            lineNumber: 183,
-                                            columnNumber: 21
-                                        }, this)
-                                    ]
-                                }, dose.key, true, {
-                                    fileName: "[project]/src/components/HistorySheet.tsx",
-                                    lineNumber: 171,
-                                    columnNumber: 19
-                                }, this);
-                            })
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/HistorySheet.tsx",
-                            lineNumber: 167,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/HistorySheet.tsx",
-                    lineNumber: 143,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/components/HistorySheet.tsx",
-            lineNumber: 78,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/components/HistorySheet.tsx",
-        lineNumber: 68,
-        columnNumber: 5
-    }, this);
-}
-_s(HistorySheet, "7KK+MJbYJ48jLxVku3wa8vS/xbw=");
-_c = HistorySheet;
-var _c;
-__turbopack_context__.k.register(_c, "HistorySheet");
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
-}
+var e = new Error("Could not parse module '[project]/src/components/HistorySheet.tsx'\n\nExpected '</', got '?'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/src/components/HomeView.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -6857,6 +4847,7 @@ function MeuRemedioApp() {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
                     className: "flex-1 overflow-y-auto",
                     children: isGuided ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$VoiceGuidedOverlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["VoiceGuidedOverlay"], {
+                        activeMedication: activeMedication,
                         nextDose: nextUntakenDose,
                         playback: playback,
                         onSpeak: speak,
@@ -6905,7 +4896,7 @@ function MeuRemedioApp() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                        lineNumber: 513,
+                        lineNumber: 514,
                         columnNumber: 13
                     }, this) : activeTab === 'remedios' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationDetailView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MedicationDetailView"], {
                         medication: activeMedication,
@@ -6966,7 +4957,7 @@ function MeuRemedioApp() {
                         onClearPendingQuestion: ()=>setPendingQuestion(null)
                     }, void 0, false, {
                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                        lineNumber: 546,
+                        lineNumber: 547,
                         columnNumber: 13
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CompararView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CompararView"], {
                         medication: activeMedication,
@@ -7001,7 +4992,7 @@ function MeuRemedioApp() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                        lineNumber: 601,
+                        lineNumber: 602,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
@@ -7028,7 +5019,7 @@ function MeuRemedioApp() {
                                         className: "w-6 h-6 stroke-[2.4]"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 650,
+                                        lineNumber: 651,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7036,13 +5027,13 @@ function MeuRemedioApp() {
                                         children: "Hoje"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 651,
+                                        lineNumber: 652,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                lineNumber: 637,
+                                lineNumber: 638,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7058,7 +5049,7 @@ function MeuRemedioApp() {
                                         className: "w-6 h-6 stroke-[2.4]"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 667,
+                                        lineNumber: 668,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7066,13 +5057,13 @@ function MeuRemedioApp() {
                                         children: "Bula"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 668,
+                                        lineNumber: 669,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                lineNumber: 654,
+                                lineNumber: 655,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7088,7 +5079,7 @@ function MeuRemedioApp() {
                                         className: "w-6 h-6 stroke-[2.4]"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 684,
+                                        lineNumber: 685,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7096,13 +5087,13 @@ function MeuRemedioApp() {
                                         children: "Comparar"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 685,
+                                        lineNumber: 686,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                lineNumber: 671,
+                                lineNumber: 672,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7118,7 +5109,7 @@ function MeuRemedioApp() {
                                         className: "w-6 h-6 stroke-[2.4]"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 697,
+                                        lineNumber: 698,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7126,24 +5117,24 @@ function MeuRemedioApp() {
                                         children: "Adicionar"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                        lineNumber: 698,
+                                        lineNumber: 699,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                                lineNumber: 688,
+                                lineNumber: 689,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                        lineNumber: 636,
+                        lineNumber: 637,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 632,
+                    lineNumber: 633,
                     columnNumber: 11
                 }, this),
                 addSheetStep && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AddMedicationSheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AddMedicationSheet"], {
@@ -7157,7 +5148,7 @@ function MeuRemedioApp() {
                     onSpeak: speak
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 706,
+                    lineNumber: 707,
                     columnNumber: 11
                 }, this),
                 showVoiceSettings && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$VoiceAiSettingsSheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["VoiceAiSettingsSheet"], {
@@ -7187,7 +5178,7 @@ function MeuRemedioApp() {
                     onClose: ()=>setShowVoiceSettings(false)
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 719,
+                    lineNumber: 720,
                     columnNumber: 11
                 }, this),
                 showAddAlarm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AddAlarmSheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AddAlarmSheet"], {
@@ -7198,7 +5189,7 @@ function MeuRemedioApp() {
                     onClose: ()=>setShowAddAlarm(false)
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 748,
+                    lineNumber: 749,
                     columnNumber: 11
                 }, this),
                 historySheetDate !== null && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$HistorySheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["HistorySheet"], {
@@ -7214,7 +5205,7 @@ function MeuRemedioApp() {
                     onClose: ()=>setHistorySheetDate(null)
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 758,
+                    lineNumber: 759,
                     columnNumber: 11
                 }, this),
                 ringingAlarm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AlarmRingingModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlarmRingingModal"], {
@@ -7239,7 +5230,7 @@ function MeuRemedioApp() {
                     onReplayVoice: ()=>announceAlarm(ringingAlarm.dose)
                 }, void 0, false, {
                     fileName: "[project]/src/components/MeuRemedioApp.tsx",
-                    lineNumber: 773,
+                    lineNumber: 774,
                     columnNumber: 11
                 }, this)
             ]
@@ -7262,454 +5253,11 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/src/components/VoiceAiSettingsSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/components/VoiceAiSettingsSheet.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "VoiceAiSettingsSheet",
-    ()=>VoiceAiSettingsSheet
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/check.js [app-client] (ecmascript) <export default as Check>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-client] (ecmascript) <export default as Loader2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/play.js [app-client] (ecmascript) <export default as Play>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/volume-2.js [app-client] (ecmascript) <export default as Volume2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
-;
-var _s = __turbopack_context__.k.signature();
-'use client';
-;
-;
-const VOICE_PROFILES = [
-    {
-        id: 'acolhedora',
-        name: 'Acolhedora',
-        desc: 'Quente e gentil (Sarah)'
-    },
-    {
-        id: 'clara',
-        name: 'Clara',
-        desc: 'Articulada e nítida (Lily)'
-    },
-    {
-        id: 'calma',
-        name: 'Calma',
-        desc: 'Ritmo sereno (Alice)'
-    }
-];
-function VoiceAiSettingsSheet({ keys, status, voiceProfile, voiceRate, onSaveKeys, onChangeVoiceProfile, onToggleRate, onTestVoice, onClose }) {
-    _s();
-    const [elevenKey, setElevenKey] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(keys.elevenLabsKey ?? '');
-    const [elevenVoiceId, setElevenVoiceId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(keys.elevenLabsVoiceId ?? '');
-    const [geminiKey, setGeminiKey] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(keys.geminiKey ?? '');
-    const [saving, setSaving] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [savedOk, setSavedOk] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const handleSave = async (e)=>{
-        e.preventDefault();
-        setSaving(true);
-        await onSaveKeys({
-            elevenLabsKey: elevenKey.trim(),
-            elevenLabsVoiceId: elevenVoiceId.trim(),
-            geminiKey: geminiKey.trim()
-        });
-        setSaving(false);
-        setSavedOk(true);
-        setTimeout(()=>setSavedOk(false), 2200);
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "ai-settings-title",
-        className: "fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4",
-        onClick: onClose,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            onClick: (e)=>e.stopPropagation(),
-            className: "w-full max-w-[430px] max-h-[90dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center justify-between",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    id: "ai-settings-title",
-                                    className: "text-[20px] font-bold text-[#1C1917]",
-                                    children: "Voz Humana & IA"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 70,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[13px] text-[#6B6560]",
-                                    children: "Conecte ElevenLabs e Gemini para voz 100% natural e leitura de receitas"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 73,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 69,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: onClose,
-                            "aria-label": "Fechar configurações",
-                            className: "w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                className: "w-5 h-5"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                lineNumber: 83,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 77,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                    lineNumber: 68,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                    className: "bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-3",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center justify-between",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-[14px] font-bold text-[#1C1917] flex items-center gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
-                                            className: "w-4 h-4 text-[#146356]"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 91,
-                                            columnNumber: 15
-                                        }, this),
-                                        "Tom da voz brasileira"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 90,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: onToggleRate,
-                                    className: "px-3 py-1 rounded-full bg-[#F3EFE8] text-[12px] font-semibold text-[#1C1917] cursor-pointer",
-                                    children: voiceRate === 'slow' ? 'Ritmo: Calmo (0.85×)' : 'Ritmo: Normal (1×)'
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 94,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 89,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-3 gap-2",
-                            children: VOICE_PROFILES.map((vp)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: ()=>onChangeVoiceProfile(vp.id),
-                                    className: `p-2.5 rounded-2xl border text-left transition-all cursor-pointer ${voiceProfile === vp.id ? 'border-[#146356] bg-[#E6F2EF]' : 'border-black/[0.06] bg-[#FAF9F6]'}`,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[13px] font-bold text-[#1C1917]",
-                                            children: vp.name
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 115,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[11px] text-[#6B6560] mt-0.5 leading-tight",
-                                            children: vp.desc
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 116,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, vp.id, true, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 105,
-                                    columnNumber: 15
-                                }, this))
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 103,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>onTestVoice({
-                                    elevenLabsKey: elevenKey.trim(),
-                                    elevenLabsVoiceId: elevenVoiceId.trim(),
-                                    geminiKey: geminiKey.trim()
-                                }, voiceProfile),
-                            className: "w-full py-2.5 px-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white text-[13.5px] font-semibold inline-flex items-center justify-center gap-2 cursor-pointer",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
-                                    className: "w-4 h-4 fill-current"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 135,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: "Ouvir teste de voz agora"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 136,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 121,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                    lineNumber: 88,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                    onSubmit: handleSave,
-                    className: "space-y-3.5",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-2.5",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center justify-between gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "el-key",
-                                            className: "text-[14px] font-bold text-[#1C1917]",
-                                            children: "1. ElevenLabs (Voz Humana)"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 145,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: `text-[11.5px] font-semibold px-2.5 py-0.5 rounded-full ${status.elevenLabsConnected || elevenKey.trim() ? 'bg-[#E6F2EF] text-[#146356]' : 'bg-[#F3EFE8] text-[#78716C]'}`,
-                                            children: status.elevenLabsSource === 'env' ? 'Ativa (.env)' : elevenKey.trim() ? 'Conectada' : 'Opcional'
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 148,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 144,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    id: "el-key",
-                                    type: "password",
-                                    value: elevenKey,
-                                    onChange: (e)=>setElevenKey(e.target.value),
-                                    placeholder: "sk_... (cole sua chave ElevenLabs)",
-                                    className: "w-full px-3.5 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 162,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    type: "text",
-                                    value: elevenVoiceId,
-                                    onChange: (e)=>setElevenVoiceId(e.target.value),
-                                    placeholder: "ID de voz personalizado (opcional)",
-                                    "aria-label": "ID de voz ElevenLabs opcional",
-                                    className: "w-full px-3.5 py-2 rounded-xl bg-[#F6F4EF] text-[12.5px] text-[#57534E] focus:outline-none"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 170,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 143,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-2.5",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center justify-between gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            htmlFor: "gm-key",
-                                            className: "text-[14px] font-bold text-[#1C1917] flex items-center gap-1.5",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                    className: "w-4 h-4 text-[#146356]"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                                    lineNumber: 184,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    children: "2. Google Gemini (Receitas + Qualquer Remédio)"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                                    lineNumber: 185,
-                                                    columnNumber: 17
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 183,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: `text-[11.5px] font-semibold px-2.5 py-0.5 rounded-full shrink-0 ${status.geminiConnected || geminiKey.trim() ? 'bg-[#E6F2EF] text-[#146356]' : 'bg-[#F3EFE8] text-[#78716C]'}`,
-                                            children: status.geminiSource === 'env' ? 'Ativo (.env)' : geminiKey.trim() ? 'Conectado' : 'Opcional'
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                            lineNumber: 187,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 182,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    id: "gm-key",
-                                    type: "password",
-                                    value: geminiKey,
-                                    onChange: (e)=>setGeminiKey(e.target.value),
-                                    placeholder: "AIza... (cole sua chave Gemini)",
-                                    className: "w-full px-3.5 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 201,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[12px] text-[#78716C] leading-relaxed",
-                                    children: "Libera leitura de receitas manuscritas, busca de qualquer remédio do Brasil, dúvidas por voz e voz neural Gemini (se ElevenLabs não estiver conectada)."
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 209,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 181,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "submit",
-                            disabled: saving,
-                            className: "w-full py-3.5 rounded-full bg-[#1C1917] hover:bg-[#292524] text-white font-semibold text-[15px] inline-flex items-center justify-center gap-2 cursor-pointer",
-                            children: [
-                                saving ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                                    className: "w-4 h-4 animate-spin"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 220,
-                                    columnNumber: 15
-                                }, this) : savedOk ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                    className: "w-4 h-4"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 222,
-                                    columnNumber: 15
-                                }, this) : null,
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: savedOk ? 'Chaves salvas!' : 'Salvar configurações'
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 224,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 214,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[11.5px] text-center text-[#78716C]",
-                            children: [
-                                "Para deploy em produção (Vercel), você também pode definir ",
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("code", {
-                                    children: "ELEVENLABS_API_KEY"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 228,
-                                    columnNumber: 72
-                                }, this),
-                                " e ",
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("code", {
-                                    children: "GEMINI_API_KEY"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 228,
-                                    columnNumber: 106
-                                }, this),
-                                " no arquivo ",
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("code", {
-                                    children: ".env.local"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                                    lineNumber: 228,
-                                    columnNumber: 145
-                                }, this),
-                                "."
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                            lineNumber: 227,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-                    lineNumber: 141,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-            lineNumber: 64,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/components/VoiceAiSettingsSheet.tsx",
-        lineNumber: 57,
-        columnNumber: 5
-    }, this);
-}
-_s(VoiceAiSettingsSheet, "9gzwlym78A7EGB/Wjx80nsAkpQw=");
-_c = VoiceAiSettingsSheet;
-var _c;
-__turbopack_context__.k.register(_c, "VoiceAiSettingsSheet");
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
-}
+var e = new Error("Could not parse module '[project]/src/components/VoiceAiSettingsSheet.tsx'\n\nExpected '</', got '?'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/src/components/VoiceGuidedOverlay.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -7720,6 +5268,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/book-open.js [app-client] (ecmascript) <export default as BookOpen>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/camera.js [app-client] (ecmascript) <export default as Camera>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/check.js [app-client] (ecmascript) <export default as Check>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
@@ -7737,12 +5286,12 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpenCameraAdd, onMarkDoseTaken, onCloseGuidedMode }) {
+function VoiceGuidedOverlay({ activeMedication, nextDose, playback, onSpeak, onStopSpeaking, onOpenCameraAdd, onMarkDoseTaken, onCloseGuidedMode }) {
     _s();
     const [listening, setListening] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [thinking, setThinking] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [lastSpokenAnswer, setLastSpokenAnswer] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const welcomePrompt = nextDose ? `Olá! Estou com você. Seu próximo remédio é ${nextDose.medication?.name ?? 'seu medicamento'}, às ${nextDose.scheduledTime}. Toque no botão grande da câmera para mostrar uma receita, no botão do relógio para marcar que tomou, ou no microfone para me fazer qualquer pergunta.` : 'Olá! Estou com você. Toque no botão grande da câmera para mostrar a foto do seu remédio ou receita, ou toque no microfone para me fazer qualquer pergunta.';
+    const welcomePrompt = nextDose ? `Olá! Estou com você. Seu próximo remédio é ${nextDose.medication?.name ?? 'seu medicamento'}, às ${nextDose.scheduledTime}. Toque no botão verde da câmera para mostrar uma receita, no botão de confirmar quando tomar, no botão azul para ouvir a bula do ${activeMedication.name}, ou no microfone para fazer qualquer pergunta.` : `Olá! Estou com você. Toque no botão da câmera para mostrar seu remédio, no botão azul para ouvir sobre o ${activeMedication.name}, ou no microfone para me fazer qualquer pergunta.`;
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "VoiceGuidedOverlay.useEffect": ()=>{
             onSpeak('guided-welcome', welcomePrompt);
@@ -7762,7 +5311,9 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
                 setListening(false);
                 setThinking(true);
                 const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$aiClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["askPharmacistAi"])({
-                    question: transcript
+                    question: transcript,
+                    medicationName: activeMedication.name,
+                    activeIngredient: activeMedication.activeIngredient
                 });
                 setThinking(false);
                 setLastSpokenAnswer(res.answer);
@@ -7779,12 +5330,17 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
         });
         if (!stop) setListening(false);
     };
+    const handleHearBulaAndGenerics = ()=>{
+        const script = `${activeMedication.name}. ${activeMedication.purposeSimple} ${activeMedication.howToTake.spokenScript} ${activeMedication.whatNotToDo.spokenScript} ${activeMedication.genericsHighlight.spokenScript}`;
+        setLastSpokenAnswer(`${activeMedication.name}: ${activeMedication.howToTake.summary}`);
+        onSpeak('guided-bula', script);
+    };
     const isSpeaking = playback.status === 'playing' || playback.status === 'loading';
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "px-5 pt-4 pb-10 min-h-[calc(100dvh-76px)] flex flex-col justify-between gap-6",
+        className: "px-4 pt-4 pb-8 min-h-[calc(100dvh-76px)] flex flex-col justify-between gap-5",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex flex-col items-center text-center pt-4 space-y-5",
+                className: "flex flex-col items-center text-center pt-2 space-y-4",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
@@ -7792,65 +5348,65 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
                             if (isSpeaking) onStopSpeaking();
                             else onSpeak('guided-welcome', welcomePrompt);
                         },
-                        "aria-label": "Ouvir orientação por voz",
-                        className: `w-28 h-28 rounded-full flex items-center justify-center text-white shadow-xl transition-all cursor-pointer ${listening ? 'bg-[#BE123C] ring-[12px] ring-[#BE123C]/20 animate-pulse' : 'bg-[#146356] animate-calm-breathe'}`,
+                        "aria-label": isSpeaking ? 'Parar de ouvir' : 'Ouvir orientação por voz',
+                        className: `w-28 h-28 rounded-full flex items-center justify-center text-white shadow-xl transition-all cursor-pointer ${listening ? 'bg-[#B91C1C] ring-[12px] ring-[#FECACA] animate-pulse' : isSpeaking ? 'bg-[#1D4ED8] ring-[12px] ring-[#DBEAFE]' : 'bg-[#047857] animate-calm-breathe'}`,
                         children: thinking || playback.status === 'loading' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                            className: "w-11 h-11 animate-spin"
+                            className: "w-12 h-12 animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                            lineNumber: 96,
+                            lineNumber: 110,
                             columnNumber: 13
                         }, this) : listening ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {
-                            className: "w-11 h-11"
+                            className: "w-12 h-12"
                         }, void 0, false, {
                             fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                            lineNumber: 98,
+                            lineNumber: 112,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
-                            className: "w-11 h-11"
+                            className: "w-12 h-12"
                         }, void 0, false, {
                             fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                            lineNumber: 100,
+                            lineNumber: 114,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 82,
-                        columnNumber: 9
+                        lineNumber: 95,
+                        columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "space-y-1.5 max-w-[300px]",
+                        className: "space-y-1.5 max-w-[340px]",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                className: "text-[24px] font-bold text-[#1C1917] leading-snug",
-                                children: listening ? 'Pode falar, estou ouvindo...' : thinking ? 'Pensando na melhor resposta...' : isSpeaking ? 'Estou falando com você' : 'Como posso te ajudar?'
+                                className: "text-[24px] font-extrabold text-[#111827] leading-snug",
+                                children: listening ? 'Pode falar, estou ouvindo!' : thinking ? 'Preparando sua resposta...' : isSpeaking ? 'Estou falando (toque para parar)' : 'Toque no que você precisa'
                             }, void 0, false, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 105,
-                                columnNumber: 11
+                                lineNumber: 119,
+                                columnNumber: 19
                             }, this),
                             lastSpokenAnswer && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-[15px] text-[#57534E] leading-relaxed pt-1",
+                                className: "text-[16px] font-medium text-[#1F2937] leading-relaxed bg-white rounded-2xl p-3.5 border border-slate-200",
                                 children: lastSpokenAnswer
                             }, void 0, false, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 115,
-                                columnNumber: 13
+                                lineNumber: 129,
+                                columnNumber: 23
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 104,
-                        columnNumber: 9
+                        lineNumber: 118,
+                        columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                lineNumber: 81,
-                columnNumber: 7
+                lineNumber: 94,
+                columnNumber: 11
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-3.5",
+                className: "space-y-3",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
@@ -7858,51 +5414,51 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
                             onStopSpeaking();
                             onOpenCameraAdd();
                         },
-                        className: "w-full p-5 rounded-[26px] bg-white border border-black/[0.06] shadow-[0_6px_24px_rgba(28,25,23,0.05)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
+                        className: "w-full p-5 rounded-[24px] bg-[#0F766E] hover:bg-[#115E59] text-white flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-16 h-16 rounded-[20px] bg-[#E6F2EF] text-[#146356] flex items-center justify-center shrink-0",
+                                className: "w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
-                                    className: "w-8 h-8 stroke-[2]"
+                                    className: "w-9 h-9 stroke-[2.2]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                    lineNumber: 133,
-                                    columnNumber: 13
+                                    lineNumber: 147,
+                                    columnNumber: 27
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 132,
-                                columnNumber: 11
+                                lineNumber: 146,
+                                columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[19px] font-bold text-[#1C1917]",
+                                        className: "text-[20px] font-extrabold leading-tight",
                                         children: "Mostrar remédio"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 136,
-                                        columnNumber: 13
+                                        lineNumber: 150,
+                                        columnNumber: 27
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[14px] text-[#6B6560]",
-                                        children: "Foto da caixa ou receita"
+                                        className: "text-[15px] text-white/90 font-medium",
+                                        children: "Foto da receita ou caixa"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 137,
-                                        columnNumber: 13
+                                        lineNumber: 151,
+                                        columnNumber: 27
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 135,
-                                columnNumber: 11
+                                lineNumber: 149,
+                                columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 124,
-                        columnNumber: 9
+                        lineNumber: 138,
+                        columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
@@ -7911,122 +5467,175 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
                                 onMarkDoseTaken(nextDose);
                                 onSpeak('guided-taken', `Muito bem! Marquei que você tomou ${nextDose.medication?.name ?? 'seu remédio'} agora.`);
                             } else {
-                                onSpeak('guided-none', 'Você já tomou todos os seus remédios programados para hoje.');
+                                onSpeak('guided-none', 'Parabéns! Você já tomou todos os seus remédios de hoje.');
                             }
                         },
-                        className: "w-full p-5 rounded-[26px] bg-[#E8F4EE] border border-[#146356]/15 flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
+                        className: "w-full p-5 rounded-[24px] bg-[#047857] hover:bg-[#065F46] text-white flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-16 h-16 rounded-[20px] bg-[#146356] text-white flex items-center justify-center shrink-0",
+                                className: "w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0",
                                 children: nextDose ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                    className: "w-8 h-8 stroke-[2.5]"
+                                    className: "w-9 h-9 stroke-[3]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                    lineNumber: 157,
-                                    columnNumber: 25
+                                    lineNumber: 171,
+                                    columnNumber: 39
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                    className: "w-8 h-8"
+                                    className: "w-9 h-9"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                    lineNumber: 157,
-                                    columnNumber: 70
+                                    lineNumber: 171,
+                                    columnNumber: 82
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 156,
-                                columnNumber: 11
+                                lineNumber: 170,
+                                columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "min-w-0",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[19px] font-bold text-[#0F4F45] truncate",
+                                        className: "text-[20px] font-extrabold leading-tight truncate",
                                         children: nextDose ? `Tomei ${nextDose.medication?.name ?? ''}` : 'Tudo certinho hoje'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 160,
-                                        columnNumber: 13
+                                        lineNumber: 174,
+                                        columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[14px] text-[#146356]",
-                                        children: nextDose ? `Horário das ${nextDose.scheduledTime}` : 'Nenhum remédio pendente'
+                                        className: "text-[15px] text-white/90 font-medium",
+                                        children: nextDose ? `Horário das ${nextDose.scheduledTime}` : 'Nenhum pendente agora'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 163,
-                                        columnNumber: 13
+                                        lineNumber: 177,
+                                        columnNumber: 31
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 159,
-                                columnNumber: 11
+                                lineNumber: 173,
+                                columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 141,
-                        columnNumber: 9
+                        lineNumber: 155,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: handleHearBulaAndGenerics,
+                        className: "w-full p-5 rounded-[24px] bg-[#1D4ED8] hover:bg-[#1E40AF] text-white flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
+                                    className: "w-9 h-9 stroke-[2.2]"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                                    lineNumber: 189,
+                                    columnNumber: 31
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                                lineNumber: 188,
+                                columnNumber: 29
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "min-w-0",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[20px] font-extrabold leading-tight truncate",
+                                        children: [
+                                            "Ouvir bula: ",
+                                            activeMedication.name
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                                        lineNumber: 192,
+                                        columnNumber: 31
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[15px] text-white/90 font-medium",
+                                        children: "Como tomar, perigos e genéricos"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                                        lineNumber: 195,
+                                        columnNumber: 31
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                                lineNumber: 191,
+                                columnNumber: 29
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
+                        lineNumber: 183,
+                        columnNumber: 27
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
                         onClick: handleVoiceAsk,
-                        className: "w-full p-5 rounded-[26px] bg-white border border-black/[0.06] shadow-[0_6px_24px_rgba(28,25,23,0.05)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer",
+                        className: "w-full p-5 rounded-[24px] bg-white border-2 border-[#D97706] text-[#111827] flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: `w-16 h-16 rounded-[20px] flex items-center justify-center shrink-0 ${listening ? 'bg-[#BE123C] text-white' : 'bg-[#FEF3DD] text-[#B45309]'}`,
+                                className: `w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 ${listening ? 'bg-[#B91C1C] text-white' : 'bg-[#FEF3C7] text-[#92400E]'}`,
                                 children: listening ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MicOff$3e$__["MicOff"], {
-                                    className: "w-8 h-8"
+                                    className: "w-9 h-9"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                    lineNumber: 179,
-                                    columnNumber: 26
+                                    lineNumber: 208,
+                                    columnNumber: 44
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {
-                                    className: "w-8 h-8 stroke-[2]"
+                                    className: "w-9 h-9 stroke-[2.2]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                    lineNumber: 179,
-                                    columnNumber: 59
+                                    lineNumber: 208,
+                                    columnNumber: 77
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 174,
-                                columnNumber: 11
+                                lineNumber: 204,
+                                columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[19px] font-bold text-[#1C1917]",
+                                        className: "text-[20px] font-extrabold leading-tight",
                                         children: listening ? 'Parar de ouvir' : 'Falar minha dúvida'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 182,
-                                        columnNumber: 13
+                                        lineNumber: 211,
+                                        columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-[14px] text-[#6B6560]",
+                                        className: "text-[15px] font-medium text-[#374151]",
                                         children: "Pergunte qualquer coisa por voz"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                        lineNumber: 185,
-                                        columnNumber: 13
+                                        lineNumber: 214,
+                                        columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                                lineNumber: 181,
-                                columnNumber: 11
+                                lineNumber: 210,
+                                columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 169,
-                        columnNumber: 9
+                        lineNumber: 199,
+                        columnNumber: 27
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                lineNumber: 123,
-                columnNumber: 7
+                lineNumber: 137,
+                columnNumber: 19
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 type: "button",
@@ -8034,33 +5643,33 @@ function VoiceGuidedOverlay({ nextDose, playback, onSpeak, onStopSpeaking, onOpe
                     onStopSpeaking();
                     onCloseGuidedMode();
                 },
-                className: "mx-auto py-2.5 px-5 rounded-full bg-[#EAE5DC] text-[#57534E] text-[13px] font-semibold inline-flex items-center gap-1.5 cursor-pointer",
+                className: "w-full min-h-[50px] px-5 rounded-2xl bg-[#E5E7EB] text-[#111827] text-[15.5px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                        className: "w-4 h-4"
+                        className: "w-5 h-5"
                     }, void 0, false, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 199,
-                        columnNumber: 9
+                        lineNumber: 228,
+                        columnNumber: 27
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         children: "Voltar para a tela normal"
                     }, void 0, false, {
                         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                        lineNumber: 200,
-                        columnNumber: 9
+                        lineNumber: 229,
+                        columnNumber: 27
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-                lineNumber: 191,
-                columnNumber: 7
+                lineNumber: 220,
+                columnNumber: 25
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/VoiceGuidedOverlay.tsx",
-        lineNumber: 79,
-        columnNumber: 5
+        lineNumber: 92,
+        columnNumber: 9
     }, this);
 }
 _s(VoiceGuidedOverlay, "1FpxvDT5xPXzA3cLyoHGXoR8Tgw=");

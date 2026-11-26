@@ -13,6 +13,7 @@ import {
   Plus,
   Search,
   Sparkles,
+  Volume2,
   X,
 } from 'lucide-react';
 import type { Medication } from '@/types/medication';
@@ -29,6 +30,8 @@ import {
 } from '@/services/aiClient';
 import { voiceEngine } from '@/services/voiceEngine';
 import { MedicationAvatar } from './MedicationAvatar';
+
+export type SheetStep = 'choose' | 'scan' | 'voice' | 'search' | 'manual';
 
 interface AddMedicationSheetProps {
   catalog: Medication[];
@@ -48,8 +51,6 @@ interface AddMedicationSheetProps {
   onAddNewMedication: (med: Medication, alarmTimes?: string[], photoDataUrl?: string) => void;
   onSpeak: (sectionId: string, text: string) => void;
 }
-
-export type SheetStep = 'choose' | 'scan' | 'voice' | 'search' | 'manual';
 
 async function fileToCompressedDataUrl(file: File): Promise<{ dataUrl: string; mimeType: string }> {
   return new Promise((resolve, reject) => {
@@ -133,7 +134,6 @@ export function AddMedicationSheet({
       setScanning(false);
 
       if (res.error === 'NO_GEMINI_KEY') {
-        // Graceful filename fallback if user hasn't added Gemini key yet
         const fallbackMatches = parsePrescriptionText(
           file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' '),
           catalog
@@ -152,7 +152,9 @@ export function AddMedicationSheet({
           );
           return;
         }
-        setScanError(res.message || 'Configure a chave Gemini para ler receitas por foto.');
+        setScanError(
+          res.message || 'Conecte sua chave Gemini para ler fotos de receitas e caixas automaticamente.'
+        );
         return;
       }
 
@@ -162,14 +164,16 @@ export function AddMedicationSheet({
       }
 
       if (res.items.length === 0) {
-        setScanError('Não identifiquei o nome do remédio nessa imagem. Tente outra foto ou busque pelo nome.');
+        setScanError(
+          'Não identifiquei o nome do remédio nessa foto. Tente tirar mais de perto ou falar o nome.'
+        );
         return;
       }
 
       setScannedItems(res.items);
       onSpeak(
         'scan-done',
-        `Encontrei ${res.items.map((i) => i.name).join(' e ')}. Toque para salvar e ouvir a bula fácil.`
+          `Encontrei ${res.items.map((i) => i.name).join(' e ')}. Toque no botão verde para salvar e criar o alarme.`
       );
     } catch {
       setScanning(false);
@@ -199,7 +203,7 @@ export function AddMedicationSheet({
     setScannedItems(items);
     onSpeak(
       'scan-text-done',
-      `Encontrei ${items.map((i) => i.name).join(' e ')}. Toque para abrir.`
+        `Encontrei ${items.map((i) => i.name).join(' e ')}. Toque no botão verde para salvar.`
     );
   };
 
@@ -220,7 +224,6 @@ export function AddMedicationSheet({
       return;
     }
 
-    // Not in local catalog — fetch complete Brazilian bula & bioequivalent differences via Gemini!
     setResolvingIdx(idx);
     const lookup = await lookupAnyBrazilianMedication(item.name);
     setResolvingIdx(null);
@@ -282,6 +285,7 @@ export function AddMedicationSheet({
         if (matches.length > 0 && transcript.length >= 3) {
           setQuery(transcript);
           setStep('search');
+          onSpeak('voice-found', `Ouvi ${transcript}. Encontrei ${matches[0].name}. Toque para abrir.`);
         } else if (hasGeminiKey) {
           void handleAiLookupQuery(transcript);
         } else {
@@ -302,17 +306,29 @@ export function AddMedicationSheet({
 
   const localResults = searchMedications(catalog, query);
 
+  const speakSheetHelp = () => {
+    const text =
+      step === 'choose'
+        ? 'Como você quer adicionar seu remédio? Botão verde para tirar foto da receita ou da caixa, botão azul para falar o nome em voz alta, ou botão branco para procurar na lista.'
+        : step === 'scan'
+          ? 'Toque no botão verde para tirar foto da receita ou da caixa do remédio, ou no botão branco para escolher um print da galeria.'
+          : step === 'voice'
+            ? 'Toque no botão azul grande do microfone e diga o nome do remédio em voz alta.'
+            : 'Digite o nome do remédio na caixa de busca ou toque em uma opção da lista.';
+    onSpeak('add-sheet-help', text);
+  };
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-sheet-title"
-      className="fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-50 bg-[#111827]/55 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[430px] max-h-[90dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5"
+        className="w-full max-w-[430px] max-h-[92dvh] overflow-y-auto bg-[#F7F6F2] rounded-t-[30px] sm:rounded-[30px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-4"
       >
         {/* Hidden file inputs */}
         <input
@@ -339,280 +355,292 @@ export function AddMedicationSheet({
           }}
         />
 
-        {/* Sheet Header */}
+        {/* High-Contrast Accessible Header */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            {step !== 'choose' && (
-              <button
-                type="button"
-                onClick={() => setStep('choose')}
-                aria-label="Voltar"
-                className="w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer"
-              >
-                <ArrowLeft className="w-4.5 h-4.5" />
-              </button>
-            )}
-            <h2 id="add-sheet-title" className="text-[20px] font-bold text-[#1C1917]">
-              {step === 'choose'
-                ? 'Adicionar remédio'
-                : step === 'scan'
-                  ? 'Foto ou receita'
-                  : step === 'voice'
-                    ? 'Falar o nome'
-                    : step === 'manual'
-                      ? 'Cadastro manual'
-                      : 'Buscar remédio'}
-            </h2>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Fechar"
-            className="w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* STEP 0: 3 SERENE, SPACIOUS CHOICES */}
-        {step === 'choose' && (
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={() => setStep('scan')}
-              className="w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <span className="w-13 h-13 rounded-2xl bg-[#E6F2EF] text-[#146356] flex items-center justify-center shrink-0">
-                <Camera className="w-6 h-6 stroke-[2]" />
-              </span>
-              <div>
-                <p className="text-[16px] font-bold text-[#1C1917]">Foto da receita ou caixa</p>
-                <p className="text-[13.5px] text-[#6B6560] mt-0.5">
-                  Lê receita médica, caixinha ou print de WhatsApp
-                </p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setStep('voice')}
-              className="w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <span className="w-13 h-13 rounded-2xl bg-[#FEF3DD] text-[#B45309] flex items-center justify-center shrink-0">
-                <Mic className="w-6 h-6 stroke-[2]" />
-              </span>
-              <div>
-                <p className="text-[16px] font-bold text-[#1C1917]">Falar o nome do remédio</p>
-                <p className="text-[13.5px] text-[#6B6560] mt-0.5">
-                  Sem precisar digitar — só falar em voz alta
-                </p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setStep('search')}
-              className="w-full p-5 rounded-[24px] bg-white hover:bg-[#FCFBF9] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.04)] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <span className="w-13 h-13 rounded-2xl bg-[#EFECE6] text-[#44403C] flex items-center justify-center shrink-0">
-                <Search className="w-6 h-6 stroke-[2]" />
-              </span>
-              <div>
-                <p className="text-[16px] font-bold text-[#1C1917]">Buscar qualquer remédio</p>
-                <p className="text-[13.5px] text-[#6B6560] mt-0.5">
-                  Catálogo brasileiro completo ou cadastro manual
-                </p>
-              </div>
-            </button>
-          </div>
-        )}
-
-        {/* STEP 1: FOTO / RECEITA / PRINT */}
-        {step === 'scan' && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => cameraRef.current?.click()}
-                className="py-4 px-4 rounded-[20px] bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Camera className="w-5 h-5" />
-                <span>Tirar foto</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => galleryRef.current?.click()}
-                className="py-4 px-4 rounded-[20px] bg-white border border-black/10 hover:bg-[#F3EFE8] text-[#1C1917] font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <ImagePlus className="w-5 h-5 text-[#146356]" />
-                <span>Print / Galeria</span>
-              </button>
-            </div>
-
-            {photoDataUrl && (
-              <div className="rounded-[20px] overflow-hidden bg-white border border-black/[0.06] max-h-44 flex items-center justify-center">
-                <img src={photoDataUrl} alt="Foto selecionada" className="max-h-44 object-contain" />
-              </div>
-            )}
-
-            {scanning && (
-              <div className="bg-white rounded-[20px] p-5 flex items-center gap-3 text-[14px] font-semibold text-[#146356]">
-                <Loader2 className="w-5 h-5 animate-spin shrink-0" />
-                <span>Lendo receita com visão por IA...</span>
-              </div>
-            )}
-
-            {scanError && (
-              <div className="bg-[#FFF6F7] border border-[#BE123C]/15 rounded-[20px] p-4 space-y-2.5">
-                <p className="text-[13.5px] text-[#9F1239] leading-relaxed">{scanError}</p>
-                {!hasGeminiKey && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose();
-                      onOpenVoiceSettings();
-                    }}
-                    className="py-2 px-4 rounded-full bg-[#146356] text-white text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Conectar chave Gemini agora</span>
-                  </button>
-                )}
-              </div>
-            )}
-
-            {scannedItems.length > 0 && (
-              <div className="space-y-3">
-                {scannedItems.map((item, idx) => (
-                  <div
-                    key={`${item.name}-${idx}`}
-                    className="bg-white rounded-[22px] p-4 border border-black/[0.06] space-y-3"
-                  >
-                    <div>
-                      <p className="text-[16px] font-bold text-[#1C1917]">{item.name}</p>
-                      <p className="text-[13px] text-[#6B6560]">
-                        {item.dosage} · Horário sugerido: {item.times.join(', ')}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        disabled={resolvingIdx === idx}
-                        onClick={() => void handleConfirmScannedItem(item, idx, true)}
-                        className="flex-1 py-3 px-3 rounded-full bg-[#146356] text-white text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        {resolvingIdx === idx ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <AlarmClock className="w-4 h-4" />
-                        )}
-                        <span>Salvar + Alarme</span>
-                      </button>
-                      <button
-                        type="button"
-                        disabled={resolvingIdx === idx}
-                        onClick={() => void handleConfirmScannedItem(item, idx, false)}
-                        className="py-3 px-4 rounded-full bg-[#F3EFE8] text-[#1C1917] text-[13px] font-semibold cursor-pointer"
-                      >
-                        Só abrir
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Paste WhatsApp text */}
-            <div className="bg-white rounded-[22px] p-4 border border-black/[0.05] space-y-2.5">
-              <label htmlFor="paste-rx" className="text-[13px] font-semibold text-[#57534E]">
-                Ou cole o texto de uma receita do WhatsApp
-              </label>
-              <textarea
-                id="paste-rx"
-                rows={2}
-                value={pastedText}
-                onChange={(e) => setPastedText(e.target.value)}
-                placeholder="Ex: Iumi 1 comp às 21:00 e Dipirona 6/6h"
-                className="w-full rounded-2xl bg-[#F6F4EF] px-3.5 py-2.5 text-[14px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-              />
-              {pastedText.trim() && (
+            <div className="flex items-center gap-2 min-w-0">
+              {step !== 'choose' && (
                 <button
                   type="button"
-                  onClick={() => handleAnalyzeText(pastedText)}
-                  className="w-full py-2.5 rounded-full bg-[#1C1917] text-white text-[13px] font-semibold cursor-pointer"
+                  onClick={() => setStep('choose')}
+                  aria-label="Voltar"
+                  className="w-11 h-11 rounded-full bg-white border border-slate-300 text-[#111827] inline-flex items-center justify-center shrink-0 cursor-pointer"
                 >
-                  Ler receita colada
+                  <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
                 </button>
               )}
+                <h2 id="add-sheet-title" className="text-[22px] font-extrabold text-[#111827] truncate">
+                  {step === 'choose'
+                    ? 'Adicionar remédio'
+                    : step === 'scan'
+                      ? 'Foto ou receita'
+                      : step === 'voice'
+                        ? 'Falar o nome'
+                        : step === 'manual'
+                          ? 'Cadastro manual'
+                          : 'Buscar remédio'}
+                </h2>
             </div>
 
-            {/* Quiet collapsible demo prescriptions */}
-            <div className="text-center">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => setShowExamples((v) => !v)}
-                className="text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer"
+                onClick={speakSheetHelp}
+                aria-label="Ouvir explicação desta tela"
+                className="w-11 h-11 rounded-full bg-[#1D4ED8] hover:bg-[#1E40AF] text-white inline-flex items-center justify-center cursor-pointer"
               >
-                {showExamples ? 'Esconder exemplos' : 'Testar com um exemplo de receita pronto'}
+                <Volume2 className="w-5 h-5 stroke-[2.4]" />
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Fechar"
+                className="w-11 h-11 rounded-full bg-white border border-slate-300 text-[#111827] inline-flex items-center justify-center cursor-pointer"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+
+          {/* STEP 0: 3 GIANT HIGH-CONTRAST CHOICES */}
+          {step === 'choose' && (
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => setStep('scan')}
+                className="w-full p-5 rounded-[24px] bg-[#0F766E] hover:bg-[#115E59] text-white flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer"
+              >
+                  <span className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                    <Camera className="w-8 h-8 stroke-[2.2]" />
+                  </span>
+                  <div>
+                      <p className="text-[18px] font-extrabold leading-tight">Foto da receita ou caixa</p>
+                      <p className="text-[14.5px] text-white/90 font-medium mt-0.5">
+                        Câmera, caixa do remédio ou print
+                      </p>
+                  </div>
               </button>
 
-              {showExamples && (
-                <div className="mt-3 space-y-2 text-left">
-                  {SAMPLE_PRESCRIPTIONS.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => handleAnalyzeText(s.extractedText)}
-                      className="w-full p-3.5 rounded-2xl bg-white border border-black/[0.05] hover:bg-[#FAF9F6] cursor-pointer"
-                    >
-                      <p className="text-[14px] font-bold text-[#1C1917]">{s.title}</p>
-                      <p className="text-[12.5px] text-[#78716C] mt-0.5 truncate">
-                        {s.previewLines.slice(1).join(' · ')}
+              <button
+                type="button"
+                onClick={() => setStep('voice')}
+                className="w-full p-5 rounded-[24px] bg-[#1D4ED8] hover:bg-[#1E40AF] text-white flex items-center gap-4 text-left shadow-sm active:scale-[0.99] transition-all cursor-pointer"
+              >
+                  <span className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                    <Mic className="w-8 h-8 stroke-[2.2]" />
+                  </span>
+                  <div>
+                      <p className="text-[18px] font-extrabold leading-tight">Falar o nome em voz alta</p>
+                      <p className="text-[14.5px] text-white/90 font-medium mt-0.5">
+                        Sem precisar digitar nada
                       </p>
-                    </button>
-                  ))}
-                </div>
-              )}
+                  </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setStep('search')}
+                className="w-full p-5 rounded-[24px] bg-white hover:bg-slate-50 border-2 border-slate-300 text-[#111827] flex items-center gap-4 text-left active:scale-[0.99] transition-all cursor-pointer"
+              >
+                  <span className="w-14 h-14 rounded-2xl bg-[#F3F4F6] text-[#111827] flex items-center justify-center shrink-0">
+                    <Search className="w-7 h-7 stroke-[2.4]" />
+                  </span>
+                  <div>
+                      <p className="text-[18px] font-extrabold leading-tight">Buscar ou cadastrar</p>
+                      <p className="text-[14.5px] text-[#374151] font-medium mt-0.5">
+                        Qualquer remédio do Brasil
+                      </p>
+                  </div>
+              </button>
             </div>
+          )}
+
+          {/* STEP 1: FOTO / RECEITA / PRINT */}
+          {step === 'scan' && (
+            <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => cameraRef.current?.click()}
+                    className="min-h-[64px] px-4 rounded-2xl bg-[#0F766E] hover:bg-[#115E59] text-white font-extrabold text-[16px] inline-flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                  >
+                    <Camera className="w-6 h-6" />
+                    <span>Tirar foto</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => galleryRef.current?.click()}
+                    className="min-h-[64px] px-4 rounded-2xl bg-white border-2 border-slate-300 hover:bg-slate-50 text-[#111827] font-extrabold text-[16px] inline-flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <ImagePlus className="w-6 h-6 text-[#0F766E]" />
+                    <span>Print / Foto</span>
+                  </button>
+                </div>
+
+                {photoDataUrl && (
+                    <div className="rounded-2xl overflow-hidden bg-white border-2 border-slate-200 max-h-48 flex items-center justify-center">
+                      <img src={photoDataUrl} alt="Foto selecionada" className="max-h-48 object-contain" />
+                    </div>
+            )}
+
+                    {scanning && (
+                        <div className="bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded-2xl p-5 flex items-center gap-3 text-[16px] font-extrabold text-[#1E40AF]">
+                          <Loader2 className="w-6 h-6 animate-spin shrink-0" />
+                          <span>Lendo sua receita...</span>
+                        </div>
+            )}
+
+                        {scanError && (
+                            <div className="bg-[#FEF2F2] border-2 border-[#FCA5A5] rounded-2xl p-4 space-y-3">
+                              <p className="text-[15.5px] font-bold text-[#991B1B] leading-snug">{scanError}</p>
+                              {!hasGeminiKey && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    onClose();
+                                    onOpenVoiceSettings();
+                                  }}
+                                  className="w-full min-h-[48px] px-4 rounded-xl bg-[#1D4ED8] text-white text-[15px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                  <Sparkles className="w-5 h-5" />
+                                  <span>Conectar chave Gemini agora</span>
+                                </button>
+                              )}
+                            </div>
+            )}
+
+                            {scannedItems.length > 0 && (
+                              <div className="space-y-3">
+                                {scannedItems.map((item, idx) => (
+                                  <div
+                                    key={`${item.name}-${idx}`}
+                                    className="bg-white rounded-[22px] p-4 border-2 border-[#059669]/40 space-y-3"
+                                  >
+                                    <div>
+                                        <p className="text-[19px] font-extrabold text-[#111827]">{item.name}</p>
+                                        <p className="text-[15px] font-semibold text-[#374151] mt-0.5">
+                                          {item.dosage} · Horário: {item.times.join(', ')}
+                                        </p>
+                                    </div>
+                                      <div className="grid grid-cols-1 gap-2">
+                                        <button
+                                          type="button"
+                                          disabled={resolvingIdx === idx}
+                                          onClick={() => void handleConfirmScannedItem(item, idx, true)}
+                                          className="w-full min-h-[52px] px-4 rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white text-[16px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
+                                        >
+                                          {resolvingIdx === idx ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                                          ) : (
+                          <AlarmClock className="w-5 h-5" />
+                                          )}
+                                          <span>Salvar + Criar Alarme</span>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          disabled={resolvingIdx === idx}
+                                          onClick={() => void handleConfirmScannedItem(item, idx, false)}
+                                          className="w-full min-h-[48px] px-4 rounded-2xl bg-[#F3F4F6] text-[#111827] text-[15px] font-extrabold cursor-pointer"
+                                        >
+                                          Só abrir a bula
+                                        </button>
+                                      </div>
+                                    </div>
+                ))}
+                                  </div>
+                                )}
+
+                                {/* Paste WhatsApp text */}
+                                    <div className="bg-white rounded-[22px] p-4 border border-slate-200 space-y-2.5">
+                                      <label htmlFor="paste-rx" className="block text-[15px] font-extrabold text-[#111827]">
+                                        Ou cole o texto de uma receita do WhatsApp
+                                      </label>
+                                      <textarea
+                                        id="paste-rx"
+                                        rows={2}
+                                        value={pastedText}
+                                        onChange={(e) => setPastedText(e.target.value)}
+                                        placeholder="Ex: Iumi 1 comp às 21:00 e Dipirona 6/6h"
+                                        className="w-full rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 px-3.5 py-2.5 text-[15.5px] text-[#111827] focus:border-[#0F766E] focus:outline-none"
+                                      />
+                                      {pastedText.trim() && (
+                                        <button
+                                          type="button"
+                                          onClick={() => handleAnalyzeText(pastedText)}
+                                          className="w-full min-h-[50px] rounded-2xl bg-[#111827] text-white text-[15.5px] font-extrabold cursor-pointer"
+                                        >
+                                          Ler receita colada
+                                        </button>
+                                      )}
+                                    </div>
+
+                                      {/* Easy demo recipes button */}
+                                      <div className="space-y-2.5">
+                                        <button
+                                          type="button"
+                                          onClick={() => setShowExamples((v) => !v)}
+                                          className="w-full min-h-[48px] rounded-2xl bg-[#FEF3C7] text-[#92400E] text-[15px] font-extrabold cursor-pointer"
+                                        >
+                                          {showExamples ? 'Esconder exemplos' : 'Testar com receita de exemplo pronta'}
+                                        </button>
+
+                                        {showExamples && (
+                                            <div className="space-y-2.5">
+                                              {SAMPLE_PRESCRIPTIONS.map((s) => (
+                                                <button
+                                                  key={s.id}
+                                                  type="button"
+                                                  onClick={() => handleAnalyzeText(s.extractedText)}
+                                                  className="w-full p-4 rounded-2xl bg-white border-2 border-slate-200 hover:border-[#0F766E] text-left cursor-pointer"
+                                                >
+                                                    <p className="text-[16px] font-extrabold text-[#111827]">{s.title}</p>
+                                                    <p className="text-[14px] font-medium text-[#374151] mt-1">
+                                                      {s.previewLines.slice(1).join(' · ')}
+                                                    </p>
+                                                </button>
+                                              ))}
+                                            </div>
+              )}
+                                          </div>
           </div>
         )}
 
-        {/* STEP 2: VOICE SEARCH */}
-        {step === 'voice' && (
-          <div className="bg-white rounded-[26px] p-6 border border-black/[0.05] flex flex-col items-center text-center space-y-4">
-            <p className="text-[14.5px] text-[#57534E]">
-              Toque no botão e diga o nome do remédio (ex.: &ldquo;Iumi&rdquo;, &ldquo;Losartana&rdquo;, &ldquo;Ozempic&rdquo;)
-            </p>
-            <button
-              type="button"
-              onClick={handleStartVoice}
-              aria-label={listening ? 'Ouvindo' : 'Falar nome do remédio'}
-              className={`w-24 h-24 rounded-full flex items-center justify-center text-white shadow-lg transition-all cursor-pointer ${
-                listening
-                  ? 'bg-[#BE123C] ring-[10px] ring-[#BE123C]/20 animate-pulse'
-                  : 'bg-[#146356] animate-calm-breathe'
-              }`}
+                                      {/* STEP 2: VOICE SEARCH */}
+                                      {step === 'voice' && (
+                                            <div className="bg-white rounded-[26px] p-6 border-2 border-slate-200 flex flex-col items-center text-center space-y-5">
+                                              <p className="text-[16.5px] font-bold text-[#111827] leading-snug">
+                                                Toque no botão azul grande e fale o nome do remédio
+                                              </p>
+                                              <button
+                                                type="button"
+                                                onClick={handleStartVoice}
+                                                aria-label={listening ? 'Ouvindo' : 'Falar nome do remédio'}
+                                                        ? 'bg-[#B91C1C] ring-[12px] ring-[#FECACA] animate-pulse'
+                                                        : 'bg-[#1D4ED8] hover:bg-[#1E40AF] ring-[12px] ring-[#DBEAFE]'
+                                                    }`}
             >
-              {listening ? <MicOff className="w-10 h-10" /> : <Mic className="w-10 h-10" />}
+              {listening ? <MicOff className="w-12 h-12" /> : <Mic className="w-12 h-12" />}
             </button>
-            <p className="text-[16px] font-bold text-[#1C1917]">
-              {listening ? 'Estou ouvindo...' : 'Toque para falar'}
+            <p className="text-[18px] font-extrabold text-[#111827]">
+              {listening ? 'Estou ouvindo... pode falar!' : 'TOQUE PARA FALAR'}
             </p>
             {voiceHeard && (
-              <p className="text-[13.5px] text-[#146356] font-medium">
+              <p className="text-[15.5px] font-extrabold text-[#1D4ED8]">
                 Ouvi: &ldquo;{voiceHeard}&rdquo;
               </p>
             )}
-            {voiceError && <p className="text-[13px] text-[#BE123C]">{voiceError}</p>}
+            {voiceError && (
+              <p className="text-[15px] font-bold text-[#991B1B] bg-[#FEF2F2] rounded-2xl p-3.5 w-full">
+                {voiceError}
+              </p>
+            )}
           </div>
         )}
 
         {/* STEP 3: SEARCH ANY BRAZILIAN MEDICATION */}
         {step === 'search' && (
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             <div className="relative">
-              <Search className="w-4.5 h-4.5 text-[#78716C] absolute left-4 top-1/2 -translate-y-1/2" />
+              <Search className="w-5 h-5 text-[#374151] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="search"
                 autoFocus
@@ -621,40 +649,39 @@ export function AddMedicationSheet({
                   setQuery(e.target.value);
                   setLookupError(null);
                 }}
-                placeholder="Digite qualquer remédio do Brasil..."
-                className="w-full pl-11 pr-4 py-3.5 rounded-full bg-white border border-black/[0.08] text-[15px] text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:border-[#146356]"
+                placeholder="Digite o nome do remédio..."
+                className="w-full min-h-[54px] pl-12 pr-4 rounded-2xl bg-white border-2 border-slate-300 text-[16.5px] font-semibold text-[#111827] placeholder:text-[#6B7280] focus:outline-none focus:border-[#0F766E]"
               />
             </div>
 
-            {/* AI lookup button for ANY medication not in local list */}
             {query.trim().length >= 3 && (
               <button
                 type="button"
                 disabled={lookingUpAi}
                 onClick={() => void handleAiLookupQuery(query)}
-                className="w-full py-3.5 px-4 rounded-[20px] bg-[#E6F2EF] hover:bg-[#D5EBE5] text-[#0F4F45] font-semibold text-[14px] inline-flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full min-h-[54px] px-4 rounded-2xl bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-extrabold text-[15.5px] inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 {lookingUpAi ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Montando bula e genéricos de &ldquo;{query.trim()}&rdquo;...</span>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Buscando &ldquo;{query.trim()}&rdquo;...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4" />
-                    <span>Consultar &ldquo;{query.trim()}&rdquo; com IA (qualquer remédio BR)</span>
+                    <Sparkles className="w-5 h-5" />
+                    <span>Buscar &ldquo;{query.trim()}&rdquo; com IA</span>
                   </>
                 )}
               </button>
             )}
 
             {lookupError && (
-              <p className="text-[13px] text-[#9F1239] bg-[#FFF6F7] rounded-2xl p-3.5">
+              <p className="text-[15px] font-bold text-[#991B1B] bg-[#FEF2F2] border border-[#FCA5A5] rounded-2xl p-3.5">
                 {lookupError}
               </p>
             )}
 
-            <div className="bg-white rounded-[24px] border border-black/[0.05] divide-y divide-black/[0.05] overflow-hidden max-h-72 overflow-y-auto">
+            <div className="bg-white rounded-[22px] border-2 border-slate-200 divide-y divide-slate-200 overflow-hidden max-h-72 overflow-y-auto">
               {localResults.map((med) => (
                 <button
                   key={med.id}
@@ -663,14 +690,16 @@ export function AddMedicationSheet({
                     onAddExisting(med, { createAlarm: false, openAfter: true });
                     onClose();
                   }}
-                  className="w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#FAF9F6] cursor-pointer"
+                  className="w-full px-4 py-3.5 flex items-center gap-3.5 text-left hover:bg-slate-50 cursor-pointer"
                 >
                   <MedicationAvatar medication={med} size="sm" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-[15px] font-bold text-[#1C1917] truncate">{med.name}</p>
-                    <p className="text-[12.5px] text-[#78716C] truncate">{med.activeIngredient}</p>
+                    <p className="text-[17px] font-extrabold text-[#111827] truncate">{med.name}</p>
+                    <p className="text-[14px] font-medium text-[#374151] truncate">
+                      {med.activeIngredient}
+                    </p>
                   </div>
-                  <Check className="w-4 h-4 text-[#146356] opacity-70" />
+                  <Check className="w-5 h-5 text-[#047857] shrink-0" />
                 </button>
               ))}
             </div>
@@ -681,9 +710,9 @@ export function AddMedicationSheet({
                 setManualName(query);
                 setStep('manual');
               }}
-              className="w-full py-3 rounded-full bg-white border border-black/10 text-[#57534E] text-[13.5px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full min-h-[52px] rounded-2xl bg-white border-2 border-slate-300 text-[#111827] text-[15.5px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               <span>Cadastrar manualmente</span>
             </button>
           </div>
@@ -704,10 +733,10 @@ export function AddMedicationSheet({
               onAddNewMedication(med, manualTime ? [manualTime] : undefined);
               onClose();
             }}
-            className="bg-white rounded-[24px] p-5 border border-black/[0.05] space-y-4"
+            className="bg-white rounded-[24px] p-5 border-2 border-slate-200 space-y-4"
           >
             <div>
-              <label htmlFor="man-name" className="block text-[13px] font-semibold text-[#57534E] mb-1.5">
+              <label htmlFor="man-name" className="block text-[15px] font-extrabold text-[#111827] mb-1.5">
                 Nome do remédio
               </label>
               <input
@@ -717,13 +746,13 @@ export function AddMedicationSheet({
                 value={manualName}
                 onChange={(e) => setManualName(e.target.value)}
                 placeholder="Ex: Vitamina D 2000 UI"
-                className="w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[15px] text-[#1C1917] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
+                className="w-full min-h-[50px] px-4 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 text-[16px] font-semibold text-[#111827] focus:border-[#0F766E] focus:outline-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="man-dose" className="block text-[13px] font-semibold text-[#57534E] mb-1.5">
+                <label htmlFor="man-dose" className="block text-[15px] font-extrabold text-[#111827] mb-1.5">
                   Dose
                 </label>
                 <input
@@ -731,11 +760,11 @@ export function AddMedicationSheet({
                   type="text"
                   value={manualDosage}
                   onChange={(e) => setManualDosage(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] text-[#1C1917] focus:outline-none"
+                  className="w-full min-h-[50px] px-4 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 text-[15.5px] font-semibold text-[#111827] focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="man-time" className="block text-[13px] font-semibold text-[#57534E] mb-1.5">
+                <label htmlFor="man-time" className="block text-[15px] font-extrabold text-[#111827] mb-1.5">
                   Horário
                 </label>
                 <input
@@ -743,13 +772,13 @@ export function AddMedicationSheet({
                   type="time"
                   value={manualTime}
                   onChange={(e) => setManualTime(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] font-semibold text-[#1C1917] focus:outline-none"
+                  className="w-full min-h-[50px] px-4 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 text-[16px] font-extrabold text-[#111827] focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="man-notes" className="block text-[13px] font-semibold text-[#57534E] mb-1.5">
+              <label htmlFor="man-notes" className="block text-[15px] font-extrabold text-[#111827] mb-1.5">
                 Como tomar (opcional)
               </label>
               <input
@@ -758,15 +787,15 @@ export function AddMedicationSheet({
                 value={manualNotes}
                 onChange={(e) => setManualNotes(e.target.value)}
                 placeholder="Ex: Após o almoço"
-                className="w-full px-4 py-3 rounded-2xl bg-[#F6F4EF] text-[14px] text-[#1C1917] focus:outline-none"
+                className="w-full min-h-[50px] px-4 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 text-[15.5px] text-[#111827] focus:outline-none"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[15px] cursor-pointer"
+              className="w-full min-h-[56px] rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-extrabold text-[17px] cursor-pointer"
             >
-              Salvar remédio
+              Salvar remédio e alarme
             </button>
           </form>
         )}

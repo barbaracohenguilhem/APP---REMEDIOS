@@ -17,9 +17,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Meu Remédio — Bula calma, genéricos e horários com voz humana',
+  title: 'Meu Remédio — Bula fácil, genéricos e horários com voz humana',
   description:
-    'Aplicativo brasileiro feito para entender qualquer remédio com clareza, ouvir em voz natural, comparar diferenças reais entre genéricos e controlar seus horários.',
+  'Aplicativo brasileiro acessível feito para entender qualquer remédio com clareza, ouvir em voz natural, comparar diferenças reais entre genéricos e controlar seus horários.',
   manifest: '/manifest.webmanifest',
 };
 
@@ -27,7 +27,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#F6F4EF',
+  themeColor: '#F7F6F2',
 };
 
 export default function RootLayout({
@@ -36,10 +36,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${plusJakarta.variable} ${inter.variable}`}>
-      <body className="antialiased bg-[#ECE8E0] text-[#1C1917] font-sans selection:bg-[#146356]/15 selection:text-[#146356]">
-        {children}
-      </body>
-    </html>
-  );
+        <html
+          lang="pt-BR"
+          suppressHydrationWarning
+          className={`${plusJakarta.variable} ${inter.variable}`}
+        >
+          <body
+            suppressHydrationWarning
+            className="antialiased bg-[#ECE8E0] text-[#111827] font-sans selection:bg-[#0F766E]/15 selection:text-[#0F766E]"
+          >
+            {children}
+          </body>
+        </html>
+        );
 }
