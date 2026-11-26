@@ -1,9 +1,12 @@
+'use client';
+
 import { BellRing, Check, Clock, Volume2, X } from 'lucide-react';
-import type { ScheduledDoseInstance } from '../services/scheduleEngine';
-import { MedicinePackArt } from './MedicinePackArt';
+import type { ScheduledDoseInstance } from '@/services/scheduleEngine';
+import { MedicationAvatar } from './MedicationAvatar';
 
 interface AlarmRingingModalProps {
   dose: ScheduledDoseInstance;
+  photoOverride?: string;
   onMarkTaken: () => void;
   onSnooze: () => void;
   onDismiss: () => void;
@@ -12,6 +15,7 @@ interface AlarmRingingModalProps {
 
 export function AlarmRingingModal({
   dose,
+  photoOverride,
   onMarkTaken,
   onSnooze,
   onDismiss,
@@ -23,67 +27,73 @@ export function AlarmRingingModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-labelledby="alarm-modal-title"
-      className="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4"
+      aria-labelledby="alarm-ring-title"
+      className="fixed inset-0 z-50 bg-[#1C1917]/60 backdrop-blur-sm flex items-center justify-center p-5"
     >
-      <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl border-4 border-teal-500 animate-in fade-in zoom-in-95 duration-200 relative">
+      <div className="w-full max-w-[380px] bg-[#F6F4EF] rounded-[34px] p-6 shadow-2xl border border-white/60 relative animate-sheet-up">
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Fechar aviso de alarme"
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 inline-flex items-center justify-center cursor-pointer"
+          aria-label="Fechar aviso"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center mb-3 animate-bounce">
-            <BellRing className="w-9 h-9" />
+        <div className="flex flex-col items-center text-center pt-2">
+          <div className="w-14 h-14 rounded-full bg-[#E6F2EF] text-[#146356] flex items-center justify-center animate-calm-breathe">
+            <BellRing className="w-7 h-7" />
           </div>
 
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-sm font-extrabold">
-            <Clock className="w-4 h-4" />
-            HORA DO REMÉDIO · {dose.scheduledTime}
-          </span>
-
-          <h2 id="alarm-modal-title" className="text-2xl font-extrabold text-slate-900 mt-3">
-            {med?.name ?? 'Seu Remédio'}
-          </h2>
-          <p className="text-base font-bold text-teal-800 mt-1">{dose.dosage}</p>
-          {dose.notes && <p className="text-sm text-slate-600 mt-1">{dose.notes}</p>}
+          <p className="mt-4 text-[13px] font-semibold uppercase tracking-wide text-[#146356]">
+            Hora do seu remédio · {dose.scheduledTime}
+          </p>
 
           {med && (
-            <div className="my-4 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-              <MedicinePackArt pack={med.pack} size="lg" />
+            <div className="mt-4">
+              <MedicationAvatar
+                medication={med}
+                photoOverride={photoOverride}
+                size="lg"
+                className="w-24 h-24 rounded-[28px]"
+              />
             </div>
+          )}
+
+          <h2 id="alarm-ring-title" className="text-[26px] font-bold text-[#1C1917] mt-4">
+            {med?.name ?? 'Seu Remédio'}
+          </h2>
+          <p className="text-[16px] font-semibold text-[#57534E] mt-1">{dose.dosage}</p>
+          {dose.notes && (
+            <p className="text-[13.5px] text-[#78716C] mt-1 max-w-[260px]">{dose.notes}</p>
           )}
 
           <button
             type="button"
             onClick={onReplayVoice}
-            className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-800 font-bold text-sm hover:bg-blue-100 cursor-pointer"
+            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[#146356] font-semibold text-[13px] border border-black/[0.06] hover:bg-[#E6F2EF] cursor-pointer"
           >
             <Volume2 className="w-4 h-4" />
-            <span>Ouvir aviso novamente</span>
+            <span>Ouvir novamente</span>
           </button>
 
-          <div className="w-full space-y-2.5">
+          <div className="w-full space-y-2.5 mt-6">
             <button
               type="button"
               onClick={onMarkTaken}
-              className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-lg shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"
+              className="w-full py-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-bold text-[16px] shadow-[0_8px_22px_rgba(20,99,86,0.28)] inline-flex items-center justify-center gap-2 active:scale-[0.99] transition-all cursor-pointer"
             >
-              <Check className="w-6 h-6 stroke-[3]" />
-              <span>JÁ TOMEI AGORA</span>
+              <Check className="w-5 h-5 stroke-[2.6]" />
+              <span>Já tomei agora</span>
             </button>
 
             <button
               type="button"
               onClick={onSnooze}
-              className="w-full py-3.5 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-extrabold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"
+              className="w-full py-3.5 rounded-full bg-white border border-black/10 hover:bg-[#EFECE6] text-[#1C1917] font-semibold text-[14.5px] inline-flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Clock className="w-5 h-5" />
-              <span>Lembrar daqui 15 minutos</span>
+              <Clock className="w-4.5 h-4.5 text-[#78716C]" />
+              <span>Lembrar em 15 minutos</span>
             </button>
           </div>
         </div>

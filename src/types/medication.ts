@@ -1,4 +1,6 @@
-export type ActiveTab = 'entender' | 'comparar' | 'horarios' | 'adicionar';
+export type ActiveTab = 'hoje' | 'remedios' | 'comparar';
+
+export type MedicationDetailTab = 'bula' | 'genericos' | 'alarmes';
 
 export type BulaIconType =
   | 'pill'
@@ -132,6 +134,8 @@ export interface Medication {
   };
   equivalents: EquivalentProduct[];
   isCustom?: boolean;
+  aiGenerated?: boolean;
+  userPhotoUrl?: string;
 }
 
 export interface BrazilianRegion {
@@ -166,9 +170,19 @@ export interface DoseLog {
   delayMinutes: number; // positive = late, negative = early
 }
 
+export type VoiceProfile = 'acolhedora' | 'clara' | 'calma';
+
 export interface VoicePreferences {
   enabled: boolean;
   rate: 'normal' | 'slow';
+  guidedMode?: boolean;
+  voiceProfile?: VoiceProfile;
+}
+
+export interface ClientAiKeys {
+  elevenLabsKey?: string;
+  elevenLabsVoiceId?: string;
+  geminiKey?: string;
 }
 
 export interface AppPersistedState {
@@ -178,6 +192,7 @@ export interface AppPersistedState {
   myMedicationIds: string[];
   activeMedicationId: string;
   customMedications: Medication[];
+  medicationPhotos?: Record<string, string>;
   schedules: MedicationSchedule[];
   doseLogs: DoseLog[];
 }

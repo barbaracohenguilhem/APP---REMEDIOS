@@ -1,7 +1,8 @@
-import type { AppPersistedState } from '../types/medication';
+import type { AppPersistedState, ClientAiKeys } from '../types/medication';
 import { formatLocalDateStr } from './scheduleEngine';
 
 export const STORAGE_KEY = 'meu_remedio_state_v1';
+export const AI_KEYS_STORAGE_KEY = 'meu_remedio_ai_keys_v2';
 
 export function createDefaultState(now: Date = new Date()): AppPersistedState {
   const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
@@ -13,10 +14,13 @@ export function createDefaultState(now: Date = new Date()): AppPersistedState {
     voice: {
       enabled: true,
       rate: 'normal',
+      guidedMode: false,
+      voiceProfile: 'acolhedora',
     },
     myMedicationIds: ['iumi', 'losartana', 'glifage-xr'],
     activeMedicationId: 'iumi',
     customMedications: [],
+    medicationPhotos: {},
     schedules: [
       {
         id: 'sched-losartana-default',
@@ -26,7 +30,7 @@ export function createDefaultState(now: Date = new Date()): AppPersistedState {
         daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
         cycleMode: 'daily',
         enabled: true,
-        notes: 'Tomar com água pela manhã',
+        notes: 'Com água pela manhã',
         createdAt: yesterday.toISOString(),
       },
       {
@@ -114,6 +118,11 @@ export function loadPersistedState(): AppPersistedState {
             ? parsed.voice.enabled
             : defaults.voice.enabled,
         rate: parsed.voice?.rate === 'slow' ? 'slow' : 'normal',
+        guidedMode: Boolean(parsed.voice?.guidedMode),
+        voiceProfile:
+          parsed.voice?.voiceProfile === 'clara' || parsed.voice?.voiceProfile === 'calma'
+            ? parsed.voice.voiceProfile
+            : 'acolhedora',
       },
       myMedicationIds:
         Array.isArray(parsed.myMedicationIds) && parsed.myMedicationIds.length > 0
@@ -124,6 +133,10 @@ export function loadPersistedState(): AppPersistedState {
           ? parsed.activeMedicationId
           : defaults.activeMedicationId,
       customMedications: Array.isArray(parsed.customMedications) ? parsed.customMedications : [],
+      medicationPhotos:
+        parsed.medicationPhotos && typeof parsed.medicationPhotos === 'object'
+          ? parsed.medicationPhotos
+          : {},
       schedules: Array.isArray(parsed.schedules) ? parsed.schedules : defaults.schedules,
       doseLogs: Array.isArray(parsed.doseLogs) ? parsed.doseLogs : defaults.doseLogs,
     };
@@ -137,6 +150,41 @@ export function savePersistedState(state: AppPersistedState): void {
   if (!storage) return;
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
+
+export function loadClientAiKeys(): ClientAiKeys {
+  const storage = getSafeLocalStorage();
+  if (!storage) return {};
+  try {
+    const raw = storage.getItem(AI_KEYS_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as ClientAiKeys;
+    return {
+      elevenLabsKey: typeof parsed.elevenLabsKey === 'string' ? parsed.elevenLabsKey.trim() : '',
+      elevenLabsVoiceId:
+        typeof parsed.elevenLabsVoiceId === 'string' ? parsed.elevenLabsVoiceId.trim() : '',
+      geminiKey: typeof parsed.geminiKey === 'string' ? parsed.geminiKey.trim() : '',
+    };
+  } catch {
+    return {};
+  }
+}
+
+export function saveClientAiKeys(keys: ClientAiKeys): void {
+  const storage = getSafeLocalStorage();
+  if (!storage) return;
+  try {
+    storage.setItem(
+      AI_KEYS_STORAGE_KEY,
+      JSON.stringify({
+        elevenLabsKey: keys.elevenLabsKey?.trim() || '',
+        elevenLabsVoiceId: keys.elevenLabsVoiceId?.trim() || '',
+        geminiKey: keys.geminiKey?.trim() || '',
+      })
+    );
   } catch {
     // Ignore storage quota errors
   }

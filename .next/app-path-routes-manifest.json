@@ -1,0 +1,10 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/ask/route": "/api/ask",
+  "/api/medication/route": "/api/medication",
+  "/api/scan/route": "/api/scan",
+  "/api/status/route": "/api/status",
+  "/api/tts/route": "/api/tts",
+  "/page": "/"
+}

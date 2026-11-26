@@ -1,44 +1,44 @@
+'use client';
+
 import { useState } from 'react';
 import { Clock, Plus, Trash2, X } from 'lucide-react';
-import type { Medication, MedicationSchedule } from '../types/medication';
-import { MedicinePackArt } from './MedicinePackArt';
+import type { Medication, MedicationSchedule } from '@/types/medication';
+import { MedicationAvatar } from './MedicationAvatar';
 
 interface AddAlarmSheetProps {
   medications: Medication[];
-  savedMedicationIds?: string[];
+  medicationPhotos: Record<string, string>;
   initialMedicationId: string;
   onSave: (schedule: Omit<MedicationSchedule, 'id' | 'createdAt'>) => void;
   onClose: () => void;
 }
 
-const TIME_PRESETS: { label: string; emoji: string; times: string[] }[] = [
-  { label: '1x Manhã (08:00)', emoji: '🌅', times: ['08:00'] },
-  { label: '1x Noite (21:00)', emoji: '🌙', times: ['21:00'] },
-  { label: '2x ao dia (08h e 20h)', emoji: '🔄', times: ['08:00', '20:00'] },
-  { label: 'De 8 em 8h', emoji: '⏱️', times: ['07:00', '15:00', '23:00'] },
+const PRESETS = [
+  { label: 'Manhã (08:00)', times: ['08:00'] },
+  { label: 'Noite (21:00)', times: ['21:00'] },
+  { label: '12 em 12h', times: ['08:00', '20:00'] },
+  { label: '8 em 8h', times: ['07:00', '15:00', '23:00'] },
 ];
 
 export function AddAlarmSheet({
   medications,
-  savedMedicationIds = [],
+  medicationPhotos,
   initialMedicationId,
   onSave,
   onClose,
 }: AddAlarmSheetProps) {
-  const initialMed =
-    medications.find((m) => m.id === initialMedicationId) ?? medications[0];
-
-  const [selectedMedId, setSelectedMedId] = useState(initialMed?.id ?? '');
-  const [dosage, setDosage] = useState(initialMed?.howToTake.defaultDosage ?? '1 comprimido');
+  const initial = medications.find((m) => m.id === initialMedicationId) ?? medications[0];
+  const [selectedMedId, setSelectedMedId] = useState(initial?.id ?? '');
+  const [dosage, setDosage] = useState(initial?.howToTake.defaultDosage ?? '1 comprimido');
   const [times, setTimes] = useState<string[]>(
-    initialMed?.howToTake.defaultTimes?.length ? initialMed.howToTake.defaultTimes : ['08:00']
+    initial?.howToTake.defaultTimes?.length ? [...initial.howToTake.defaultTimes] : ['08:00']
   );
   const [cycleMode, setCycleMode] = useState<MedicationSchedule['cycleMode']>(
-    initialMed?.category === 'anticoncepcional' ? '24_4' : 'daily'
+    initial?.category === 'anticoncepcional' ? '24_4' : 'daily'
   );
-  const [notes, setNotes] = useState(initialMed?.howToTake.summary ?? '');
+  const [notes, setNotes] = useState(initial?.howToTake.summary ?? '');
 
-  const handleSelectMed = (med: Medication) => {
+  const handlePickMed = (med: Medication) => {
     setSelectedMedId(med.id);
     setDosage(med.howToTake.defaultDosage);
     setTimes(med.howToTake.defaultTimes.length ? [...med.howToTake.defaultTimes] : ['08:00']);
@@ -46,35 +46,17 @@ export function AddAlarmSheet({
     setNotes(med.howToTake.summary);
   };
 
-  const handleTimeChange = (idx: number, value: string) => {
-    setTimes((prev) => prev.map((t, i) => (i === idx ? value : t)));
-  };
-
-  const handleAddTimeSlot = () => {
-    const candidates = ['12:00', '18:00', '20:00', '08:00', '14:00', '22:00', '06:00'];
-    setTimes((prev) => {
-      const next = candidates.find((c) => !prev.includes(c)) ?? '15:00';
-      return [...prev, next];
-    });
-  };
-
-  const handleRemoveTimeSlot = (idx: number) => {
-    if (times.length <= 1) return;
-    setTimes((prev) => prev.filter((_, i) => i !== idx));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const validTimes = Array.from(
+    const cleanTimes = Array.from(
       new Set(times.map((t) => t.trim()).filter((t) => /^\d{2}:\d{2}$/.test(t)))
     ).sort();
-
-    if (!selectedMedId || validTimes.length === 0) return;
+    if (!selectedMedId || cleanTimes.length === 0) return;
 
     onSave({
       medicationId: selectedMedId,
       dosage: dosage.trim() || '1 comprimido',
-      times: validTimes,
+      times: cleanTimes,
       daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
       cycleMode,
       enabled: true,
@@ -86,101 +68,95 @@ export function AddAlarmSheet({
     <div
       role="dialog"
       aria-modal="true"
-      aria-labelledby="add-alarm-title"
-      className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
+      aria-labelledby="add-alarm-sheet-title"
+      className="fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      onClick={onClose}
     >
-      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl max-h-[90dvh] overflow-y-auto shadow-2xl p-5 space-y-4">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-5"
+      >
         <div className="flex items-center justify-between">
-          <h2 id="add-alarm-title" className="text-xl font-extrabold text-slate-900">
-            Criar Alarme de Remédio
+          <h2 id="add-alarm-sheet-title" className="text-[20px] font-bold text-[#1C1917]">
+            Novo lembrete
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 inline-flex items-center justify-center cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* 1. Pick Medicine visually */}
-          <div>
-            <label className="block text-sm font-extrabold text-slate-800 mb-2">
-              1. Escolha o remédio
-            </label>
-            <div className="flex gap-2.5 overflow-x-auto pb-1.5 no-scrollbar">
-              {medications.map((med) => {
-                const selected = med.id === selectedMedId;
-                const isSaved = savedMedicationIds.includes(med.id);
-                return (
-                  <button
-                    key={med.id}
-                    type="button"
-                    onClick={() => handleSelectMed(med)}
-                    className={`shrink-0 w-32 p-2.5 rounded-2xl border-2 text-left transition-all cursor-pointer ${
-                      selected
-                        ? 'border-[#0D9488] bg-teal-50/70 shadow-sm'
-                        : 'border-slate-200 bg-white hover:border-slate-300'
-                    }`}
-                  >
-                    <MedicinePackArt pack={med.pack} size="sm" className="mx-auto mb-1.5" />
-                    <p className="text-xs font-extrabold text-slate-900 truncate text-center">
-                      {med.name}
-                    </p>
-                    {isSaved && (
-                      <p className="text-[10px] font-bold text-teal-700 text-center mt-0.5">
-                        Na sua lista
-                      </p>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          {/* Med selector */}
+          <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+            {medications.map((med) => {
+              const active = med.id === selectedMedId;
+              return (
+                <button
+                  key={med.id}
+                  type="button"
+                  onClick={() => handlePickMed(med)}
+                  className={`shrink-0 px-3.5 py-2.5 rounded-[20px] border flex items-center gap-2.5 transition-all cursor-pointer ${
+                    active
+                      ? 'bg-[#1C1917] text-white border-[#1C1917]'
+                      : 'bg-white text-[#1C1917] border-black/[0.06]'
+                  }`}
+                >
+                  <MedicationAvatar
+                    medication={med}
+                    photoOverride={medicationPhotos[med.id]}
+                    size="sm"
+                    className="w-8 h-8 rounded-xl"
+                  />
+                  <span className="text-[13.5px] font-semibold">{med.name}</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* 2. Quick frequency presets */}
-          <div>
-            <span className="block text-sm font-extrabold text-slate-800 mb-2">
-              2. Escolha os horários (ou toque para mudar)
-            </span>
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              {TIME_PRESETS.map((preset) => (
+          {/* Quick presets */}
+          <div className="bg-white rounded-[24px] p-4 border border-black/[0.05] space-y-3">
+            <p className="text-[13px] font-semibold text-[#57534E]">Horários</p>
+            <div className="grid grid-cols-2 gap-2">
+              {PRESETS.map((p) => (
                 <button
-                  key={preset.label}
+                  key={p.label}
                   type="button"
-                  onClick={() => setTimes([...preset.times])}
-                  className="px-3 py-2.5 rounded-xl bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-xs font-bold text-slate-800 text-left transition-colors cursor-pointer"
+                  onClick={() => setTimes([...p.times])}
+                  className="py-2.5 px-3 rounded-xl bg-[#F6F4EF] hover:bg-[#E6F2EF] text-[13px] font-semibold text-[#1C1917] text-left cursor-pointer"
                 >
-                  <span className="mr-1">{preset.emoji}</span>
-                  {preset.label}
+                  {p.label}
                 </button>
               ))}
             </div>
 
-            <div className="space-y-2">
-              {times.map((time, idx) => (
+            <div className="space-y-2 pt-1">
+              {times.map((t, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <div className="flex-1 flex items-center gap-2 rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-2">
-                    <Clock className="w-5 h-5 text-[#0D9488]" />
+                  <div className="flex-1 flex items-center gap-2.5 rounded-2xl bg-[#F6F4EF] px-4 py-2.5">
+                    <Clock className="w-4.5 h-4.5 text-[#146356]" />
                     <input
                       type="time"
                       aria-label={`Horário ${idx + 1}`}
-                      value={time}
-                      onChange={(e) => handleTimeChange(idx, e.target.value)}
-                      required
-                      className="flex-1 bg-transparent text-lg font-extrabold text-slate-900 focus:outline-none"
+                      value={t}
+                      onChange={(e) =>
+                        setTimes((prev) => prev.map((v, i) => (i === idx ? e.target.value : v)))
+                      }
+                      className="flex-1 bg-transparent text-[18px] font-bold text-[#1C1917] focus:outline-none"
                     />
                   </div>
                   {times.length > 1 && (
                     <button
                       type="button"
-                      onClick={() => handleRemoveTimeSlot(idx)}
-                      aria-label={`Remover horário ${idx + 1}`}
-                      className="w-11 h-11 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 inline-flex items-center justify-center cursor-pointer"
+                      onClick={() => setTimes((prev) => prev.filter((_, i) => i !== idx))}
+                      aria-label="Remover horário"
+                      className="w-10 h-10 rounded-full bg-[#FEECEF] text-[#BE123C] inline-flex items-center justify-center cursor-pointer"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   )}
                 </div>
@@ -188,68 +164,56 @@ export function AddAlarmSheet({
 
               <button
                 type="button"
-                onClick={handleAddTimeSlot}
-                className="w-full py-2.5 rounded-xl border-2 border-dashed border-teal-300 text-teal-800 font-bold text-sm hover:bg-teal-50 inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                onClick={() => {
+                  const next =
+                    ['12:00', '18:00', '20:00', '08:00', '14:00'].find((c) => !times.includes(c)) ??
+                    '15:00';
+                  setTimes((prev) => [...prev, next]);
+                }}
+                className="w-full py-2.5 rounded-xl border border-dashed border-[#146356]/35 text-[#146356] text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
-                <span>Adicionar outro horário no dia</span>
+                <span>Outro horário no dia</span>
               </button>
             </div>
           </div>
 
-          {/* 3. Dosage & Cycle */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Dose & cycle */}
+          <div className="bg-white rounded-[24px] p-4 border border-black/[0.05] grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="alarm-dosage" className="block text-sm font-extrabold text-slate-800 mb-1">
-                3. Quanto tomar
+              <label htmlFor="al-dose" className="block text-[12.5px] font-semibold text-[#57534E] mb-1">
+                Dose
               </label>
               <input
-                id="alarm-dosage"
+                id="al-dose"
                 type="text"
                 value={dosage}
                 onChange={(e) => setDosage(e.target.value)}
-                placeholder="Ex: 1 comprimido"
-                className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-900 focus:border-[#0D9488] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none"
               />
             </div>
-
             <div>
-              <label htmlFor="alarm-cycle" className="block text-sm font-extrabold text-slate-800 mb-1">
-                4. Tipo de uso
+              <label htmlFor="al-cycle" className="block text-[12.5px] font-semibold text-[#57534E] mb-1">
+                Frequência
               </label>
               <select
-                id="alarm-cycle"
+                id="al-cycle"
                 value={cycleMode}
                 onChange={(e) => setCycleMode(e.target.value as MedicationSchedule['cycleMode'])}
-                className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-900 bg-white focus:border-[#0D9488] focus:outline-none"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#F6F4EF] text-[13.5px] font-semibold text-[#1C1917] focus:outline-none"
               >
                 <option value="daily">Todos os dias</option>
-                <option value="24_4">24 dias + 4 pausa</option>
-                <option value="21_7">21 dias + 7 pausa</option>
+                <option value="24_4">24d + 4 pausa</option>
+                <option value="21_7">21d + 7 pausa</option>
               </select>
             </div>
           </div>
 
-          {/* Optional note */}
-          <div>
-            <label htmlFor="alarm-notes" className="block text-sm font-extrabold text-slate-800 mb-1">
-              Lembrete curto (opcional)
-            </label>
-            <input
-              id="alarm-notes"
-              type="text"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ex: Tomar com água após o jantar"
-              className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium text-slate-900 focus:border-[#0D9488] focus:outline-none"
-            />
-          </div>
-
           <button
             type="submit"
-            className="w-full py-4 rounded-2xl bg-[#0D9488] hover:bg-[#0F766E] text-white font-extrabold text-base shadow-md active:scale-[0.99] transition-all cursor-pointer"
+            className="w-full py-4 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-bold text-[15px] cursor-pointer"
           >
-            Salvar Alarme
+            Salvar lembrete
           </button>
         </form>
       </div>
