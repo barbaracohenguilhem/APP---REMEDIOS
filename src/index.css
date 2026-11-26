@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #eef2f1 0%, #e5ebe9 100%);
+    min-height: 100dvh;
+  }
+}
+
+/* Custom accessible focus rings */
+:focus-visible {
+  outline: 3px solid #0d9488;
+  outline-offset: 2px;
+}
+
+/* Gentle speaking soundwave animation */
+@keyframes pulseWave {
+  0%, 100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-wave-1 {
+  animation: pulseWave 0.7s ease-in-out infinite;
+}
+.animate-wave-2 {
+  animation: pulseWave 0.7s ease-in-out 0.15s infinite;
+}
+.animate-wave-3 {
+  animation: pulseWave 0.7s ease-in-out 0.3s infinite;
+}
+
+/* Hide scrollbars cleanly where horizontal carousels are used */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
