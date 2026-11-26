@@ -95,6 +95,15 @@ export function HorariosView({
   };
 
   const buildTodaySpokenSummary = (): string => {
+    if (dosesToday.length === 0 && pausedCyclesToday.length > 0) {
+      const pausedList = pausedCyclesToday
+        .map(
+          ({ med, cycle }) =>
+            `${med?.name ?? 'sua cartela'}, dia de pausa ${cycle.dayInPhase} de ${cycle.phaseLength}`
+        )
+        .join(', e ');
+      return `Hoje é dia de pausa para ${pausedList}. Você não precisa tomar comprimido hoje. O alarme volta automaticamente na próxima cartela.`;
+    }
     if (dosesToday.length === 0) {
       return 'Você ainda não tem alarmes cadastrados para hoje. Toque em Novo Alarme para criar um lembrete.';
     }
@@ -291,7 +300,12 @@ export function HorariosView({
             role="tab"
             type="button"
             aria-selected={subView === tab.id}
-            onClick={() => setSubView(tab.id)}
+            onClick={() => {
+              if (subView !== tab.id) {
+                onStopSpeaking();
+                setSubView(tab.id);
+              }
+            }}
             className={`py-2.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
               subView === tab.id
                 ? 'bg-white text-slate-900 shadow-xs'
@@ -339,7 +353,7 @@ export function HorariosView({
             );
           })}
 
-          {dosesToday.length === 0 ? (
+          {dosesToday.length === 0 && pausedCyclesToday.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center border border-slate-100 space-y-3">
               <AlarmClock className="w-12 h-12 text-teal-600 mx-auto" />
               <p className="text-base font-extrabold text-slate-900">
@@ -446,7 +460,7 @@ export function HorariosView({
 
                             <div className="flex items-start justify-between gap-2 mt-0.5">
                               <div className="min-w-0 flex-1">
-                                <h4 className="text-base font-extrabold text-slate-900 truncate">
+                                <h4 className="text-base font-extrabold text-slate-900 leading-snug">
                                   {dose.medication?.name ?? 'Medicamento'}
                                 </h4>
                                 <p className="text-xs font-semibold text-slate-600">{dose.dosage}</p>
@@ -544,7 +558,7 @@ export function HorariosView({
               />
             </div>
 
-            <div className="grid grid-cols-7 gap-1.5">
+            <div className="grid grid-cols-7 gap-1 min-[360px]:gap-1.5">
               {last7Days.map((day) => {
                 const isSelected = day.dateStr === activeHistoryDateStr;
                 const dotColor =
@@ -560,11 +574,18 @@ export function HorariosView({
                   <button
                     key={day.dateStr}
                     type="button"
+                    aria-pressed={isSelected}
+                    aria-label={`${day.weekdayShort} dia ${day.dayNumber}: ${day.takenCount} de ${day.totalScheduled} doses tomadas`}
                     onClick={() => {
-                      if (speakingId === 'horarios-historico-dia') onStopSpeaking();
+                      if (
+                        speakingId === 'horarios-historico-dia' ||
+                        speakingId === 'horarios-historico-semana'
+                      ) {
+                        onStopSpeaking();
+                      }
                       setSelectedHistoryDateStr(day.dateStr);
                     }}
-                    className={`flex flex-col items-center py-2 px-1 rounded-xl border-2 transition-all cursor-pointer ${
+                    className={`flex flex-col items-center py-1.5 min-[360px]:py-2 px-0.5 min-[360px]:px-1 rounded-xl border-2 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-[#0D9488] bg-teal-50/70'
                         : 'border-transparent hover:bg-slate-50'
@@ -574,7 +595,7 @@ export function HorariosView({
                       {day.weekdayShort}
                     </span>
                     <span
-                      className={`mt-1 w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold ${dotColor}`}
+                      className={`mt-1 w-7 h-7 min-[360px]:w-8 min-[360px]:h-8 rounded-full flex items-center justify-center text-xs font-extrabold ${dotColor}`}
                     >
                       {day.status === 'complete' ? '✓' : day.dayNumber}
                     </span>
