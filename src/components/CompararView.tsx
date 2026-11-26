@@ -4,6 +4,7 @@ import { useState } from 'react';
 import {
   AlertTriangle,
   CheckCircle2,
+  ChevronDown,
   ChevronRight,
   MapPin,
   MessageCircle,
@@ -15,6 +16,7 @@ import type { EquivalentProduct, Medication } from '@/types/medication';
 import { calculateRegionalPrice, calculateSavingsPercent } from '@/services/pricing';
 import type { VoicePlaybackState } from '@/services/voiceEngine';
 import { MedicationAvatar } from './MedicationAvatar';
+import { AccessiblePictogram } from './AccessiblePictograms';
 import { AudioPlayerBar, QuietListenButton } from './AudioPlayerBar';
 
 interface CompararViewProps {
@@ -53,6 +55,7 @@ export function CompararView({
   embedded = false,
 }: CompararViewProps) {
   const [inspectingProduct, setInspectingProduct] = useState<EquivalentProduct | null>(null);
+  const [showTechDetails, setShowTechDetails] = useState(false);
 
   const reference =
     medication.equivalents.find((e) => e.type === 'referencia') ?? medication.equivalents[0];
@@ -67,16 +70,13 @@ export function CompararView({
   };
 
   return (
-    <div className={embedded ? 'space-y-4' : 'px-5 pt-2 pb-28 space-y-5'}>
-      {/* Standalone header when opened directly from bottom tab */}
+    <div className={embedded ? 'space-y-4' : 'px-4 pt-3 pb-28 space-y-4'}>
+      {/* Standalone header */}
       {!embedded && (
         <section className="space-y-3">
-          <div>
-            <p className="text-[13px] font-medium text-[#78716C]">Genéricos e similares</p>
-            <h2 className="text-[26px] font-bold text-[#1C1917] leading-tight mt-0.5">
-              Comparar opções
-            </h2>
-          </div>
+          <h2 className="text-[25px] font-extrabold text-[#111827] leading-tight">
+            Genéricos e Diferenças
+          </h2>
 
           {allMedications.length > 1 && onSelectMedication && (
             <div className="flex gap-2 overflow-x-auto no-scrollbar pb-0.5">
@@ -87,10 +87,10 @@ export function CompararView({
                     key={med.id}
                     type="button"
                     onClick={() => onSelectMedication(med.id)}
-                    className={`shrink-0 px-4 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer ${
+                    className={`shrink-0 min-h-[44px] px-4 rounded-full text-[15px] font-extrabold transition-all cursor-pointer ${
                       active
-                        ? 'bg-[#1C1917] text-white'
-                        : 'bg-white text-[#57534E] border border-black/[0.06] hover:bg-[#F3EFE8]'
+                        ? 'bg-[#111827] text-white'
+                        : 'bg-white text-[#111827] border-2 border-slate-300'
                     }`}
                   >
                     {med.name}
@@ -100,58 +100,66 @@ export function CompararView({
             </div>
           )}
 
-          <div className="flex items-center gap-3 pt-1">
+          <div className="flex items-center gap-3.5 bg-white rounded-[22px] p-3.5 border border-slate-200">
             <MedicationAvatar
               medication={medication}
               photoOverride={medicationPhotos[medication.id]}
-              size="sm"
+              size="md"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-[16px] font-bold text-[#1C1917] truncate">{medication.name}</p>
-              <p className="text-[13px] text-[#78716C] truncate">{medication.activeIngredient}</p>
+              <p className="text-[19px] font-extrabold text-[#111827] truncate">{medication.name}</p>
+              <p className="text-[14px] font-medium text-[#374151] truncate">
+                {medication.activeIngredient}
+              </p>
             </div>
+            <QuietListenButton
+              sectionId="compare-why-top"
+              playback={playback}
+              onClick={() => toggleSpeak('compare-why-top', medication.genericsHighlight.spokenScript)}
+              ariaLabel="Ouvir sobre genéricos e diferenças"
+            />
           </div>
         </section>
       )}
 
-      {/* Compact single-row State/Region picker + Calm 1-sentence insight */}
-      <div className="bg-white rounded-[22px] p-4 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-[13px] font-semibold text-[#57534E]">
-            <MapPin className="w-4 h-4 text-[#146356]" />
-            <span>Preços em</span>
-          </div>
-          <select
-            aria-label="Selecionar estado para média de preço"
-            value={selectedUf}
-            onChange={(e) => onChangeUf(e.target.value)}
-            className="rounded-full bg-[#F3EFE8] hover:bg-[#EAE4D9] px-3.5 py-1.5 text-[13px] font-semibold text-[#1C1917] focus:outline-none cursor-pointer"
-          >
-            {BRAZILIAN_REGIONS.map((r) => (
-              <option key={r.uf} value={r.uf}>
-                {r.uf === 'BR' ? 'Média Brasil' : `${r.uf} · ${r.name}`}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Clear Region Selector + Plain-Portuguese Explainer */}
+      <div className="bg-white rounded-[22px] p-4 border border-slate-200 space-y-3">
+        <label
+          htmlFor="uf-picker"
+          className="flex items-center gap-2 text-[15px] font-extrabold text-[#111827]"
+        >
+          <MapPin className="w-5 h-5 text-[#0F766E]" />
+          <span>Preços no seu estado:</span>
+        </label>
+        <select
+          id="uf-picker"
+          value={selectedUf}
+          onChange={(e) => onChangeUf(e.target.value)}
+          className="w-full min-h-[48px] rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 px-4 text-[16px] font-bold text-[#111827] focus:border-[#0F766E] focus:outline-none cursor-pointer"
+        >
+          {BRAZILIAN_REGIONS.map((r) => (
+            <option key={r.uf} value={r.uf}>
+              {r.uf === 'BR' ? 'Média de todo o Brasil' : `${r.name} (${r.uf})`}
+            </option>
+          ))}
+        </select>
 
-        <div className="flex items-start justify-between gap-3 pt-2.5 border-t border-black/[0.05]">
-          <p className="text-[13.5px] text-[#57534E] leading-relaxed">
-            Mesma eficácia pela ANVISA. Toque em qualquer opção abaixo para ver{' '}
-            <strong className="text-[#1C1917] font-semibold">o que pode mudar na troca</strong>{' '}
-            (revestimento, excipientes e absorção).
+        <div className="rounded-2xl bg-[#FFFBEB] border-l-[6px] border-[#D97706] p-3.5 flex items-center justify-between gap-3">
+          <p className="text-[14.5px] font-semibold text-[#78350F] leading-snug">
+            Mesmo remédio pela ANVISA. Toque em qualquer opção abaixo para ver{' '}
+            <strong>o que pode mudar na troca</strong> (como inchaço ou estômago).
           </p>
           <QuietListenButton
             sectionId="compare-why"
             playback={playback}
             onClick={() => toggleSpeak('compare-why', medication.genericsHighlight.spokenScript)}
-            ariaLabel="Ouvir sobre diferenças entre genéricos"
+            ariaLabel="Ouvir por que pode dar diferença na troca"
           />
         </div>
       </div>
 
-      {/* Clean, spacious bioequivalent list (NO badge soup, progressive disclosure into focused sheet) */}
-      <section aria-label="Opções bioequivalentes" className="space-y-3">
+      {/* High-Contrast Bioequivalent Cards */}
+      <section aria-label="Opções no mercado" className="space-y-3">
         {medication.equivalents.map((eq) => {
           const price = calculateRegionalPrice(eq, selectedUf);
           const savings = calculateSavingsPercent(reference, eq, selectedUf);
@@ -159,71 +167,127 @@ export function CompararView({
           const firstEffect = eq.switchingEffects[0];
 
           return (
-            <button
+            <div
               key={eq.id}
-              type="button"
-              onClick={() => setInspectingProduct(eq)}
-              className="w-full text-left bg-white hover:bg-[#FCFBF9] active:scale-[0.995] rounded-[24px] p-5 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] transition-all cursor-pointer space-y-2.5"
+              className="bg-white rounded-[24px] p-4 border-2 border-slate-200 shadow-xs space-y-3"
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="text-[12px] font-semibold text-[#78716C]">
-                    {isRef
-                      ? 'Referência'
-                      : eq.type === 'generico'
-                        ? 'Genérico'
-                        : 'Similar intercambiável'}{' '}
-                    · {eq.lab}
-                  </p>
-                  <h3 className="text-[16px] font-bold text-[#1C1917] mt-0.5 leading-snug">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTechDetails(false);
+                    setInspectingProduct(eq);
+                  }}
+                  className="text-left flex-1 min-w-0 cursor-pointer"
+                >
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-[13px] font-extrabold ${
+                      isRef
+                        ? 'bg-[#EEF2FF] text-[#3730A3]'
+                        : eq.type === 'generico'
+                          ? 'bg-[#FEF3C7] text-[#92400E]'
+                          : 'bg-[#E0F2FE] text-[#075985]'
+                    }`}
+                  >
+                    {isRef ? 'Original' : eq.type === 'generico' ? 'Genérico' : 'Similar'} · {eq.lab}
+                  </span>
+
+                  <h3 className="text-[18px] font-extrabold text-[#111827] mt-2 leading-snug">
                     {eq.name}
                   </h3>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#A8A29E] shrink-0 mt-1" />
-              </div>
 
-              <div className="flex items-baseline justify-between gap-2">
-                <p
-                  className={`text-[17px] font-bold ${
-                    price.isFreeSus ? 'text-[#15803D]' : 'text-[#1C1917]'
-                  }`}
-                >
-                  {price.formattedRange}
-                </p>
-                {savings !== null && savings > 0 && !isRef && (
-                  <span className="text-[12.5px] font-semibold text-[#146356]">
-                    {savings === 100 ? 'Gratuito SUS' : `Economiza ~${savings}%`}
-                  </span>
-                )}
+                  <div className="mt-2 flex items-center flex-wrap gap-2">
+                    <span
+                      className={`text-[20px] font-extrabold ${
+                        price.isFreeSus ? 'text-[#047857]' : 'text-[#111827]'
+                      }`}
+                    >
+                      {price.formattedRange}
+                    </span>
+                    {savings !== null && savings > 0 && !isRef && (
+                      <span className="px-3 py-0.5 rounded-full bg-[#DCFCE7] text-[#065F46] text-[13.5px] font-extrabold">
+                        {savings === 100 ? 'GRÁTIS NO SUS' : `Economia ~${savings}%`}
+                      </span>
+                    )}
+                  </div>
+                </button>
+
+                <QuietListenButton
+                  sectionId={`eq-card-${eq.id}`}
+                  playback={playback}
+                  onClick={() =>
+                    toggleSpeak(
+                      `eq-card-${eq.id}`,
+                      `${eq.name}, laboratório ${eq.lab}. Preço em ${region.name}: ${price.formattedRange}. ${eq.spokenSummary}`
+                    )
+                  }
+                  ariaLabel={`Ouvir sobre ${eq.name}`}
+                />
               </div>
 
               {firstEffect && (
-                <div className="pt-2 border-t border-black/[0.05] flex items-center gap-2 text-[13px] text-[#9A3412]">
-                  <AlertTriangle className="w-4 h-4 text-[#D97706] shrink-0" />
-                  <span className="truncate font-medium">
-                    Na troca: {firstEffect.symptom}
-                  </span>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTechDetails(false);
+                    setInspectingProduct(eq);
+                  }}
+                  className="w-full text-left rounded-2xl bg-[#FFFBEB] border border-[#F59E0B]/50 p-3 flex items-center justify-between gap-2.5 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <AlertTriangle className="w-5 h-5 text-[#B45309] shrink-0" />
+                    <span className="text-[14.5px] font-extrabold text-[#78350F] leading-snug">
+                      Na troca: {firstEffect.symptom}
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-[#B45309] shrink-0" />
+                </button>
               )}
 
               {!eq.bioequivalent && (
-                <div className="pt-2 border-t border-black/[0.05] flex items-center gap-2 text-[13px] text-[#BE123C]">
-                  <ShieldAlert className="w-4 h-4 shrink-0" />
-                  <span className="font-semibold">Atenção: não substitui diretamente</span>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTechDetails(false);
+                    setInspectingProduct(eq);
+                  }}
+                  className="w-full text-left rounded-2xl bg-[#FEF2F2] border border-[#DC2626]/40 p-3 flex items-center justify-between gap-2.5 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <ShieldAlert className="w-5 h-5 text-[#B91C1C] shrink-0" />
+                    <span className="text-[14.5px] font-extrabold text-[#991B1B]">
+                      Atenção: NÃO substitui direto
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-[#B91C1C] shrink-0" />
+                </button>
               )}
-            </button>
+
+              {!firstEffect && eq.bioequivalent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTechDetails(false);
+                    setInspectingProduct(eq);
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[#111827] text-[14.5px] font-bold flex items-center justify-between cursor-pointer"
+                >
+                  <span>{isRef ? 'Ver detalhes do Original' : 'Ver o que muda na troca'}</span>
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           );
         })}
       </section>
 
-      {/* FOCUSED COMPARISON SHEET — ONLY 3 CRYSTAL-CLEAR BLOCKS */}
+      {/* FOCUSED ACCESSIBLE COMPARISON SHEET (Plain Spoken Language + Visual Pictograms!) */}
       {inspectingProduct && reference && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="switch-sheet-title"
-          className="fixed inset-0 z-50 bg-[#1C1917]/45 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
+          className="fixed inset-0 z-50 bg-[#111827]/55 backdrop-blur-[2px] flex items-end sm:items-center justify-center p-0 sm:p-4"
           onClick={() => {
             onStopSpeaking();
             setInspectingProduct(null);
@@ -231,19 +295,18 @@ export function CompararView({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-[#F6F4EF] rounded-t-[32px] sm:rounded-[32px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-4"
+            className="w-full max-w-[430px] max-h-[90dvh] overflow-y-auto bg-[#F7F6F2] rounded-t-[30px] sm:rounded-[30px] p-5 pb-8 shadow-2xl animate-sheet-up space-y-4"
           >
-            {/* Sheet Header */}
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-wide text-[#146356]">
+                <p className="text-[13.5px] font-extrabold uppercase text-[#0F766E]">
                   {inspectingProduct.id === reference.id
-                    ? 'Medicamento de referência'
-                    : `Troca · ${reference.name.split(' ')[0]} → ${inspectingProduct.lab}`}
+                    ? 'Remédio Original'
+                    : `Troca: ${reference.name.split(' ')[0]} → ${inspectingProduct.lab}`}
                 </p>
                 <h3
                   id="switch-sheet-title"
-                  className="text-[21px] font-bold text-[#1C1917] leading-snug mt-0.5"
+                  className="text-[22px] font-extrabold text-[#111827] leading-snug mt-0.5"
                 >
                   {inspectingProduct.name}
                 </h3>
@@ -255,16 +318,15 @@ export function CompararView({
                   setInspectingProduct(null);
                 }}
                 aria-label="Fechar comparação"
-                className="w-9 h-9 rounded-full bg-white text-[#57534E] hover:bg-[#EAE4D9] inline-flex items-center justify-center shrink-0 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-white border border-slate-300 text-[#111827] inline-flex items-center justify-center shrink-0 cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Natural Voice Play Bar for this exact switch */}
+            {/* Big Blue Voice Player */}
             <AudioPlayerBar
-              label="Ouvir o que muda nessa troca"
-              sublabel={inspectingProduct.switchVerdict.headline}
+              label="Ouvir o que muda na troca"
               sectionId={`sheet-eq-${inspectingProduct.id}`}
               playback={playback}
               rate={voiceRate}
@@ -275,7 +337,7 @@ export function CompararView({
                     ? `O que pode mudar na troca: ${inspectingProduct.switchingEffects
                         .map((fx) => `${fx.symptom}. ${fx.why}`)
                         .join(' ')}`
-                    : 'Este é o medicamento de referência usado como base.';
+                    : 'Este é o medicamento original usado como referência.';
                 toggleSpeak(
                   `sheet-eq-${inspectingProduct.id}`,
                   `${inspectingProduct.name}, do laboratório ${inspectingProduct.lab}. ${inspectingProduct.switchVerdict.headline}. ${inspectingProduct.switchVerdict.explanation} ${effectsSpoken}`
@@ -285,76 +347,99 @@ export function CompararView({
               onOpenVoiceSettings={onOpenVoiceSettings}
             />
 
-            {/* BLOCK 1: Preço & Economia */}
-            <div className="bg-white rounded-[22px] p-4 border border-black/[0.05] space-y-2">
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-[#78716C]">
+            {/* 1. PREÇO */}
+            <div className="bg-white rounded-[22px] p-4 border-2 border-slate-200 space-y-1">
+              <p className="text-[13.5px] font-extrabold uppercase text-[#374151]">
                 1. Média de preço em {region.name}
               </p>
-              <div className="flex items-baseline justify-between gap-2">
-                <p className="text-[22px] font-bold text-[#1C1917]">
-                  {calculateRegionalPrice(inspectingProduct, selectedUf).formattedRange}
+              <p className="text-[26px] font-extrabold text-[#047857]">
+                {calculateRegionalPrice(inspectingProduct, selectedUf).formattedRange}
+              </p>
+              {inspectingProduct.id !== reference.id && (
+                <p className="text-[15px] font-semibold text-[#374151]">
+                  Original custa cerca de{' '}
+                  <strong>{calculateRegionalPrice(reference, selectedUf).formattedRange}</strong>
                 </p>
-                {inspectingProduct.id !== reference.id && (
-                  <p className="text-[13px] text-[#78716C]">
-                    Original: {calculateRegionalPrice(reference, selectedUf).formattedRange}
-                  </p>
-                )}
-              </div>
-              <p className="text-[12.5px] text-[#78716C]">{region.icmsLabel}</p>
+              )}
             </div>
 
-            {/* BLOCK 2: O que continua igual */}
-            <div className="bg-[#EEF7F2] rounded-[22px] p-4 border border-[#146356]/10 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-[#146356] shrink-0 mt-0.5" />
+            {/* 2. O QUE É IGUAL */}
+            <div className="bg-[#ECFDF5] rounded-[22px] p-4 border-l-[7px] border-[#059669] flex items-start gap-3">
+              <CheckCircle2 className="w-7 h-7 text-[#047857] shrink-0 mt-0.5" />
               <div>
-                <p className="text-[14px] font-bold text-[#0F4F45]">
+                <p className="text-[16px] font-extrabold text-[#065F46]">
                   {inspectingProduct.bioequivalent
-                    ? 'O que continua igual'
-                    : 'Atenção: formulação diferente'}
+                    ? '2. O que continua igual'
+                    : '2. Atenção: fórmula diferente'}
                 </p>
-                <p className="text-[13.5px] text-[#146356]/90 mt-0.5 leading-relaxed">
+                <p className="text-[15.5px] font-medium text-[#111827] mt-1 leading-snug">
                   {inspectingProduct.switchVerdict.explanation}
                 </p>
               </div>
             </div>
 
-            {/* BLOCK 3: O que MUDA de um equivalente para outro */}
-            <div className="bg-white rounded-[22px] p-4 border border-black/[0.05] space-y-3.5">
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-[#B45309]">
-                3. O que muda na troca (revestimento & absorção)
+            {/* 3. O QUE MUDA NA TROCA (Visual & Plain Portuguese FIRST!) */}
+            <div className="bg-white rounded-[22px] p-4 border-2 border-[#F59E0B]/50 space-y-3">
+              <p className="text-[16px] font-extrabold text-[#92400E] uppercase">
+                3. O que pode mudar na troca
               </p>
 
-              <div className="space-y-2 text-[13.5px] text-[#44403C] leading-relaxed">
-                <p>
-                  <strong className="text-[#1C1917]">Revestimento / Base:</strong>{' '}
-                  {inspectingProduct.coatingOrTech}
-                </p>
-                <p>
-                  <strong className="text-[#1C1917]">Absorção:</strong>{' '}
-                  {inspectingProduct.absorptionNote}
-                </p>
-                <p>
-                  <strong className="text-[#1C1917]">Excipientes:</strong>{' '}
-                  {inspectingProduct.excipients.keyNotes}
-                </p>
-              </div>
-
-              {inspectingProduct.switchingEffects.length > 0 && (
-                <div className="pt-2 border-t border-black/[0.05] space-y-2.5">
+              {inspectingProduct.switchingEffects.length > 0 ? (
+                <div className="space-y-3">
                   {inspectingProduct.switchingEffects.map((fx, i) => (
                     <div
                       key={`${fx.symptom}-${i}`}
-                      className="rounded-2xl bg-[#FEF8EC] p-3.5 border border-[#F59E0B]/20"
+                      className="rounded-2xl bg-[#FFFBEB] p-3.5 border border-[#F59E0B]/40 flex items-start gap-3.5"
                     >
-                      <p className="text-[14.5px] font-bold text-[#9A3412]">{fx.symptom}</p>
-                      <p className="text-[13.5px] text-[#57534E] mt-1 leading-relaxed">{fx.why}</p>
+                      <AccessiblePictogram type={fx.icon} size={48} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[16.5px] font-extrabold text-[#78350F] leading-snug">
+                          {fx.symptom}
+                        </p>
+                        <p className="text-[15px] font-medium text-[#111827] mt-1 leading-snug">
+                          {fx.why}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
+              ) : (
+                <p className="text-[15.5px] text-[#374151] leading-snug">
+                  Este é o remédio original. Toque em um genérico da lista para ver o que pode mudar ao trocar.
+                </p>
               )}
+
+              {/* Optional technical details tucked cleanly away so non-readers aren't overwhelmed */}
+              <div className="pt-2 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setShowTechDetails((v) => !v)}
+                  className="w-full py-1.5 flex items-center justify-between text-[14.5px] font-bold text-[#374151] cursor-pointer"
+                >
+                  <span>Detalhes técnicos (revestimento e excipientes)</span>
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform ${showTechDetails ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {showTechDetails && (
+                  <div className="mt-2 space-y-2 text-[14.5px] text-[#374151] leading-relaxed bg-[#F7F6F2] rounded-xl p-3">
+                    <p>
+                      <strong className="text-[#111827]">Revestimento:</strong>{' '}
+                      {inspectingProduct.coatingOrTech}
+                    </p>
+                    <p>
+                      <strong className="text-[#111827]">Absorção:</strong>{' '}
+                      {inspectingProduct.absorptionNote}
+                    </p>
+                    <p>
+                      <strong className="text-[#111827]">Excipientes:</strong>{' '}
+                      {inspectingProduct.excipients.keyNotes}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Direct AI Pharmacist follow-up */}
             {inspectingProduct.id !== reference.id && (
               <button
                 type="button"
@@ -363,10 +448,10 @@ export function CompararView({
                   setInspectingProduct(null);
                   onAskAboutSwitch(q);
                 }}
-                className="w-full py-3.5 px-4 rounded-full bg-white border border-black/10 hover:bg-[#F3EFE8] text-[#1C1917] font-semibold text-[14px] inline-flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full min-h-[54px] px-4 rounded-2xl bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-extrabold text-[15.5px] inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <MessageCircle className="w-4 h-4 text-[#146356]" />
-                <span>Tirar dúvida sobre essa troca com a IA</span>
+                <MessageCircle className="w-5 h-5" />
+                <span>Tirar dúvida sobre essa troca por voz</span>
               </button>
             )}
           </div>

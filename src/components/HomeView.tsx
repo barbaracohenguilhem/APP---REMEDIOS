@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import {
   BellRing,
+  Camera,
   Check,
   ChevronDown,
   ChevronRight,
   Clock,
+  Mic,
   Plus,
   RotateCcw,
 } from 'lucide-react';
@@ -19,7 +21,7 @@ import {
 } from '@/services/scheduleEngine';
 import type { VoicePlaybackState } from '@/services/voiceEngine';
 import { MedicationAvatar } from './MedicationAvatar';
-import { QuietListenButton } from './AudioPlayerBar';
+import { AudioPlayerBar, QuietListenButton } from './AudioPlayerBar';
 
 interface HomeViewProps {
   medications: Medication[];
@@ -29,12 +31,16 @@ interface HomeViewProps {
   last7Days: DayAdherenceSummary[];
   now: Date;
   playback: VoicePlaybackState;
+  voiceRate: 'normal' | 'slow';
+  hasNaturalVoiceKey: boolean;
   onSpeak: (sectionId: string, text: string) => void;
   onStopSpeaking: () => void;
+  onToggleRate: () => void;
+  onOpenVoiceSettings: () => void;
   onMarkTaken: (dose: ScheduledDoseInstance) => void;
   onUndoDose: (dose: ScheduledDoseInstance) => void;
   onSelectMedication: (medId: string) => void;
-  onOpenAdd: () => void;
+  onOpenAddWithStep: (step: 'choose' | 'scan' | 'voice' | 'search') => void;
   onOpenAddAlarm: () => void;
   onOpenHistory: (dateStr?: string) => void;
   onTriggerTestAlarm: (dose: ScheduledDoseInstance) => void;
@@ -46,15 +52,6 @@ function getGreeting(hour: number): string {
   return 'Boa noite';
 }
 
-function formatFriendlyDatePt(date: Date): string {
-  const formatted = date.toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  });
-  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-}
-
 export function HomeView({
   medications,
   medicationPhotos,
@@ -63,12 +60,16 @@ export function HomeView({
   last7Days,
   now,
   playback,
+  voiceRate,
+  hasNaturalVoiceKey,
   onSpeak,
   onStopSpeaking,
+  onToggleRate,
+  onOpenVoiceSettings,
   onMarkTaken,
   onUndoDose,
   onSelectMedication,
-  onOpenAdd,
+  onOpenAddWithStep,
   onOpenAddAlarm,
   onOpenHistory,
   onTriggerTestAlarm,
@@ -78,7 +79,6 @@ export function HomeView({
   const takenCount = dosesToday.filter((d) => d.status === 'taken').length;
   const totalCount = dosesToday.length;
 
-  // Pick the single most urgent / next upcoming dose for the calm hero card
   const heroDose =
     dosesToday.find((d) => d.status === 'due_now') ??
     dosesToday.find((d) => d.status === 'late') ??
@@ -103,36 +103,55 @@ export function HomeView({
     }
   };
 
-  return (
-    <div className="px-5 pt-2 pb-28 space-y-6">
-      {/* Serene Greeting */}
-      <section className="pt-1">
-        <p className="text-[13px] font-medium text-[#78716C]">{formatFriendlyDatePt(now)}</p>
-        <h2 className="text-[28px] font-bold text-[#1C1917] leading-tight mt-0.5">
-          {getGreeting(now.getHours())}
-        </h2>
-      </section>
+  const todaySummaryScript = heroDose
+    ? `${getGreeting(now.getHours())}! Seu próximo remédio é ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. Você já tomou ${takenCount} de ${totalCount} doses de hoje. Para adicionar uma receita ou caixa nova, toque no botão verde da câmera.`
+    : totalCount > 0
+      ? `${getGreeting(now.getHours())}! Parabéns, você tomou todos os ${totalCount} remédios de hoje certinho.`
+      : `${getGreeting(now.getHours())}! Você ainda não tem horários cadastrados para hoje. Toque no botão da câmera ou do microfone para adicionar seu remédio.`;
 
-      {/* 1. Calm Hero Card: Next Dose (ONLY one focus at a time) */}
-      <section aria-label="Próxima dose">
+  return (
+    <div className="px-4 pt-3 pb-28 space-y-5">
+      {/* 1. Prominent Accessible Voice Summary Bar right at top */}
+      <AudioPlayerBar
+        label="Ouvir resumo de hoje"
+        sectionId="home-summary"
+        playback={playback}
+        rate={voiceRate}
+        hasNaturalVoiceKey={hasNaturalVoiceKey}
+        onPlayToggle={() => toggleSpeak('home-summary', todaySummaryScript)}
+        onToggleRate={onToggleRate}
+        onOpenVoiceSettings={onOpenVoiceSettings}
+      />
+
+      {/* 2. Giant, Unmistakable "Próximo Remédio" Hero Card */}
+      <section aria-label="Próximo remédio">
         {heroDose ? (
-          <div className="bg-white rounded-[28px] p-5 border border-black/[0.05] shadow-[0_6px_28px_rgba(28,25,23,0.05)] space-y-4">
+          <div className="bg-white rounded-[26px] p-5 border-2 border-[#059669]/25 shadow-sm space-y-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold tracking-wide uppercase text-[#146356]">
-                <Clock className="w-3.5 h-3.5" />
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13.5px] font-extrabold ${
+                  heroDose.status === 'late'
+                    ? 'bg-[#FEE2E2] text-[#991B1B]'
+                    : heroDose.status === 'due_now'
+                      ? 'bg-[#FEF3C7] text-[#92400E]'
+                      : 'bg-[#DCFCE7] text-[#065F46]'
+                }`}
+              >
+                <Clock className="w-4 h-4" />
                 {heroDose.status === 'due_now'
-                  ? 'Hora agora'
+                  ? 'HORA AGORA'
                   : heroDose.status === 'late'
-                    ? 'Atrasado · previsto às ' + heroDose.scheduledTime
-                    : 'Próximo remédio · ' + heroDose.scheduledTime}
+                    ? `ATRASADO · ${heroDose.scheduledTime}`
+                    : 'PRÓXIMO REMÉDIO'}
               </span>
+
               <QuietListenButton
                 sectionId="home-hero-dose"
                 playback={playback}
                 onClick={() =>
                   toggleSpeak(
                     'home-hero-dose',
-                    `Seu próximo remédio é ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. ${heroDose.notes ?? ''}`
+                    `Próximo remédio: ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. ${heroDose.notes ?? ''}`
                   )
                 }
                 ariaLabel="Ouvir próximo remédio"
@@ -154,67 +173,69 @@ export function HomeView({
                 </button>
               )}
               <div className="min-w-0 flex-1">
-                <p className="text-[30px] font-bold text-[#1C1917] leading-none tracking-tight">
+                <p className="text-[34px] font-extrabold text-[#111827] leading-none">
                   {heroDose.scheduledTime}
                 </p>
-                <h3 className="text-[19px] font-bold text-[#1C1917] mt-1.5 truncate">
+                <h2 className="text-[22px] font-extrabold text-[#111827] mt-1 leading-tight">
                   {heroDose.medication?.name ?? 'Medicamento'}
-                </h3>
-                <p className="text-[14px] text-[#6B6560] mt-0.5">{heroDose.dosage}</p>
+                </h2>
+                <p className="text-[15.5px] font-semibold text-[#374151] mt-0.5">
+                  {heroDose.dosage}
+                </p>
               </div>
             </div>
 
-            <div className="pt-1 flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={() => onMarkTaken(heroDose)}
-                className="flex-1 py-3.5 px-5 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[15px] inline-flex items-center justify-center gap-2 shadow-[0_6px_18px_rgba(20,99,86,0.22)] active:scale-[0.99] transition-all cursor-pointer"
+                className="flex-1 min-h-[56px] px-5 rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-extrabold text-[17px] inline-flex items-center justify-center gap-2.5 shadow-md active:scale-[0.99] transition-all cursor-pointer"
               >
-                <Check className="w-5 h-5 stroke-[2.5]" />
-                <span>Tomei agora</span>
+                <Check className="w-6 h-6 stroke-[3]" />
+                <span>TOMEI AGORA</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => onTriggerTestAlarm(heroDose)}
-                aria-label="Testar aviso do alarme"
-                title="Testar tela de alarme"
-                className="w-12 h-12 rounded-full bg-[#F3EFE8] hover:bg-[#EAE4D9] text-[#57534E] inline-flex items-center justify-center shrink-0 active:scale-95 transition-all cursor-pointer"
+                aria-label="Testar tela de alarme"
+                title="Testar alarme"
+                className="w-14 h-14 rounded-2xl bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E] inline-flex items-center justify-center shrink-0 cursor-pointer"
               >
-                <BellRing className="w-5 h-5" />
+                <BellRing className="w-6 h-6" />
               </button>
             </div>
 
             {totalCount > 1 && (
-              <div className="pt-1 border-t border-black/[0.05]">
+              <div className="pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowAllToday((v) => !v)}
-                  className="w-full py-1.5 flex items-center justify-between text-[13px] font-medium text-[#6B6560] hover:text-[#1C1917] cursor-pointer"
+                  className="w-full py-2 flex items-center justify-between text-[15px] font-bold text-[#374151] cursor-pointer"
                 >
                   <span>
                     Hoje: {takenCount} de {totalCount} tomados
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform ${showAllToday ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 transition-transform ${showAllToday ? 'rotate-180' : ''}`}
                   />
                 </button>
 
                 {showAllToday && (
-                  <div className="mt-2.5 space-y-2">
+                  <div className="mt-2 space-y-2.5">
                     {dosesToday.map((dose) => {
                       const isTaken = dose.status === 'taken';
                       const punct = dose.log ? formatPunctualityLabel(dose.log.delayMinutes) : null;
                       return (
                         <div
                           key={dose.key}
-                          className="flex items-center justify-between gap-3 py-2.5 px-3 rounded-2xl bg-[#F8F6F2]"
+                          className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#F7F6F2] border border-slate-200"
                         >
                           <div className="min-w-0">
-                            <p className="text-[14px] font-semibold text-[#1C1917] truncate">
+                            <p className="text-[16px] font-extrabold text-[#111827]">
                               {dose.scheduledTime} · {dose.medication?.name ?? 'Remédio'}
                             </p>
-                            <p className="text-[12px] text-[#78716C]">
+                            <p className="text-[14px] font-medium text-[#374151]">
                               {isTaken && dose.log
                                 ? `Tomado às ${dose.log.takenTimeDisplay} · ${punct?.label ?? ''}`
                                 : dose.dosage}
@@ -225,17 +246,17 @@ export function HomeView({
                               type="button"
                               onClick={() => onUndoDose(dose)}
                               aria-label="Desfazer marcação"
-                              className="p-2 rounded-full text-[#78716C] hover:bg-white cursor-pointer"
+                              className="w-11 h-11 rounded-full bg-white border border-slate-300 text-[#374151] inline-flex items-center justify-center shrink-0 cursor-pointer"
                             >
-                              <RotateCcw className="w-4 h-4" />
+                              <RotateCcw className="w-5 h-5" />
                             </button>
                           ) : (
                             <button
                               type="button"
                               onClick={() => onMarkTaken(dose)}
-                              className="px-3.5 py-1.5 rounded-full bg-white border border-black/10 text-[#146356] text-xs font-semibold hover:bg-[#E6F2EF] cursor-pointer"
+                              className="px-4 py-2.5 rounded-xl bg-[#047857] text-white text-[14px] font-extrabold shrink-0 cursor-pointer"
                             >
-                              Tomar
+                              Tomei
                             </button>
                           )}
                         </div>
@@ -247,10 +268,20 @@ export function HomeView({
             )}
           </div>
         ) : totalCount > 0 ? (
-          <div className="bg-[#E8F4EE] rounded-[28px] p-6 border border-[#146356]/10 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-full bg-[#146356] text-white flex items-center justify-center">
-                <Check className="w-6 h-6 stroke-[2.5]" />
+          <div className="bg-[#ECFDF5] rounded-[26px] p-5 border-2 border-[#059669]/40 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="w-12 h-12 rounded-full bg-[#047857] text-white flex items-center justify-center shrink-0">
+                  <Check className="w-7 h-7 stroke-[3]" />
+                </span>
+                <div>
+                  <h2 className="text-[21px] font-extrabold text-[#065F46]">
+                    Tudo certinho hoje!
+                  </h2>
+                  <p className="text-[15px] font-semibold text-[#047857]">
+                    {takenCount} de {totalCount} remédios tomados
+                  </p>
+                </div>
               </div>
               <QuietListenButton
                 sectionId="home-all-done"
@@ -258,101 +289,117 @@ export function HomeView({
                 onClick={() =>
                   toggleSpeak(
                     'home-all-done',
-                    `Parabéns! Você tomou todos os ${totalCount} remédios programados para hoje certinho.`
+                    `Parabéns! Você tomou todos os ${totalCount} remédios de hoje certinho.`
                   )
                 }
-                ariaLabel="Ouvir resumo do dia"
+                ariaLabel="Ouvir resumo de hoje"
               />
             </div>
-            <div>
-              <h3 className="text-[20px] font-bold text-[#0F4F45]">Tudo certinho hoje</h3>
-              <p className="text-[14px] text-[#146356]/85 mt-1">
-                Você completou {takenCount} de {totalCount} doses de hoje.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => onOpenHistory()}
-              className="text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer"
-            >
-              Ver horários registrados ›
-            </button>
           </div>
         ) : pausedCycle?.cycle ? (
-          <div className="bg-[#FDF2F6] rounded-[28px] p-5 border border-[#FBCFE8]/60 space-y-2">
-            <p className="text-[12px] font-semibold uppercase tracking-wide text-[#9D174D]">
+          <div className="bg-[#FDF2F8] rounded-[26px] p-5 border-2 border-[#F472B6]/40 space-y-1.5">
+            <p className="text-[14px] font-extrabold text-[#9D174D] uppercase">
               Dia de pausa · {pausedCycle.cycle.dayInPhase} de {pausedCycle.cycle.phaseLength}
             </p>
-            <h3 className="text-[19px] font-bold text-[#1C1917]">
+            <h2 className="text-[20px] font-extrabold text-[#111827]">
               Hoje não precisa tomar {pausedCycle.med?.name ?? 'sua cartela'}
-            </h3>
-            <p className="text-[14px] text-[#6B6560]">
-              O alarme volta automaticamente no início da próxima cartela.
+            </h2>
+            <p className="text-[15px] text-[#374151]">
+              O alarme volta sozinho na próxima cartela.
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-[28px] p-6 border border-black/[0.05] shadow-[0_6px_28px_rgba(28,25,23,0.04)] space-y-3">
-            <h3 className="text-[19px] font-bold text-[#1C1917]">Nenhum alarme ativo hoje</h3>
-            <p className="text-[14px] text-[#6B6560] leading-relaxed">
-              Crie um lembrete calmo com voz natural para nunca esquecer seu horário.
+          <div className="bg-white rounded-[26px] p-5 border-2 border-slate-200 space-y-3">
+            <h2 className="text-[20px] font-extrabold text-[#111827]">
+              Nenhum alarme para hoje
+            </h2>
+            <p className="text-[15px] text-[#374151]">
+              Crie um lembrete para o celular te avisar com voz na hora certa.
             </p>
             <button
               type="button"
               onClick={onOpenAddAlarm}
-              className="mt-1 py-3 px-5 rounded-full bg-[#146356] text-white text-[14px] font-semibold inline-flex items-center gap-2 cursor-pointer"
+              className="w-full min-h-[52px] rounded-2xl bg-[#047857] text-white text-[16px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
-              <span>Criar lembrete</span>
+              <Plus className="w-5 h-5 stroke-[2.8]" />
+              <span>Criar meu alarme</span>
             </button>
           </div>
         )}
       </section>
 
-      {/* 2. Serene 7-day Adherence Strip (taps open detailed History sheet) */}
-      <section aria-label="Sua semana" className="space-y-2.5">
-        <div className="flex items-center justify-between px-1">
-          <h3 className="text-[14px] font-semibold text-[#57534E]">Sua semana</h3>
+      {/* 3. Two GIANT Visual Input Cards (Photo & Voice right on Home — zero hunting!) */}
+      <section aria-label="Adicionar remédio fácil" className="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => onOpenAddWithStep('scan')}
+          className="p-4 rounded-[24px] bg-[#0F766E] hover:bg-[#115E59] text-white text-left shadow-sm flex flex-col justify-between min-h-[124px] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <span className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+            <Camera className="w-7 h-7 stroke-[2.2]" />
+          </span>
+          <div className="mt-3">
+            <p className="text-[17px] font-extrabold leading-tight">Foto da receita</p>
+            <p className="text-[13.5px] text-white/90 font-medium mt-0.5">Caixa ou print</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onOpenAddWithStep('voice')}
+          className="p-4 rounded-[24px] bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-left shadow-sm flex flex-col justify-between min-h-[124px] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <span className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+            <Mic className="w-7 h-7 stroke-[2.2]" />
+          </span>
+          <div className="mt-3">
+            <p className="text-[17px] font-extrabold leading-tight">Falar o nome</p>
+            <p className="text-[13.5px] text-white/90 font-medium mt-0.5">Sem digitar</p>
+          </div>
+        </button>
+      </section>
+
+      {/* 4. High-Contrast 7-Day Adherence Strip ("Tomei certinho?") */}
+      <section aria-label="Sua semana" className="bg-white rounded-[24px] p-4 border border-slate-200 space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[17px] font-extrabold text-[#111827]">Tomei certinho?</h3>
           <button
             type="button"
             onClick={() => onOpenHistory()}
-            className="text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer"
+            className="px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[#111827] text-[14px] font-bold cursor-pointer"
           >
-            Histórico ›
+            Ver dias ›
           </button>
         </div>
 
-        <div className="bg-white rounded-[24px] p-4 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1">
           {last7Days.map((day) => {
             const dotCls =
               day.status === 'complete'
-                ? 'bg-[#146356] text-white'
+                ? 'bg-[#047857] text-white'
                 : day.status === 'partial'
-                  ? 'bg-[#FEF3DD] text-[#B45309] ring-1 ring-[#F59E0B]/30'
+                  ? 'bg-[#F59E0B] text-[#111827]'
                   : day.status === 'missed'
-                    ? 'bg-[#FEECEF] text-[#BE123C]'
-                    : 'bg-[#F3EFE8] text-[#A8A29E]';
+                    ? 'bg-[#DC2626] text-white'
+                    : 'bg-[#E5E7EB] text-[#374151]';
 
             return (
               <button
                 key={day.dateStr}
                 type="button"
                 onClick={() => onOpenHistory(day.dateStr)}
-                aria-label={`Ver dia ${day.dayNumber}: ${day.takenCount} de ${day.totalScheduled} tomados`}
-                className="flex flex-col items-center py-1 rounded-xl hover:bg-[#F6F4EF] transition-colors cursor-pointer"
+                aria-label={`Dia ${day.dayNumber}: ${day.takenCount} de ${day.totalScheduled} tomados`}
+                className="flex flex-col items-center py-1 rounded-xl hover:bg-slate-100 cursor-pointer"
               >
-                <span
-                  className={`text-[11px] font-medium ${
-                    day.isToday ? 'text-[#146356] font-bold' : 'text-[#78716C]'
-                  }`}
-                >
+                <span className="text-[12.5px] font-bold text-[#374151]">
                   {day.weekdayShort.slice(0, 3)}
                 </span>
                 <span
-                  className={`mt-1.5 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold ${dotCls} ${
-                    day.isToday ? 'ring-2 ring-[#146356]/30 ring-offset-2' : ''
+                  className={`mt-1.5 w-9 h-9 rounded-full flex items-center justify-center text-[13.5px] font-extrabold ${dotCls} ${
+                    day.isToday ? 'ring-2 ring-[#111827] ring-offset-2' : ''
                   }`}
                 >
-                  {day.status === 'complete' ? <Check className="w-4 h-4 stroke-[2.6]" /> : day.dayNumber}
+                  {day.status === 'complete' ? <Check className="w-5 h-5 stroke-[3]" /> : day.dayNumber}
                 </span>
               </button>
             );
@@ -360,38 +407,53 @@ export function HomeView({
         </div>
       </section>
 
-      {/* 3. Clean Saved Medications List */}
-      <section aria-label="Seus remédios" className="space-y-2.5">
+      {/* 5. Spacious High-Contrast Saved Medications List (Each row has its own 🔊 button!) */}
+      <section aria-label="Seus remédios" className="space-y-3">
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-[14px] font-semibold text-[#57534E]">Seus remédios</h3>
+          <h3 className="text-[18px] font-extrabold text-[#111827]">Seus remédios</h3>
           <button
             type="button"
-            onClick={onOpenAdd}
-            className="text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer"
+            onClick={() => onOpenAddWithStep('search')}
+            className="px-3.5 py-1.5 rounded-full bg-[#ECFDF5] text-[#065F46] text-[14px] font-extrabold cursor-pointer"
           >
-            + Adicionar
+            + Buscar
           </button>
         </div>
 
-        <div className="bg-white rounded-[24px] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] divide-y divide-black/[0.05] overflow-hidden">
+        <div className="space-y-2.5">
           {medications.map((med) => (
-            <button
+            <div
               key={med.id}
-              type="button"
-              onClick={() => onSelectMedication(med.id)}
-              className="w-full px-4 py-3.5 flex items-center gap-3.5 text-left hover:bg-[#FAF9F6] active:bg-[#F3EFE8] transition-colors cursor-pointer"
+              className="bg-white rounded-[22px] p-3.5 border border-slate-200 shadow-xs flex items-center gap-3"
             >
-              <MedicationAvatar
-                medication={med}
-                photoOverride={medicationPhotos[med.id]}
-                size="sm"
+              <button
+                type="button"
+                onClick={() => onSelectMedication(med.id)}
+                className="flex items-center gap-3.5 flex-1 min-w-0 text-left cursor-pointer"
+              >
+                <MedicationAvatar
+                  medication={med}
+                  photoOverride={medicationPhotos[med.id]}
+                  size="md"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[18px] font-extrabold text-[#111827] truncate">{med.name}</p>
+                  <p className="text-[14px] font-medium text-[#374151] line-clamp-2 leading-snug mt-0.5">
+                    {med.purposeSimple}
+                  </p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#4B5563] shrink-0" />
+              </button>
+
+              <QuietListenButton
+                sectionId={`home-med-${med.id}`}
+                playback={playback}
+                onClick={() =>
+                  toggleSpeak(`home-med-${med.id}`, `${med.name}. ${med.purposeSimple}`)
+                }
+                ariaLabel={`Ouvir para que serve ${med.name}`}
               />
-              <div className="min-w-0 flex-1">
-                <p className="text-[16px] font-bold text-[#1C1917] truncate">{med.name}</p>
-                <p className="text-[13px] text-[#78716C] truncate mt-0.5">{med.purposeSimple}</p>
-              </div>
-              <ChevronRight className="w-4.5 h-4.5 text-[#A8A29E] shrink-0" />
-            </button>
+            </div>
           ))}
         </div>
       </section>

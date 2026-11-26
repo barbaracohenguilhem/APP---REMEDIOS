@@ -2,8 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import {
+  AlertTriangle,
+  ArrowLeftRight,
+  Ban,
   BellRing,
-  ChevronDown,
+  CheckCircle2,
+  ChevronRight,
   Loader2,
   Mic,
   MicOff,
@@ -17,10 +21,11 @@ import type {
   MedicationSchedule,
 } from '@/types/medication';
 import type { ScheduledDoseInstance } from '@/services/scheduleEngine';
+import { getLowestGenericPrice } from '@/services/pricing';
 import { askPharmacistAi } from '@/services/aiClient';
 import { voiceEngine, type VoicePlaybackState } from '@/services/voiceEngine';
 import { MedicationAvatar } from './MedicationAvatar';
-import { CleanIcon } from './CleanIcons';
+import { AccessiblePictogram } from './AccessiblePictograms';
 import { AudioPlayerBar, QuietListenButton } from './AudioPlayerBar';
 import { CompararView } from './CompararView';
 
@@ -75,11 +80,12 @@ export function MedicationDetailView({
   pendingQuestion,
   onClearPendingQuestion,
 }: MedicationDetailViewProps) {
-  const [openAccordion, setOpenAccordion] = useState<'missed' | 'can' | 'ask' | null>(null);
   const [questionInput, setQuestionInput] = useState('');
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [askingAi, setAskingAi] = useState(false);
   const [listeningQ, setListeningQ] = useState(false);
+
+  const lowestGeneric = getLowestGenericPrice(medication, selectedUf);
 
   const toggleSpeak = (id: string, text: string) => {
     if (playback.sectionId === id && playback.status !== 'idle') {
@@ -89,12 +95,11 @@ export function MedicationDetailView({
     }
   };
 
-  const fullSummaryScript = `${medication.name}. ${medication.purposeSimple} ${medication.howToTake.spokenScript} ${medication.whatNotToDo.spokenScript}`;
+  const fullSummaryScript = `${medication.name}. ${medication.purposeSimple} ${medication.howToTake.spokenScript} ${medication.whatNotToDo.spokenScript} Sobre genéricos: ${lowestGeneric.priceText}. ${medication.genericsHighlight.spokenScript}`;
 
   const submitQuestion = async (rawQuestion: string) => {
     const q = rawQuestion.trim();
     if (!q) return;
-    setOpenAccordion('ask');
     setQuestionInput(q);
     setAskingAi(true);
     setAiAnswer(null);
@@ -143,10 +148,10 @@ export function MedicationDetailView({
   };
 
   return (
-    <div className="px-5 pt-2 pb-28 space-y-5">
-      {/* Quiet horizontal switcher when user has multiple saved meds */}
+    <div className="px-4 pt-3 pb-28 space-y-4">
+      {/* High-contrast horizontal medication switcher */}
       {myMedications.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-0.5">
           {myMedications.map((med) => {
             const active = med.id === medication.id;
             return (
@@ -154,10 +159,10 @@ export function MedicationDetailView({
                 key={med.id}
                 type="button"
                 onClick={() => onSelectMedication(med.id)}
-                className={`shrink-0 px-4 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer ${
+                className={`shrink-0 min-h-[44px] px-4 rounded-full text-[15px] font-extrabold transition-all cursor-pointer ${
                   active
-                    ? 'bg-[#1C1917] text-white'
-                    : 'bg-white text-[#57534E] border border-black/[0.06] hover:bg-[#F3EFE8]'
+                    ? 'bg-[#111827] text-white'
+                    : 'bg-white text-[#111827] border-2 border-slate-300'
                 }`}
               >
                 {med.name}
@@ -167,8 +172,8 @@ export function MedicationDetailView({
         </div>
       )}
 
-      {/* Calm Editorial Hero */}
-      <section className="space-y-4">
+      {/* Hero Medication Card + Big Royal-Blue "OUVIR TUDO EM VOZ ALTA" */}
+      <section className="bg-white rounded-[26px] p-4 border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center gap-4">
           <MedicationAvatar
             medication={medication}
@@ -176,19 +181,20 @@ export function MedicationDetailView({
             size="lg"
           />
           <div className="min-w-0 flex-1">
-            <h2 className="text-[26px] font-bold text-[#1C1917] leading-tight truncate">
+            <h2 className="text-[26px] font-extrabold text-[#111827] leading-tight">
               {medication.name}
             </h2>
-            <p className="text-[13.5px] text-[#6B6560] mt-0.5 leading-snug">
+            <p className="text-[14.5px] font-semibold text-[#374151] mt-0.5 leading-snug">
               {medication.activeIngredient}
             </p>
-            <p className="text-[13px] text-[#78716C] mt-1">{medication.purposeSimple}</p>
+            <p className="text-[14px] text-[#4B5563] mt-1 leading-snug">
+              {medication.purposeSimple}
+            </p>
           </div>
         </div>
 
-        {/* Single gorgeous natural-voice Audio Player */}
         <AudioPlayerBar
-          label="Ouvir tudo em voz natural"
+          label="OUVIR TUDO EM VOZ ALTA"
           sectionId={`med-all-${medication.id}`}
           playback={playback}
           rate={voiceRate}
@@ -199,11 +205,11 @@ export function MedicationDetailView({
         />
       </section>
 
-      {/* Clean Apple-style 3-way segmented control */}
+      {/* Big High-Contrast 3-Way Tab Bar */}
       <div
         role="tablist"
-        aria-label="Detalhes do medicamento"
-        className="grid grid-cols-3 p-1 rounded-full bg-[#EAE5DC]"
+        aria-label="Seções do medicamento"
+        className="grid grid-cols-3 gap-1.5 p-1.5 rounded-2xl bg-[#E5E7EB]"
       >
         {(
           [
@@ -218,10 +224,10 @@ export function MedicationDetailView({
             role="tab"
             aria-selected={activeSubTab === tab.id}
             onClick={() => onChangeSubTab(tab.id)}
-            className={`py-2.5 rounded-full text-[13.5px] font-semibold transition-all cursor-pointer ${
+            className={`min-h-[44px] rounded-xl text-[14.5px] font-extrabold transition-all cursor-pointer ${
               activeSubTab === tab.id
-                ? 'bg-white text-[#1C1917] shadow-xs'
-                : 'text-[#6B6560] hover:text-[#1C1917]'
+                ? 'bg-white text-[#111827] shadow-xs'
+                : 'text-[#374151] hover:text-[#111827]'
             }`}
           >
             {tab.label}
@@ -229,13 +235,21 @@ export function MedicationDetailView({
         ))}
       </div>
 
-      {/* SUBTAB 1: BULA FÁCIL (Radical calm — 2 core cards + clean accordions) */}
+      {/* SUBTAB 1: BULA FÁCIL (Unmistakable Green / Red / Amber Visual Cards!) */}
       {activeSubTab === 'bula' && (
         <div className="space-y-4">
-          {/* Card 1: COMO TOMAR */}
-          <section className="bg-white rounded-[26px] p-5 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] space-y-4">
+          {/* CARD 1: COMO TOMAR (Green) */}
+          <section
+            aria-label="Como tomar"
+            className="rounded-[24px] bg-[#ECFDF5] border-l-[8px] border-[#059669] p-4 shadow-xs space-y-3.5"
+          >
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-[17px] font-bold text-[#1C1917]">Como tomar</h3>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-7 h-7 text-[#047857] stroke-[2.5] shrink-0" />
+                <h3 className="text-[18px] font-extrabold text-[#065F46] uppercase tracking-wide">
+                  COMO TOMAR
+                </h3>
+              </div>
               <QuietListenButton
                 sectionId={`how-${medication.id}`}
                 playback={playback}
@@ -244,7 +258,7 @@ export function MedicationDetailView({
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-2">
               {medication.howToTake.items.map((item, idx) => (
                 <button
                   key={`${item.shortLabel}-${idx}`}
@@ -255,25 +269,33 @@ export function MedicationDetailView({
                       `${item.shortLabel}. ${item.spokenDetail}`
                     )
                   }
-                  className="flex flex-col items-center text-center p-2.5 rounded-2xl hover:bg-[#F6F4EF] active:scale-95 transition-all cursor-pointer"
+                  className="flex flex-col items-center text-center p-2 rounded-2xl bg-white/75 hover:bg-white active:scale-95 transition-all cursor-pointer"
                 >
-                  <CleanIcon type={item.icon} tone="sage" />
-                  <span className="mt-2 text-[13px] font-semibold text-[#1C1917] leading-tight">
+                  <AccessiblePictogram type={item.icon} size={56} />
+                  <span className="mt-2 text-[14px] font-extrabold text-[#111827] leading-tight">
                     {item.shortLabel}
                   </span>
                 </button>
               ))}
             </div>
 
-            <p className="text-[14.5px] text-[#57534E] leading-relaxed">
+            <p className="text-[16px] font-bold text-[#111827] leading-snug">
               {medication.howToTake.summary}
             </p>
           </section>
 
-          {/* Card 2: O QUE NÃO PODE */}
-          <section className="bg-[#FFF6F7] rounded-[26px] p-5 border border-[#BE123C]/10 space-y-4">
+          {/* CARD 2: O QUE NÃO PODE (Strong Red!) */}
+          <section
+            aria-label="O que não pode"
+            className="rounded-[24px] bg-[#FEF2F2] border-l-[8px] border-[#DC2626] p-4 shadow-xs space-y-3.5"
+          >
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-[17px] font-bold text-[#9F1239]">O que não pode</h3>
+              <div className="flex items-center gap-2">
+                <Ban className="w-7 h-7 text-[#B91C1C] stroke-[2.5] shrink-0" />
+                <h3 className="text-[18px] font-extrabold text-[#991B1B] uppercase tracking-wide">
+                  O QUE NÃO PODE
+                </h3>
+              </div>
               <QuietListenButton
                 sectionId={`not-${medication.id}`}
                 playback={playback}
@@ -282,7 +304,7 @@ export function MedicationDetailView({
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-2">
               {medication.whatNotToDo.items.map((item, idx) => (
                 <button
                   key={`${item.shortLabel}-${idx}`}
@@ -293,171 +315,179 @@ export function MedicationDetailView({
                       `Atenção: ${item.shortLabel}. ${item.spokenDetail}`
                     )
                   }
-                  className="flex flex-col items-center text-center p-2.5 rounded-2xl hover:bg-white/70 active:scale-95 transition-all cursor-pointer"
+                  className="flex flex-col items-center text-center p-2 rounded-2xl bg-white/80 hover:bg-white active:scale-95 transition-all cursor-pointer"
                 >
-                  <CleanIcon type={item.icon} tone="rose" />
-                  <span className="mt-2 text-[13px] font-semibold text-[#881337] leading-tight">
+                  <AccessiblePictogram type={item.icon} size={56} />
+                  <span className="mt-2 text-[14px] font-extrabold text-[#7F1D1D] leading-tight">
                     {item.shortLabel}
                   </span>
                 </button>
               ))}
             </div>
 
-            <p className="text-[14.5px] text-[#881337]/90 leading-relaxed">
+            <p className="text-[16px] font-bold text-[#111827] leading-snug">
               {medication.whatNotToDo.summary}
             </p>
           </section>
 
-          {/* Progressive Disclosure Accordions (Clean, Zero Wall of Text) */}
-          <section className="bg-white rounded-[26px] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] divide-y divide-black/[0.05] overflow-hidden">
-            {/* Missed Dose */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setOpenAccordion((v) => (v === 'missed' ? null : 'missed'))}
-                className="w-full px-5 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-[#FAF9F6]"
-              >
-                <span className="text-[15px] font-semibold text-[#1C1917]">
-                  Esqueci de tomar — e agora?
-                </span>
-                <ChevronDown
-                  className={`w-4.5 h-4.5 text-[#78716C] transition-transform ${
-                    openAccordion === 'missed' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              {openAccordion === 'missed' && (
-                <div className="px-5 pb-4 flex items-start justify-between gap-3">
-                  <p className="text-[14px] text-[#57534E] leading-relaxed">
-                    {medication.whatYouCanDo.missedDoseTip}
-                  </p>
-                  <QuietListenButton
-                    sectionId={`missed-${medication.id}`}
-                    playback={playback}
-                    onClick={() =>
-                      toggleSpeak(`missed-${medication.id}`, medication.whatYouCanDo.missedDoseTip)
-                    }
-                    ariaLabel="Ouvir orientação de dose esquecida"
-                  />
-                </div>
-              )}
+          {/* CARD 3: GENÉRICOS E DIFERENÇAS PREVIEW (Amber — matches approved visual hierarchy!) */}
+          <section
+            aria-label="Genéricos e diferenças"
+            className="rounded-[24px] bg-[#FFFBEB] border-l-[8px] border-[#D97706] p-4 shadow-xs space-y-3"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <ArrowLeftRight className="w-6 h-6 text-[#B45309] stroke-[2.5] shrink-0" />
+                <h3 className="text-[17px] font-extrabold text-[#92400E] uppercase tracking-wide">
+                  GENÉRICOS E DIFERENÇAS
+                </h3>
+              </div>
+              <QuietListenButton
+                sectionId={`gen-preview-${medication.id}`}
+                playback={playback}
+                onClick={() =>
+                  toggleSpeak(
+                    `gen-preview-${medication.id}`,
+                    `Preço estimado: ${lowestGeneric.priceText}. ${medication.genericsHighlight.spokenScript}`
+                  )
+                }
+                ariaLabel="Ouvir sobre genéricos e diferenças"
+              />
             </div>
 
-            {/* What you can do & onset */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setOpenAccordion((v) => (v === 'can' ? null : 'can'))}
-                className="w-full px-5 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-[#FAF9F6]"
-              >
-                <span className="text-[15px] font-semibold text-[#1C1917]">
-                  O que pode fazer & quando age
-                </span>
-                <ChevronDown
-                  className={`w-4.5 h-4.5 text-[#78716C] transition-transform ${
-                    openAccordion === 'can' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              {openAccordion === 'can' && (
-                <div className="px-5 pb-4 space-y-3">
-                  <p className="text-[14px] text-[#57534E] leading-relaxed">
-                    <strong className="text-[#1C1917]">Início do efeito:</strong>{' '}
-                    {medication.whatYouCanDo.onsetTime}
-                  </p>
-                  <div className="space-y-2">
-                    {medication.whatYouCanDo.items.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-[13.5px] text-[#57534E]">
-                        <CleanIcon type={item.icon} tone="neutral" size="sm" />
-                        <div className="pt-0.5">
-                          <p className="font-semibold text-[#1C1917]">{item.shortLabel}</p>
-                          <p className="text-[13px] text-[#6B6560]">{item.spokenDetail}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="text-[20px] font-extrabold text-[#047857]">
+                {lowestGeneric.priceText}
+              </span>
+              <span className="px-3 py-1 rounded-full bg-[#DCFCE7] text-[#065F46] text-[13.5px] font-extrabold">
+                {medication.genericsHighlight.sameEffectBadge}
+              </span>
             </div>
 
-            {/* Ask Pharmacist AI (Voice or Text) */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setOpenAccordion((v) => (v === 'ask' ? null : 'ask'))}
-                className="w-full px-5 py-4 flex items-center justify-between text-left cursor-pointer hover:bg-[#FAF9F6]"
-              >
-                <span className="text-[15px] font-semibold text-[#146356]">
-                  Tirar uma dúvida sobre {medication.name}
-                </span>
-                <ChevronDown
-                  className={`w-4.5 h-4.5 text-[#146356] transition-transform ${
-                    openAccordion === 'ask' ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              {openAccordion === 'ask' && (
-                <div className="px-5 pb-5 space-y-3">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      void submitQuestion(questionInput);
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <button
-                      type="button"
-                      onClick={handleVoiceQuestion}
-                      aria-label="Falar sua dúvida"
-                      className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all cursor-pointer ${
-                        listeningQ
-                          ? 'bg-[#BE123C] text-white animate-pulse'
-                          : 'bg-[#E6F2EF] text-[#146356] hover:bg-[#D5EBE5]'
-                      }`}
-                    >
-                      {listeningQ ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-                    </button>
-                    <input
-                      type="text"
-                      value={questionInput}
-                      onChange={(e) => setQuestionInput(e.target.value)}
-                      placeholder="Ex: Posso tomar com café?"
-                      className="flex-1 min-w-0 px-4 py-2.5 rounded-full bg-[#F6F4EF] text-[14px] text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:ring-2 focus:ring-[#146356]/30"
-                    />
-                    <button
-                      type="submit"
-                      disabled={askingAi || !questionInput.trim()}
-                      aria-label="Enviar dúvida"
-                      className="w-11 h-11 rounded-full bg-[#146356] disabled:opacity-40 text-white flex items-center justify-center shrink-0 cursor-pointer"
-                    >
-                      {askingAi ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Send className="w-4 h-4" />
-                      )}
-                    </button>
-                  </form>
-
-                  {aiAnswer && (
-                    <div className="rounded-2xl bg-[#F6F4EF] p-4 space-y-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-[14px] text-[#1C1917] leading-relaxed">{aiAnswer}</p>
-                        <QuietListenButton
-                          sectionId="pharmacist-answer"
-                          playback={playback}
-                          onClick={() => toggleSpeak('pharmacist-answer', aiAnswer)}
-                          ariaLabel="Ouvir resposta novamente"
-                        />
-                      </div>
-                    </div>
-                  )}
+            <button
+              type="button"
+              onClick={() => onChangeSubTab('genericos')}
+              className="w-full text-left rounded-2xl bg-[#FDE68A]/70 hover:bg-[#FDE68A] border border-[#D97706]/35 p-3.5 flex items-center justify-between gap-3 cursor-pointer"
+            >
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle className="w-6 h-6 text-[#B45309] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[15px] font-extrabold text-[#78350F] leading-snug">
+                    {medication.genericsHighlight.switchWarningShort}
+                  </p>
+                  <p className="text-[14px] font-extrabold text-[#92400E] mt-1 underline">
+                    Toque para comparar opções
+                  </p>
                 </div>
-              )}
+              </div>
+              <ChevronRight className="w-6 h-6 text-[#92400E] shrink-0" />
+            </button>
+          </section>
+
+          {/* CARD 4: SE ESQUECER & O QUE PODE (Always clearly visible — never hidden!) */}
+          <section
+            aria-label="Se esquecer de tomar e o que pode fazer"
+            className="rounded-[24px] bg-white border-2 border-slate-200 p-4 space-y-3.5"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-[17px] font-extrabold text-[#111827] uppercase">
+                SE ESQUECER & O QUE PODE
+              </h3>
+              <QuietListenButton
+                sectionId={`missed-${medication.id}`}
+                playback={playback}
+                onClick={() =>
+                  toggleSpeak(
+                    `missed-${medication.id}`,
+                    `${medication.whatYouCanDo.spokenScript} Se esquecer: ${medication.whatYouCanDo.missedDoseTip}`
+                  )
+                }
+                ariaLabel="Ouvir o que fazer se esquecer e o que pode fazer"
+              />
+            </div>
+
+            <div className="rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] p-3.5">
+              <p className="text-[14px] font-extrabold text-[#1E40AF] uppercase">
+                Esqueci de tomar — e agora?
+              </p>
+              <p className="text-[15.5px] font-medium text-[#111827] mt-1 leading-snug">
+                {medication.whatYouCanDo.missedDoseTip}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-[#F7F6F2] p-3.5">
+              <p className="text-[14px] font-extrabold text-[#374151] uppercase">
+                Quando começa a fazer efeito
+              </p>
+              <p className="text-[15.5px] font-medium text-[#111827] mt-1 leading-snug">
+                {medication.whatYouCanDo.onsetTime}
+              </p>
             </div>
           </section>
 
-          <p className="text-[11.5px] text-center text-[#A8A29E] px-4">
-            Guia educativo em linguagem simples. Em caso de dúvida clínica, fale com seu médico ou farmacêutico.
+          {/* CARD 5: ASK BY VOICE (Big Friendly Voice Pharmacist Box) */}
+          <section
+            aria-label="Perguntar por voz"
+            className="rounded-[24px] bg-white border-2 border-[#1D4ED8]/25 p-4 space-y-3"
+          >
+            <h3 className="text-[17px] font-extrabold text-[#111827]">
+              Tem alguma dúvida sobre {medication.name}?
+            </h3>
+            <p className="text-[14.5px] font-medium text-[#374151]">
+              Toque no microfone azul para perguntar falando — eu respondo em voz alta!
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submitQuestion(questionInput);
+              }}
+              className="flex items-center gap-2"
+            >
+              <button
+                type="button"
+                onClick={handleVoiceQuestion}
+                aria-label="Falar minha dúvida"
+                className={`w-13 h-13 rounded-full flex items-center justify-center shrink-0 text-white shadow-sm cursor-pointer ${
+                  listeningQ ? 'bg-[#B91C1C] animate-pulse' : 'bg-[#1D4ED8] hover:bg-[#1E40AF]'
+                }`}
+              >
+                {listeningQ ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+              </button>
+              <input
+                type="text"
+                value={questionInput}
+                onChange={(e) => setQuestionInput(e.target.value)}
+                placeholder="Ou escreva aqui sua dúvida..."
+                className="flex-1 min-w-0 min-h-[50px] px-4 rounded-2xl bg-[#F7F6F2] border-2 border-slate-300 text-[15.5px] text-[#111827] focus:border-[#1D4ED8] focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={askingAi || !questionInput.trim()}
+                aria-label="Enviar dúvida"
+                className="w-13 h-13 rounded-2xl bg-[#047857] disabled:opacity-40 text-white flex items-center justify-center shrink-0 cursor-pointer"
+              >
+                {askingAi ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+              </button>
+            </form>
+
+            {aiAnswer && (
+              <div className="rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] p-4 flex items-start justify-between gap-3">
+                <p className="text-[15.5px] font-medium text-[#111827] leading-relaxed">
+                  {aiAnswer}
+                </p>
+                <QuietListenButton
+                  sectionId="pharmacist-answer"
+                  playback={playback}
+                  onClick={() => toggleSpeak('pharmacist-answer', aiAnswer)}
+                  ariaLabel="Ouvir resposta novamente"
+                />
+              </div>
+            )}
+          </section>
+
+          <p className="text-[13px] text-center text-[#4B5563] px-2 leading-relaxed">
+            Informação educativa em linguagem simples. Não substitui a orientação do seu médico ou farmacêutico.
           </p>
         </div>
       )}
@@ -483,23 +513,23 @@ export function MedicationDetailView({
         />
       )}
 
-      {/* SUBTAB 3: ALARMES DESTE REMÉDIO */}
+      {/* SUBTAB 3: ALARMES */}
       {activeSubTab === 'alarmes' && (
         <div className="space-y-3.5">
           {schedulesForMed.length === 0 ? (
-            <div className="bg-white rounded-[26px] p-6 border border-black/[0.05] text-center space-y-3">
-              <p className="text-[16px] font-bold text-[#1C1917]">
-                Sem alarme para {medication.name}
+            <div className="bg-white rounded-[24px] p-5 border-2 border-slate-200 text-center space-y-3">
+              <p className="text-[18px] font-extrabold text-[#111827]">
+                Nenhum alarme para {medication.name}
               </p>
-              <p className="text-[14px] text-[#6B6560]">
-                Adicione um horário para o app te lembrar com voz natural.
+              <p className="text-[15px] text-[#374151]">
+                Crie um lembrete para o celular tocar e falar na hora de tomar.
               </p>
               <button
                 type="button"
                 onClick={onOpenAddAlarm}
-                className="py-3 px-6 rounded-full bg-[#146356] text-white text-[14px] font-semibold inline-flex items-center gap-2 cursor-pointer"
+                className="w-full min-h-[54px] rounded-2xl bg-[#047857] text-white text-[16px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-5 h-5 stroke-[2.8]" />
                 <span>Criar alarme</span>
               </button>
             </div>
@@ -508,13 +538,13 @@ export function MedicationDetailView({
               {schedulesForMed.map((sched) => (
                 <div
                   key={sched.id}
-                  className="bg-white rounded-[24px] p-4 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] flex items-center justify-between gap-3"
+                  className="bg-white rounded-[24px] p-4 border-2 border-slate-200 flex items-center justify-between gap-3"
                 >
                   <div>
-                    <p className="text-[22px] font-bold text-[#1C1917] leading-none">
+                    <p className="text-[26px] font-extrabold text-[#111827] leading-none">
                       {sched.times.join(' · ')}
                     </p>
-                    <p className="text-[13px] text-[#6B6560] mt-1.5">
+                    <p className="text-[14.5px] font-semibold text-[#374151] mt-1.5">
                       {sched.dosage} ·{' '}
                       {sched.cycleMode === '24_4'
                         ? '24 dias + 4 pausa'
@@ -531,13 +561,13 @@ export function MedicationDetailView({
                       aria-checked={sched.enabled}
                       aria-label="Ativar ou pausar alarme"
                       onClick={() => onToggleScheduleEnabled(sched.id)}
-                      className={`w-12 h-7 rounded-full p-1 transition-colors cursor-pointer ${
-                        sched.enabled ? 'bg-[#146356]' : 'bg-[#D6D3CD]'
+                      className={`w-14 h-8 rounded-full p-1 transition-colors cursor-pointer ${
+                        sched.enabled ? 'bg-[#047857]' : 'bg-slate-300'
                       }`}
                     >
                       <span
-                        className={`block w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                          sched.enabled ? 'translate-x-5' : 'translate-x-0'
+                        className={`block w-6 h-6 rounded-full bg-white shadow transition-transform ${
+                          sched.enabled ? 'translate-x-6' : 'translate-x-0'
                         }`}
                       />
                     </button>
@@ -545,31 +575,31 @@ export function MedicationDetailView({
                       type="button"
                       onClick={() => onDeleteSchedule(sched.id)}
                       aria-label="Remover alarme"
-                      className="w-9 h-9 rounded-full text-[#A8A29E] hover:text-[#BE123C] hover:bg-[#FEECEF] inline-flex items-center justify-center cursor-pointer"
+                      className="w-11 h-11 rounded-full bg-[#FEF2F2] text-[#B91C1C] inline-flex items-center justify-center cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
               ))}
 
-              <div className="flex gap-2.5 pt-1">
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
                 <button
                   type="button"
                   onClick={onOpenAddAlarm}
-                  className="flex-1 py-3.5 rounded-full bg-[#146356] text-white text-[14px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="min-h-[54px] rounded-2xl bg-[#047857] text-white text-[15.5px] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-5 h-5" />
                   <span>Novo horário</span>
                 </button>
                 {dosesTodayForMed[0] && (
                   <button
                     type="button"
                     onClick={() => onTriggerTestAlarm(dosesTodayForMed[0])}
-                    className="py-3.5 px-5 rounded-full bg-white border border-black/10 text-[#1C1917] text-[14px] font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="min-h-[54px] rounded-2xl bg-[#FEF3C7] text-[#92400E] text-[15.5px] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <BellRing className="w-4 h-4 text-[#146356]" />
-                    <span>Testar</span>
+                    <BellRing className="w-5 h-5" />
+                    <span>Testar alarme</span>
                   </button>
                 )}
               </div>

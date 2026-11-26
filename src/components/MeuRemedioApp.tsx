@@ -41,7 +41,7 @@ import { HomeView } from './HomeView';
 import { MedicationDetailView } from './MedicationDetailView';
 import { CompararView } from './CompararView';
 import { VoiceGuidedOverlay } from './VoiceGuidedOverlay';
-import { AddMedicationSheet } from './AddMedicationSheet';
+import { AddMedicationSheet, type SheetStep } from './AddMedicationSheet';
 import { VoiceAiSettingsSheet } from './VoiceAiSettingsSheet';
 import { AlarmRingingModal } from './AlarmRingingModal';
 import { AddAlarmSheet } from './AddAlarmSheet';
@@ -61,11 +61,12 @@ export function MeuRemedioApp() {
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('hoje');
   const [detailSubTab, setDetailSubTab] = useState<MedicationDetailTab>('bula');
-  const [showAddSheet, setShowAddSheet] = useState(false);
+  const [addSheetStep, setAddSheetStep] = useState<SheetStep | null>(null);
   const [showVoiceSettings, setShowVoiceSettings] = useState(false);
   const [showAddAlarm, setShowAddAlarm] = useState(false);
   const [historySheetDate, setHistorySheetDate] = useState<string | null>(null);
   const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
+  const [largeText, setLargeText] = useState(false);
 
   const [playback, setPlayback] = useState<VoicePlaybackState>(() => voiceEngine.getState());
   const [now, setNow] = useState<Date>(() => new Date());
@@ -91,7 +92,6 @@ export function MeuRemedioApp() {
     toastTimerRef.current = window.setTimeout(() => setToast(null), 3200);
   }, []);
 
-  // Hydrate persisted state & check server AI status
   useEffect(() => {
     setState(loadPersistedState());
     const keys = loadClientAiKeys();
@@ -111,6 +111,18 @@ export function MeuRemedioApp() {
       voiceEngine.stop();
     };
   }, []);
+
+  // Apply accessible extra-large text scaling cleanly on root html font-size
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.fontSize = largeText ? '115%' : '100%';
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.fontSize = '100%';
+      }
+    };
+  }, [largeText]);
 
   const fullCatalog: Medication[] = useMemo(
     () => [...MEDICATIONS_CATALOG, ...state.customMedications],
@@ -179,13 +191,12 @@ export function MeuRemedioApp() {
       const medName = dose.medication?.name ?? 'seu remédio';
       speak(
         'alarm-ring',
-        `Olá, está na hora do seu remédio. Tome ${dose.dosage} de ${medName}. ${dose.notes ?? ''}`
+        `Olá! Está na hora do seu remédio. Tome ${dose.dosage} de ${medName}. ${dose.notes ?? ''}`
       );
     },
     [speak]
   );
 
-  // Live clock & alarm check every 15s
   useEffect(() => {
     const tick = () => {
       const current = new Date();
@@ -252,7 +263,7 @@ export function MeuRemedioApp() {
     }));
 
     showToast(
-      `${dose.medication?.name ?? 'Remédio'} marcado às ${takenTimeDisplay}${
+      `✓ ${dose.medication?.name ?? 'Remédio'} tomado às ${takenTimeDisplay}${
         Math.abs(delayMinutes) <= 15 ? ' · Certinho!' : ''
       }`
     );
@@ -288,7 +299,7 @@ export function MeuRemedioApp() {
       schedules: [...prev.schedules, sched],
     }));
     setShowAddAlarm(false);
-    showToast(`Lembrete salvo (${input.times.join(', ')})`);
+    showToast(`Alarme salvo (${input.times.join(', ')})`);
   };
 
   const handleAddExisting = (
@@ -400,7 +411,7 @@ export function MeuRemedioApp() {
   const toggleVoiceRate = () => {
     const nextRate = state.voice.rate === 'normal' ? 'slow' : 'normal';
     setState((prev) => ({ ...prev, voice: { ...prev.voice, rate: nextRate } }));
-    showToast(nextRate === 'slow' ? 'Ritmo da voz: Calmo (0.85×)' : 'Ritmo da voz: Normal (1×)');
+    showToast(nextRate === 'slow' ? '🐢 Leitura mais devagar ativada' : 'Velocidade normal');
   };
 
   const toggleGuidedMode = () => {
@@ -415,57 +426,72 @@ export function MeuRemedioApp() {
 
   return (
     <div className="min-h-dvh w-full flex justify-center sm:items-center sm:py-5 sm:px-4">
-      {/* Warm Minimalist Mobile Shell */}
-      <div className="w-full max-w-[430px] h-dvh sm:h-[min(860px,92dvh)] bg-[#F6F4EF] sm:rounded-[38px] sm:shadow-[0_28px_70px_rgba(28,25,23,0.14)] sm:border sm:border-white/70 flex flex-col overflow-hidden relative">
-        {/* Serene Minimal Top Bar */}
-        <header className="shrink-0 px-5 pt-4 pb-2.5 flex items-center justify-between gap-2 bg-[#F6F4EF]/90 backdrop-blur-md z-20">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#146356] shrink-0" aria-hidden="true" />
-            <h1 className="text-[17px] font-bold text-[#1C1917] tracking-tight truncate">
-              Meu Remédio
-            </h1>
-          </div>
+      <div className="w-full max-w-[430px] h-dvh sm:h-[min(860px,92dvh)] bg-[#F7F6F2] sm:rounded-[36px] sm:shadow-[0_28px_70px_rgba(17,24,39,0.16)] sm:border sm:border-white/80 flex flex-col overflow-hidden relative">
+        {/* High-Contrast Accessible Header */}
+        <header className="shrink-0 px-4 pt-3.5 pb-3 flex items-center justify-between gap-2 bg-white border-b border-slate-200 z-20">
+          <h1 className="text-[20px] font-extrabold text-[#111827] tracking-tight truncate">
+            Meu Remédio
+          </h1>
 
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Modo Só Voz Toggle */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Large Text A+ Toggle for Seniors / Low Vision */}
+            <button
+              type="button"
+              onClick={() => {
+                setLargeText((v) => !v);
+                showToast(!largeText ? 'Letra maior ativada (A+)' : 'Tamanho de letra normal');
+              }}
+              aria-pressed={largeText}
+              aria-label="Aumentar tamanho das letras"
+              title="Aumentar letras (A+)"
+              className={`min-h-[40px] min-w-[40px] px-2.5 rounded-full text-[14px] font-extrabold transition-all cursor-pointer ${
+                largeText
+                  ? 'bg-[#111827] text-white'
+                  : 'bg-[#F3F4F6] text-[#111827] border border-slate-300'
+              }`}
+            >
+              A+
+            </button>
+
+            {/* Unmistakable Modo Só Voz Pill */}
             <button
               type="button"
               onClick={toggleGuidedMode}
               aria-pressed={isGuided}
-              className={`px-3.5 py-2 rounded-full text-[12.5px] font-semibold inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
+              className={`min-h-[40px] px-3.5 rounded-full text-[14px] font-extrabold inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
                 isGuided
-                  ? 'bg-[#146356] text-white shadow-sm'
-                  : 'bg-white text-[#1C1917] border border-black/[0.06] hover:bg-[#EFECE6]'
+                  ? 'bg-[#1D4ED8] text-white shadow-sm'
+                  : 'bg-[#DCFCE7] text-[#065F46] border border-[#86EFAC]'
               }`}
             >
-              <Volume2 className="w-3.5 h-3.5" />
+              <Volume2 className="w-4.5 h-4.5 stroke-[2.5]" />
               <span>{isGuided ? 'Só Voz ON' : 'Só Voz'}</span>
             </button>
 
-            {/* AI / Voice Settings icon with subtle live status dot */}
+            {/* Voice & AI Settings */}
             <button
               type="button"
               onClick={() => setShowVoiceSettings(true)}
               aria-label="Configurar voz humana e inteligência artificial"
               title="Voz Humana & IA"
-              className="relative w-9 h-9 rounded-full bg-white border border-black/[0.06] text-[#57534E] hover:bg-[#EFECE6] inline-flex items-center justify-center cursor-pointer"
+              className="relative w-10 h-10 rounded-full bg-[#F3F4F6] border border-slate-300 text-[#111827] inline-flex items-center justify-center cursor-pointer"
             >
-              <SlidersHorizontal className="w-4 h-4" />
+              <SlidersHorizontal className="w-4.5 h-4.5" />
               <span
-                className={`absolute top-1.5 right-1.5 w-2 h-2 rounded-full ${
-                  hasNaturalVoiceKey ? 'bg-[#15803D]' : 'bg-[#D97706]'
+                className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full border border-white ${
+                  hasNaturalVoiceKey ? 'bg-[#047857]' : 'bg-[#D97706]'
                 }`}
               />
             </button>
           </div>
         </header>
 
-        {/* Quiet Toast */}
+        {/* High-Contrast Toast */}
         {toast && (
           <div
             role="status"
             aria-live="polite"
-            className="absolute top-16 left-5 right-5 z-40 px-4 py-2.5 rounded-full bg-[#1C1917] text-white text-[13px] font-medium text-center shadow-lg animate-sheet-up"
+            className="absolute top-[70px] left-4 right-4 z-40 px-4 py-3 rounded-2xl bg-[#111827] text-white text-[14.5px] font-bold text-center shadow-lg animate-sheet-up"
           >
             {toast}
           </div>
@@ -479,7 +505,7 @@ export function MeuRemedioApp() {
               playback={playback}
               onSpeak={speak}
               onStopSpeaking={() => voiceEngine.stop()}
-              onOpenCameraAdd={() => setShowAddSheet(true)}
+              onOpenCameraAdd={() => setAddSheetStep('scan')}
               onMarkDoseTaken={handleMarkTaken}
               onCloseGuidedMode={toggleGuidedMode}
             />
@@ -492,8 +518,12 @@ export function MeuRemedioApp() {
               last7Days={last7Days}
               now={now}
               playback={playback}
+              voiceRate={state.voice.rate}
+              hasNaturalVoiceKey={hasNaturalVoiceKey}
               onSpeak={speak}
               onStopSpeaking={() => voiceEngine.stop()}
+              onToggleRate={toggleVoiceRate}
+              onOpenVoiceSettings={() => setShowVoiceSettings(true)}
               onMarkTaken={handleMarkTaken}
               onUndoDose={handleUndoDose}
               onSelectMedication={(medId) => {
@@ -502,7 +532,7 @@ export function MeuRemedioApp() {
                 setDetailSubTab('bula');
                 setActiveTab('remedios');
               }}
-              onOpenAdd={() => setShowAddSheet(true)}
+              onOpenAddWithStep={(step) => setAddSheetStep(step)}
               onOpenAddAlarm={() => setShowAddAlarm(true)}
               onOpenHistory={(dateStr) =>
                 setHistorySheetDate(dateStr ?? last7Days[last7Days.length - 1]?.dateStr ?? '')
@@ -558,7 +588,7 @@ export function MeuRemedioApp() {
                   ...prev,
                   schedules: prev.schedules.filter((s) => s.id !== schedId),
                 }));
-                showToast('Lembrete removido.');
+                showToast('Alarme removido.');
               }}
               onTriggerTestAlarm={(dose) => {
                 setRinging({ dose, isTest: true });
@@ -597,13 +627,13 @@ export function MeuRemedioApp() {
           )}
         </main>
 
-        {/* Clean 3-tab Bottom Nav + Elevated Central Camera/Voice Button */}
+        {/* Tall, High-Contrast Accessible Bottom Navigation */}
         {!isGuided && (
           <nav
             aria-label="Navegação principal"
-            className="shrink-0 bg-white/95 backdrop-blur-md border-t border-black/[0.06] px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] z-20"
+            className="shrink-0 bg-white border-t-2 border-slate-200 px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] z-20"
           >
-            <div className="grid grid-cols-4 items-center">
+            <div className="grid grid-cols-4 gap-1 items-center">
               <button
                 type="button"
                 onClick={() => {
@@ -611,14 +641,14 @@ export function MeuRemedioApp() {
                   setActiveTab('hoje');
                 }}
                 aria-current={activeTab === 'hoje' ? 'page' : undefined}
-                className={`flex flex-col items-center py-1 transition-colors cursor-pointer ${
-                  activeTab === 'hoje' ? 'text-[#146356]' : 'text-[#78716C] hover:text-[#1C1917]'
+                className={`min-h-[58px] rounded-2xl flex flex-col items-center justify-center transition-colors cursor-pointer ${
+                  activeTab === 'hoje'
+                    ? 'bg-[#ECFDF5] text-[#047857]'
+                    : 'text-[#374151] hover:bg-slate-100'
                 }`}
               >
-                <Calendar className={`w-5.5 h-5.5 ${activeTab === 'hoje' ? 'stroke-[2.4]' : 'stroke-[1.9]'}`} />
-                <span className={`text-[11.5px] mt-1 ${activeTab === 'hoje' ? 'font-bold' : 'font-medium'}`}>
-                  Hoje
-                </span>
+                <Calendar className="w-6 h-6 stroke-[2.4]" />
+                <span className="text-[13px] font-extrabold mt-1">Hoje</span>
               </button>
 
               <button
@@ -628,14 +658,14 @@ export function MeuRemedioApp() {
                   setActiveTab('remedios');
                 }}
                 aria-current={activeTab === 'remedios' ? 'page' : undefined}
-                className={`flex flex-col items-center py-1 transition-colors cursor-pointer ${
-                  activeTab === 'remedios' ? 'text-[#146356]' : 'text-[#78716C] hover:text-[#1C1917]'
+                className={`min-h-[58px] rounded-2xl flex flex-col items-center justify-center transition-colors cursor-pointer ${
+                  activeTab === 'remedios'
+                    ? 'bg-[#ECFDF5] text-[#047857]'
+                    : 'text-[#374151] hover:bg-slate-100'
                 }`}
               >
-                <BookOpen className={`w-5.5 h-5.5 ${activeTab === 'remedios' ? 'stroke-[2.4]' : 'stroke-[1.9]'}`} />
-                <span className={`text-[11.5px] mt-1 ${activeTab === 'remedios' ? 'font-bold' : 'font-medium'}`}>
-                  Remédios
-                </span>
+                <BookOpen className="w-6 h-6 stroke-[2.4]" />
+                <span className="text-[13px] font-extrabold mt-1">Bula</span>
               </button>
 
               <button
@@ -645,40 +675,39 @@ export function MeuRemedioApp() {
                   setActiveTab('comparar');
                 }}
                 aria-current={activeTab === 'comparar' ? 'page' : undefined}
-                className={`flex flex-col items-center py-1 transition-colors cursor-pointer ${
-                  activeTab === 'comparar' ? 'text-[#146356]' : 'text-[#78716C] hover:text-[#1C1917]'
+                className={`min-h-[58px] rounded-2xl flex flex-col items-center justify-center transition-colors cursor-pointer ${
+                  activeTab === 'comparar'
+                    ? 'bg-[#ECFDF5] text-[#047857]'
+                    : 'text-[#374151] hover:bg-slate-100'
                 }`}
               >
-                <ArrowLeftRight className={`w-5.5 h-5.5 ${activeTab === 'comparar' ? 'stroke-[2.4]' : 'stroke-[1.9]'}`} />
-                <span className={`text-[11.5px] mt-1 ${activeTab === 'comparar' ? 'font-bold' : 'font-medium'}`}>
-                  Comparar
-                </span>
+                <ArrowLeftRight className="w-6 h-6 stroke-[2.4]" />
+                <span className="text-[13px] font-extrabold mt-1">Comparar</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => {
                   voiceEngine.stop();
-                  setShowAddSheet(true);
+                  setAddSheetStep('choose');
                 }}
                 aria-label="Adicionar remédio por foto, voz ou busca"
-                className="flex flex-col items-center cursor-pointer group"
+                className="min-h-[58px] rounded-2xl bg-[#0F766E] hover:bg-[#115E59] text-white flex flex-col items-center justify-center shadow-sm active:scale-95 transition-all cursor-pointer"
               >
-                <span className="-mt-6 w-13 h-13 rounded-full bg-[#146356] group-hover:bg-[#0F4F45] text-white shadow-[0_8px_22px_rgba(20,99,86,0.34)] flex items-center justify-center group-active:scale-95 transition-transform">
-                  <Camera className="w-6 h-6 stroke-[2.1]" />
-                </span>
-                <span className="text-[11.5px] mt-1 font-semibold text-[#146356]">Adicionar</span>
+                <Camera className="w-6 h-6 stroke-[2.4]" />
+                <span className="text-[13px] font-extrabold mt-1">Adicionar</span>
               </button>
             </div>
           </nav>
         )}
 
         {/* Sheets & Modals */}
-        {showAddSheet && (
+        {addSheetStep && (
           <AddMedicationSheet
             catalog={fullCatalog}
             hasGeminiKey={hasGeminiKey}
-            onClose={() => setShowAddSheet(false)}
+            initialStep={addSheetStep}
+            onClose={() => setAddSheetStep(null)}
             onOpenVoiceSettings={() => setShowVoiceSettings(true)}
             onAddExisting={handleAddExisting}
             onAddNewMedication={handleAddNewMedication}

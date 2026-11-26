@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2, Pause, Play, Sparkles, Volume2 } from 'lucide-react';
+import { Loader2, Sparkles, Square, Volume2 } from 'lucide-react';
 import type { VoicePlaybackState } from '@/services/voiceEngine';
 
 interface AudioPlayerBarProps {
@@ -15,6 +15,10 @@ interface AudioPlayerBarProps {
   onOpenVoiceSettings: () => void;
 }
 
+/**
+ * Unmistakable high-contrast royal blue audio banner.
+ * Designed so even a user who cannot read instantly recognizes the giant speaker button to listen.
+ */
 export function AudioPlayerBar({
   label,
   sublabel,
@@ -30,95 +34,90 @@ export function AudioPlayerBar({
   const isThisPlaying = playback.status === 'playing' && playback.sectionId === sectionId;
 
   return (
-    <div className="rounded-[22px] bg-[#146356] text-white p-3.5 shadow-[0_10px_28px_rgba(20,99,86,0.22)]">
-      <div className="flex items-center gap-3.5">
-        <button
-          type="button"
-          onClick={onPlayToggle}
-          aria-label={isThisPlaying ? 'Pausar leitura' : label}
-          className="w-12 h-12 rounded-full bg-white text-[#146356] hover:bg-[#F6F4EF] flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform cursor-pointer"
-        >
-          {isThisLoading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : isThisPlaying ? (
-            <Pause className="w-5 h-5 fill-current" />
-          ) : (
-            <Play className="w-5 h-5 fill-current ml-0.5" />
-          )}
-        </button>
+    <div className="space-y-2">
+      <div
+        className={`rounded-[22px] p-2 shadow-[0_8px_24px_rgba(29,78,216,0.22)] transition-colors ${
+          isThisPlaying ? 'bg-[#B91C1C]' : 'bg-[#1D4ED8]'
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onPlayToggle}
+            aria-label={isThisPlaying ? 'Parar leitura em voz alta' : label}
+            className="flex-1 min-h-[54px] px-3.5 py-2.5 rounded-[16px] text-white flex items-center justify-center gap-3 active:scale-[0.99] transition-transform cursor-pointer"
+          >
+            {isThisLoading ? (
+              <Loader2 className="w-7 h-7 animate-spin shrink-0" />
+            ) : isThisPlaying ? (
+              <Square className="w-6 h-6 fill-current shrink-0" />
+            ) : (
+              <Volume2 className="w-7 h-7 stroke-[2.5] shrink-0" />
+            )}
 
-        <button
-          type="button"
-          onClick={onPlayToggle}
-          className="flex-1 min-w-0 text-left cursor-pointer"
-        >
-          <p className="text-[15px] font-bold leading-tight tracking-tight">
-            {isThisLoading
-              ? 'Preparando voz natural...'
-              : isThisPlaying
-                ? 'Ouvindo agora...'
-                : label}
-          </p>
-          <p className="text-[12.5px] text-white/75 mt-0.5 truncate">
-            {isThisPlaying
-              ? playback.provider === 'elevenlabs'
-                ? 'Voz humana · ElevenLabs'
-                : playback.provider === 'gemini'
-                  ? 'Voz natural · Gemini'
-                  : 'Voz do aparelho (conecte IA para voz humana)'
-              : sublabel ??
-                (hasNaturalVoiceKey
-                  ? 'Explicação calma em português natural'
-                  : 'Toque para ouvir em voz alta')}
-          </p>
-        </button>
+            <div className="text-left min-w-0">
+              <p className="text-[16px] font-extrabold leading-tight tracking-wide uppercase">
+                {isThisLoading
+                  ? 'PREPARANDO VOZ...'
+                  : isThisPlaying
+                    ? 'PARAR DE OUVIR'
+                    : label}
+              </p>
+              {(sublabel || isThisPlaying) && (
+                <p className="text-[13px] text-white/90 font-medium leading-tight mt-0.5 truncate">
+                  {isThisPlaying
+                    ? playback.provider === 'elevenlabs'
+                      ? 'Voz humana · ElevenLabs'
+                      : playback.provider === 'gemini'
+                        ? 'Voz natural · Gemini'
+                        : 'Lendo em voz alta...'
+                    : sublabel}
+                </p>
+              )}
+            </div>
+          </button>
 
-        {isThisPlaying ? (
-          <div className="flex items-end gap-[3px] h-5 pr-1 shrink-0" aria-hidden="true">
-            <span className="w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-1" />
-            <span className="w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-2" />
-            <span className="w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-3" />
-            <span className="w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-4" />
-          </div>
-        ) : (
           <button
             type="button"
             onClick={onToggleRate}
-            aria-label="Alternar velocidade da voz"
-            className="px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-semibold shrink-0 transition-colors cursor-pointer"
+            aria-label={rate === 'slow' ? 'Voz devagar ativada. Toque para normal' : 'Velocidade normal. Toque para falar mais devagar'}
+            className="min-h-[48px] px-3 rounded-[14px] bg-white/18 hover:bg-white/28 text-white text-[13px] font-bold shrink-0 cursor-pointer"
           >
-            {rate === 'slow' ? '0.85×' : '1×'}
+            {rate === 'slow' ? '🐢 Devagar' : 'Normal'}
           </button>
-        )}
+        </div>
       </div>
 
       {!hasNaturalVoiceKey && (
         <button
           type="button"
           onClick={onOpenVoiceSettings}
-          className="mt-2.5 w-full py-2 px-3 rounded-xl bg-white/12 hover:bg-white/20 text-white/95 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          className="w-full py-2.5 px-4 rounded-2xl bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-[#BFDBFE] text-[#1E40AF] text-[13.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Conectar ElevenLabs ou Gemini para voz 100% humana</span>
+          <Sparkles className="w-4 h-4 shrink-0" />
+          <span>Ativar voz humana real (ElevenLabs / Gemini)</span>
         </button>
       )}
     </div>
   );
 }
 
-interface QuietListenButtonProps {
+interface AccessibleSpeakButtonProps {
   sectionId: string;
   playback: VoicePlaybackState;
   onClick: () => void;
   ariaLabel: string;
 }
 
+/**
+ * Unmistakable solid blue 48x48 circular speaker button on every card (WCAG AAA target & contrast).
+ */
 export function QuietListenButton({
   sectionId,
   playback,
   onClick,
   ariaLabel,
-}: QuietListenButtonProps) {
+}: AccessibleSpeakButtonProps) {
   const isLoading = playback.status === 'loading' && playback.sectionId === sectionId;
   const isPlaying = playback.status === 'playing' && playback.sectionId === sectionId;
 
@@ -128,18 +127,18 @@ export function QuietListenButton({
       onClick={onClick}
       aria-label={ariaLabel}
       aria-pressed={isPlaying}
-      className={`w-10 h-10 rounded-full inline-flex items-center justify-center shrink-0 transition-all active:scale-95 cursor-pointer ${
+      className={`w-12 h-12 rounded-full inline-flex items-center justify-center shrink-0 shadow-sm transition-all active:scale-95 cursor-pointer ${
         isPlaying
-          ? 'bg-[#146356] text-white shadow-sm'
-          : 'bg-[#F0ECE4] text-[#146356] hover:bg-[#E6F2EF]'
+          ? 'bg-[#B91C1C] text-white ring-4 ring-[#FECACA]'
+          : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'
       }`}
     >
       {isLoading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
+        <Loader2 className="w-5 h-5 animate-spin" />
       ) : isPlaying ? (
-        <Pause className="w-4 h-4 fill-current" />
+        <Square className="w-4.5 h-4.5 fill-current" />
       ) : (
-        <Volume2 className="w-4.5 h-4.5 stroke-[2.1]" />
+        <Volume2 className="w-6 h-6 stroke-[2.4]" />
       )}
     </button>
   );

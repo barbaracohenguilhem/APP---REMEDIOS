@@ -3,7 +3,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MeuRemedioApp } from '@/components/MeuRemedioApp';
 
-describe('MeuRemedioApp V2 calm minimalist flow', () => {
+describe('MeuRemedioApp V2 accessible flow', () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.stubGlobal(
@@ -34,26 +34,38 @@ describe('MeuRemedioApp V2 calm minimalist flow', () => {
     vi.unstubAllGlobals();
   });
 
-  it('opens on the calm Hoje hub and navigates to Iumi detail and Comparar switching sheet', async () => {
+  it('opens on accessible Hoje hub with giant Photo/Voice actions, opens Bula Fácil and Comparar switching sheet', async () => {
     const user = userEvent.setup();
     render(<MeuRemedioApp />);
 
     expect(await screen.findByText('Seus remédios')).toBeInTheDocument();
-    expect(screen.getByText('Sua semana')).toBeInTheDocument();
+    expect(screen.getByText('Foto da receita')).toBeInTheDocument();
+    expect(screen.getByText('Falar o nome')).toBeInTheDocument();
 
-    // Tap Comparar tab -> see Iumi generics list -> tap EMS -> see focused 3-block switching sheet
+    // Toggle A+ large text cleanly
+    const fontBtn = screen.getByRole('button', { name: /Aumentar tamanho das letras/i });
+    await user.click(fontBtn);
+    expect(fontBtn).toHaveAttribute('aria-pressed', 'true');
+
+    // Open Bula tab and check high-contrast sections
+    await user.click(screen.getByRole('button', { name: 'Bula' }));
+    expect(await screen.findByText('COMO TOMAR')).toBeInTheDocument();
+    expect(screen.getByText('O QUE NÃO PODE')).toBeInTheDocument();
+    expect(screen.getByText('GENÉRICOS E DIFERENÇAS')).toBeInTheDocument();
+
+    // Tap Comparar tab -> tap EMS -> verify focused 3-block switching sheet
     await user.click(screen.getByRole('button', { name: 'Comparar' }));
-    expect(await screen.findByText('Comparar opções')).toBeInTheDocument();
+    expect(await screen.findByText('Genéricos e Diferenças')).toBeInTheDocument();
 
-    const emsCard = screen.getByRole('button', { name: /EMS/i });
-    await user.click(emsCard);
+    const emsBtn = screen.getAllByRole('button', { name: /EMS/i })[0];
+    await user.click(emsBtn);
 
     const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByText(/O que muda na troca/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/3\. O que pode mudar na troca/i)).toBeInTheDocument();
     expect(within(dialog).getByText(/Inchaço e retenção de líquido/i)).toBeInTheDocument();
   });
 
-  it('toggles Modo Só Voz for non-readers cleanly and opens Voz & IA settings sheet', async () => {
+  it('toggles Modo Só Voz and opens Voz Humana & IA settings sheet', async () => {
     const user = userEvent.setup();
     render(<MeuRemedioApp />);
 

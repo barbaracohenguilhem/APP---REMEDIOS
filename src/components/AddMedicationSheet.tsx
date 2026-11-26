@@ -33,6 +33,7 @@ import { MedicationAvatar } from './MedicationAvatar';
 interface AddMedicationSheetProps {
   catalog: Medication[];
   hasGeminiKey: boolean;
+  initialStep?: SheetStep;
   onClose: () => void;
   onOpenVoiceSettings: () => void;
   onAddExisting: (
@@ -48,7 +49,7 @@ interface AddMedicationSheetProps {
   onSpeak: (sectionId: string, text: string) => void;
 }
 
-type SheetStep = 'choose' | 'scan' | 'voice' | 'search' | 'manual';
+export type SheetStep = 'choose' | 'scan' | 'voice' | 'search' | 'manual';
 
 async function fileToCompressedDataUrl(file: File): Promise<{ dataUrl: string; mimeType: string }> {
   return new Promise((resolve, reject) => {
@@ -82,13 +83,14 @@ async function fileToCompressedDataUrl(file: File): Promise<{ dataUrl: string; m
 export function AddMedicationSheet({
   catalog,
   hasGeminiKey,
+  initialStep = 'choose',
   onClose,
   onOpenVoiceSettings,
   onAddExisting,
   onAddNewMedication,
   onSpeak,
 }: AddMedicationSheetProps) {
-  const [step, setStep] = useState<SheetStep>('choose');
+  const [step, setStep] = useState<SheetStep>(initialStep);
   const cameraRef = useRef<HTMLInputElement | null>(null);
   const galleryRef = useRef<HTMLInputElement | null>(null);
 

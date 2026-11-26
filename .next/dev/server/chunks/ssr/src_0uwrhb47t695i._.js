@@ -1945,9 +1945,8 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-ssr] (ecmascript) <export default as Loader2>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pause$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pause.js [app-ssr] (ecmascript) <export default as Pause>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/play.js [app-ssr] (ecmascript) <export default as Play>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-ssr] (ecmascript) <export default as Sparkles>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Square$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/square.js [app-ssr] (ecmascript) <export default as Square>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/volume-2.js [app-ssr] (ecmascript) <export default as Volume2>");
 'use client';
 ;
@@ -1956,150 +1955,120 @@ function AudioPlayerBar({ label, sublabel, sectionId, playback, rate, hasNatural
     const isThisLoading = playback.status === 'loading' && playback.sectionId === sectionId;
     const isThisPlaying = playback.status === 'playing' && playback.sectionId === sectionId;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "rounded-[22px] bg-[#146356] text-white p-3.5 shadow-[0_10px_28px_rgba(20,99,86,0.22)]",
+        className: "space-y-2",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex items-center gap-3.5",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        type: "button",
-                        onClick: onPlayToggle,
-                        "aria-label": isThisPlaying ? 'Pausar leitura' : label,
-                        className: "w-12 h-12 rounded-full bg-white text-[#146356] hover:bg-[#F6F4EF] flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform cursor-pointer",
-                        children: isThisLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                            className: "w-5 h-5 animate-spin"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                            lineNumber: 42,
-                            columnNumber: 13
-                        }, this) : isThisPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pause$3e$__["Pause"], {
-                            className: "w-5 h-5 fill-current"
-                        }, void 0, false, {
+                className: `rounded-[22px] p-2 shadow-[0_8px_24px_rgba(29,78,216,0.22)] transition-colors ${isThisPlaying ? 'bg-[#B91C1C]' : 'bg-[#1D4ED8]'}`,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center gap-2",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            type: "button",
+                            onClick: onPlayToggle,
+                            "aria-label": isThisPlaying ? 'Parar leitura em voz alta' : label,
+                            className: "flex-1 min-h-[54px] px-3.5 py-2.5 rounded-[16px] text-white flex items-center justify-center gap-3 active:scale-[0.99] transition-transform cursor-pointer",
+                            children: [
+                                isThisLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                    className: "w-7 h-7 animate-spin shrink-0"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                    lineNumber: 51,
+                                    columnNumber: 15
+                                }, this) : isThisPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Square$3e$__["Square"], {
+                                    className: "w-6 h-6 fill-current shrink-0"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                    lineNumber: 53,
+                                    columnNumber: 15
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
+                                    className: "w-7 h-7 stroke-[2.5] shrink-0"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                    lineNumber: 55,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-left min-w-0",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-[16px] font-extrabold leading-tight tracking-wide uppercase",
+                                            children: isThisLoading ? 'PREPARANDO VOZ...' : isThisPlaying ? 'PARAR DE OUVIR' : label
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                            lineNumber: 59,
+                                            columnNumber: 15
+                                        }, this),
+                                        (sublabel || isThisPlaying) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-[13px] text-white/90 font-medium leading-tight mt-0.5 truncate",
+                                            children: isThisPlaying ? playback.provider === 'elevenlabs' ? 'Voz humana · ElevenLabs' : playback.provider === 'gemini' ? 'Voz natural · Gemini' : 'Lendo em voz alta...' : sublabel
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                            lineNumber: 67,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                                    lineNumber: 58,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/src/components/AudioPlayerBar.tsx",
                             lineNumber: 44,
-                            columnNumber: 13
-                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
-                            className: "w-5 h-5 fill-current ml-0.5"
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            type: "button",
+                            onClick: onToggleRate,
+                            "aria-label": rate === 'slow' ? 'Voz devagar ativada. Toque para normal' : 'Velocidade normal. Toque para falar mais devagar',
+                            className: "min-h-[48px] px-3 rounded-[14px] bg-white/18 hover:bg-white/28 text-white text-[13px] font-bold shrink-0 cursor-pointer",
+                            children: rate === 'slow' ? '🐢 Devagar' : 'Normal'
                         }, void 0, false, {
                             fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                            lineNumber: 46,
-                            columnNumber: 13
+                            lineNumber: 80,
+                            columnNumber: 11
                         }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 35,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        type: "button",
-                        onClick: onPlayToggle,
-                        className: "flex-1 min-w-0 text-left cursor-pointer",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-[15px] font-bold leading-tight tracking-tight",
-                                children: isThisLoading ? 'Preparando voz natural...' : isThisPlaying ? 'Ouvindo agora...' : label
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 55,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-[12.5px] text-white/75 mt-0.5 truncate",
-                                children: isThisPlaying ? playback.provider === 'elevenlabs' ? 'Voz humana · ElevenLabs' : playback.provider === 'gemini' ? 'Voz natural · Gemini' : 'Voz do aparelho (conecte IA para voz humana)' : sublabel ?? (hasNaturalVoiceKey ? 'Explicação calma em português natural' : 'Toque para ouvir em voz alta')
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 62,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 50,
-                        columnNumber: 9
-                    }, this),
-                    isThisPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-end gap-[3px] h-5 pr-1 shrink-0",
-                        "aria-hidden": "true",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 78,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-2"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 79,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-3"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 80,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "w-[3px] h-5 bg-white/90 rounded-full animate-soft-wave-4"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                                lineNumber: 81,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 77,
-                        columnNumber: 11
-                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        type: "button",
-                        onClick: onToggleRate,
-                        "aria-label": "Alternar velocidade da voz",
-                        className: "px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-semibold shrink-0 transition-colors cursor-pointer",
-                        children: rate === 'slow' ? '0.85×' : '1×'
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 84,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/AudioPlayerBar.tsx",
+                    lineNumber: 43,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                lineNumber: 34,
+                lineNumber: 38,
                 columnNumber: 7
             }, this),
             !hasNaturalVoiceKey && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 type: "button",
                 onClick: onOpenVoiceSettings,
-                className: "mt-2.5 w-full py-2 px-3 rounded-xl bg-white/12 hover:bg-white/20 text-white/95 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
+                className: "w-full py-2.5 px-4 rounded-2xl bg-[#EFF6FF] hover:bg-[#DBEAFE] border border-[#BFDBFE] text-[#1E40AF] text-[13.5px] font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                        className: "w-3.5 h-3.5"
+                        className: "w-4 h-4 shrink-0"
                     }, void 0, false, {
                         fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 101,
+                        lineNumber: 97,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        children: "Conectar ElevenLabs ou Gemini para voz 100% humana"
+                        children: "Ativar voz humana real (ElevenLabs / Gemini)"
                     }, void 0, false, {
                         fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                        lineNumber: 102,
+                        lineNumber: 98,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/AudioPlayerBar.tsx",
-                lineNumber: 96,
+                lineNumber: 92,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/AudioPlayerBar.tsx",
-        lineNumber: 33,
+        lineNumber: 37,
         columnNumber: 5
     }, this);
 }
@@ -2111,29 +2080,29 @@ function QuietListenButton({ sectionId, playback, onClick, ariaLabel }) {
         onClick: onClick,
         "aria-label": ariaLabel,
         "aria-pressed": isPlaying,
-        className: `w-10 h-10 rounded-full inline-flex items-center justify-center shrink-0 transition-all active:scale-95 cursor-pointer ${isPlaying ? 'bg-[#146356] text-white shadow-sm' : 'bg-[#F0ECE4] text-[#146356] hover:bg-[#E6F2EF]'}`,
+        className: `w-12 h-12 rounded-full inline-flex items-center justify-center shrink-0 shadow-sm transition-all active:scale-95 cursor-pointer ${isPlaying ? 'bg-[#B91C1C] text-white ring-4 ring-[#FECACA]' : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'}`,
         children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-            className: "w-4 h-4 animate-spin"
+            className: "w-5 h-5 animate-spin"
         }, void 0, false, {
             fileName: "[project]/src/components/AudioPlayerBar.tsx",
-            lineNumber: 138,
+            lineNumber: 137,
             columnNumber: 9
-        }, this) : isPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pause$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pause$3e$__["Pause"], {
-            className: "w-4 h-4 fill-current"
+        }, this) : isPlaying ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Square$3e$__["Square"], {
+            className: "w-4.5 h-4.5 fill-current"
         }, void 0, false, {
             fileName: "[project]/src/components/AudioPlayerBar.tsx",
-            lineNumber: 140,
+            lineNumber: 139,
             columnNumber: 9
         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {
-            className: "w-4.5 h-4.5 stroke-[2.1]"
+            className: "w-6 h-6 stroke-[2.4]"
         }, void 0, false, {
             fileName: "[project]/src/components/AudioPlayerBar.tsx",
-            lineNumber: 142,
+            lineNumber: 141,
             columnNumber: 9
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/AudioPlayerBar.tsx",
-        lineNumber: 126,
+        lineNumber: 125,
         columnNumber: 5
     }, this);
 }
@@ -3375,10 +3344,12 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2d$ring$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BellRing$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/bell-ring.js [app-ssr] (ecmascript) <export default as BellRing>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/camera.js [app-ssr] (ecmascript) <export default as Camera>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/check.js [app-ssr] (ecmascript) <export default as Check>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-down.js [app-ssr] (ecmascript) <export default as ChevronDown>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-right.js [app-ssr] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/mic.js [app-ssr] (ecmascript) <export default as Mic>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/rotate-ccw.js [app-ssr] (ecmascript) <export default as RotateCcw>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/scheduleEngine.ts [app-ssr] (ecmascript)");
@@ -3396,19 +3367,10 @@ function getGreeting(hour) {
     if (hour < 18) return 'Boa tarde';
     return 'Boa noite';
 }
-function formatFriendlyDatePt(date) {
-    const formatted = date.toLocaleDateString('pt-BR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long'
-    });
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-}
-function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7Days, now, playback, onSpeak, onStopSpeaking, onMarkTaken, onUndoDose, onSelectMedication, onOpenAdd, onOpenAddAlarm, onOpenHistory, onTriggerTestAlarm }) {
+function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7Days, now, playback, voiceRate, hasNaturalVoiceKey, onSpeak, onStopSpeaking, onToggleRate, onOpenVoiceSettings, onMarkTaken, onUndoDose, onSelectMedication, onOpenAddWithStep, onOpenAddAlarm, onOpenHistory, onTriggerTestAlarm }) {
     const [showAllToday, setShowAllToday] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const takenCount = dosesToday.filter((d)=>d.status === 'taken').length;
     const totalCount = dosesToday.length;
-    // Pick the single most urgent / next upcoming dose for the calm hero card
     const heroDose = dosesToday.find((d)=>d.status === 'due_now') ?? dosesToday.find((d)=>d.status === 'late') ?? dosesToday.find((d)=>d.status === 'upcoming') ?? null;
     const medMap = new Map(medications.map((m)=>[
             m.id,
@@ -3426,73 +3388,63 @@ function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7D
             onSpeak(id, text);
         }
     };
+    const todaySummaryScript = heroDose ? `${getGreeting(now.getHours())}! Seu próximo remédio é ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. Você já tomou ${takenCount} de ${totalCount} doses de hoje. Para adicionar uma receita ou caixa nova, toque no botão verde da câmera.` : totalCount > 0 ? `${getGreeting(now.getHours())}! Parabéns, você tomou todos os ${totalCount} remédios de hoje certinho.` : `${getGreeting(now.getHours())}! Você ainda não tem horários cadastrados para hoje. Toque no botão da câmera ou do microfone para adicionar seu remédio.`;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "px-5 pt-2 pb-28 space-y-6",
+        className: "px-4 pt-3 pb-28 space-y-5",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                className: "pt-1",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-[13px] font-medium text-[#78716C]",
-                        children: formatFriendlyDatePt(now)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 110,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: "text-[28px] font-bold text-[#1C1917] leading-tight mt-0.5",
-                        children: getGreeting(now.getHours())
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 111,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AudioPlayerBar"], {
+                label: "Ouvir resumo de hoje",
+                sectionId: "home-summary",
+                playback: playback,
+                rate: voiceRate,
+                hasNaturalVoiceKey: hasNaturalVoiceKey,
+                onPlayToggle: ()=>toggleSpeak('home-summary', todaySummaryScript),
+                onToggleRate: onToggleRate,
+                onOpenVoiceSettings: onOpenVoiceSettings
+            }, void 0, false, {
                 fileName: "[project]/src/components/HomeView.tsx",
-                lineNumber: 109,
+                lineNumber: 115,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-                "aria-label": "Próxima dose",
+                "aria-label": "Próximo remédio",
                 children: heroDose ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-[28px] p-5 border border-black/[0.05] shadow-[0_6px_28px_rgba(28,25,23,0.05)] space-y-4",
+                    className: "bg-white rounded-[26px] p-5 border-2 border-[#059669]/25 shadow-sm space-y-4",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex items-center justify-between gap-2",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "inline-flex items-center gap-1.5 text-[12px] font-semibold tracking-wide uppercase text-[#146356]",
+                                    className: `inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13.5px] font-extrabold ${heroDose.status === 'late' ? 'bg-[#FEE2E2] text-[#991B1B]' : heroDose.status === 'due_now' ? 'bg-[#FEF3C7] text-[#92400E]' : 'bg-[#DCFCE7] text-[#065F46]'}`,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                            className: "w-3.5 h-3.5"
+                                            className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 122,
+                                            lineNumber: 140,
                                             columnNumber: 17
                                         }, this),
-                                        heroDose.status === 'due_now' ? 'Hora agora' : heroDose.status === 'late' ? 'Atrasado · previsto às ' + heroDose.scheduledTime : 'Próximo remédio · ' + heroDose.scheduledTime
+                                        heroDose.status === 'due_now' ? 'HORA AGORA' : heroDose.status === 'late' ? `ATRASADO · ${heroDose.scheduledTime}` : 'PRÓXIMO REMÉDIO'
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 121,
+                                    lineNumber: 131,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuietListenButton"], {
                                     sectionId: "home-hero-dose",
                                     playback: playback,
-                                    onClick: ()=>toggleSpeak('home-hero-dose', `Seu próximo remédio é ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. ${heroDose.notes ?? ''}`),
+                                    onClick: ()=>toggleSpeak('home-hero-dose', `Próximo remédio: ${heroDose.medication?.name ?? 'seu medicamento'}, ${heroDose.dosage}, às ${heroDose.scheduledTime}. ${heroDose.notes ?? ''}`),
                                     ariaLabel: "Ouvir próximo remédio"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 129,
+                                    lineNumber: 148,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 120,
+                            lineNumber: 130,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3508,112 +3460,112 @@ function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7D
                                         size: "lg"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 168,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 163,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "min-w-0 flex-1",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[30px] font-bold text-[#1C1917] leading-none tracking-tight",
+                                            className: "text-[34px] font-extrabold text-[#111827] leading-none",
                                             children: heroDose.scheduledTime
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 157,
+                                            lineNumber: 176,
                                             columnNumber: 17
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                            className: "text-[19px] font-bold text-[#1C1917] mt-1.5 truncate",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                            className: "text-[22px] font-extrabold text-[#111827] mt-1 leading-tight",
                                             children: heroDose.medication?.name ?? 'Medicamento'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 179,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-[14px] text-[#6B6560] mt-0.5",
+                                            className: "text-[15.5px] font-semibold text-[#374151] mt-0.5",
                                             children: heroDose.dosage
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 163,
+                                            lineNumber: 182,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 156,
+                                    lineNumber: 175,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 142,
+                            lineNumber: 161,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pt-1 flex items-center gap-2.5",
+                            className: "flex items-center gap-2.5 pt-1",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>onMarkTaken(heroDose),
-                                    className: "flex-1 py-3.5 px-5 rounded-full bg-[#146356] hover:bg-[#0F4F45] text-white font-semibold text-[15px] inline-flex items-center justify-center gap-2 shadow-[0_6px_18px_rgba(20,99,86,0.22)] active:scale-[0.99] transition-all cursor-pointer",
+                                    className: "flex-1 min-h-[56px] px-5 rounded-2xl bg-[#047857] hover:bg-[#065F46] text-white font-extrabold text-[17px] inline-flex items-center justify-center gap-2.5 shadow-md active:scale-[0.99] transition-all cursor-pointer",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                            className: "w-5 h-5 stroke-[2.5]"
+                                            className: "w-6 h-6 stroke-[3]"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 173,
+                                            lineNumber: 194,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Tomei agora"
+                                            children: "TOMEI AGORA"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 174,
+                                            lineNumber: 195,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 168,
+                                    lineNumber: 189,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>onTriggerTestAlarm(heroDose),
-                                    "aria-label": "Testar aviso do alarme",
-                                    title: "Testar tela de alarme",
-                                    className: "w-12 h-12 rounded-full bg-[#F3EFE8] hover:bg-[#EAE4D9] text-[#57534E] inline-flex items-center justify-center shrink-0 active:scale-95 transition-all cursor-pointer",
+                                    "aria-label": "Testar tela de alarme",
+                                    title: "Testar alarme",
+                                    className: "w-14 h-14 rounded-2xl bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E] inline-flex items-center justify-center shrink-0 cursor-pointer",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2d$ring$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BellRing$3e$__["BellRing"], {
-                                        className: "w-5 h-5"
+                                        className: "w-6 h-6"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 184,
+                                        lineNumber: 205,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 177,
+                                    lineNumber: 198,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 167,
+                            lineNumber: 188,
                             columnNumber: 13
                         }, this),
                         totalCount > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pt-1 border-t border-black/[0.05]",
+                            className: "pt-2 border-t border-slate-200",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>setShowAllToday((v)=>!v),
-                                    className: "w-full py-1.5 flex items-center justify-between text-[13px] font-medium text-[#6B6560] hover:text-[#1C1917] cursor-pointer",
+                                    className: "w-full py-2 flex items-center justify-between text-[15px] font-bold text-[#374151] cursor-pointer",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: [
@@ -3625,35 +3577,35 @@ function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7D
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 195,
+                                            lineNumber: 216,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
-                                            className: `w-4 h-4 transition-transform ${showAllToday ? 'rotate-180' : ''}`
+                                            className: `w-5 h-5 transition-transform ${showAllToday ? 'rotate-180' : ''}`
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 198,
+                                            lineNumber: 219,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 190,
+                                    lineNumber: 211,
                                     columnNumber: 17
                                 }, this),
                                 showAllToday && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "mt-2.5 space-y-2",
+                                    className: "mt-2 space-y-2.5",
                                     children: dosesToday.map((dose)=>{
                                         const isTaken = dose.status === 'taken';
                                         const punct = dose.log ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$scheduleEngine$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatPunctualityLabel"])(dose.log.delayMinutes) : null;
                                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex items-center justify-between gap-3 py-2.5 px-3 rounded-2xl bg-[#F8F6F2]",
+                                            className: "flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#F7F6F2] border border-slate-200",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "min-w-0",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-[14px] font-semibold text-[#1C1917] truncate",
+                                                            className: "text-[16px] font-extrabold text-[#111827]",
                                                             children: [
                                                                 dose.scheduledTime,
                                                                 " · ",
@@ -3661,158 +3613,154 @@ function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7D
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 214,
+                                                            lineNumber: 235,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-[12px] text-[#78716C]",
+                                                            className: "text-[14px] font-medium text-[#374151]",
                                                             children: isTaken && dose.log ? `Tomado às ${dose.log.takenTimeDisplay} · ${punct?.label ?? ''}` : dose.dosage
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/HomeView.tsx",
-                                                            lineNumber: 217,
+                                                            lineNumber: 238,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 213,
+                                                    lineNumber: 234,
                                                     columnNumber: 27
                                                 }, this),
                                                 isTaken ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     type: "button",
                                                     onClick: ()=>onUndoDose(dose),
                                                     "aria-label": "Desfazer marcação",
-                                                    className: "p-2 rounded-full text-[#78716C] hover:bg-white cursor-pointer",
+                                                    className: "w-11 h-11 rounded-full bg-white border border-slate-300 text-[#374151] inline-flex items-center justify-center shrink-0 cursor-pointer",
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
-                                                        className: "w-4 h-4"
+                                                        className: "w-5 h-5"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/HomeView.tsx",
-                                                        lineNumber: 230,
+                                                        lineNumber: 251,
                                                         columnNumber: 31
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 224,
+                                                    lineNumber: 245,
                                                     columnNumber: 29
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     type: "button",
                                                     onClick: ()=>onMarkTaken(dose),
-                                                    className: "px-3.5 py-1.5 rounded-full bg-white border border-black/10 text-[#146356] text-xs font-semibold hover:bg-[#E6F2EF] cursor-pointer",
-                                                    children: "Tomar"
+                                                    className: "px-4 py-2.5 rounded-xl bg-[#047857] text-white text-[14px] font-extrabold shrink-0 cursor-pointer",
+                                                    children: "Tomei"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/HomeView.tsx",
-                                                    lineNumber: 233,
+                                                    lineNumber: 254,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, dose.key, true, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 209,
+                                            lineNumber: 230,
                                             columnNumber: 25
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 204,
+                                    lineNumber: 225,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 189,
+                            lineNumber: 210,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/HomeView.tsx",
-                    lineNumber: 119,
+                    lineNumber: 129,
                     columnNumber: 11
                 }, this) : totalCount > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-[#E8F4EE] rounded-[28px] p-6 border border-[#146356]/10 space-y-3",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center justify-between",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "w-11 h-11 rounded-full bg-[#146356] text-white flex items-center justify-center",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                        className: "w-6 h-6 stroke-[2.5]"
+                    className: "bg-[#ECFDF5] rounded-[26px] p-5 border-2 border-[#059669]/40 space-y-3",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-between gap-3",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "w-12 h-12 rounded-full bg-[#047857] text-white flex items-center justify-center shrink-0",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
+                                            className: "w-7 h-7 stroke-[3]"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/HomeView.tsx",
+                                            lineNumber: 275,
+                                            columnNumber: 19
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 274,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                className: "text-[21px] font-extrabold text-[#065F46]",
+                                                children: "Tudo certinho hoje!"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/HomeView.tsx",
+                                                lineNumber: 278,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-[15px] font-semibold text-[#047857]",
+                                                children: [
+                                                    takenCount,
+                                                    " de ",
+                                                    totalCount,
+                                                    " remédios tomados"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/HomeView.tsx",
+                                                lineNumber: 281,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/HomeView.tsx",
+                                        lineNumber: 277,
                                         columnNumber: 17
                                     }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 252,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuietListenButton"], {
-                                    sectionId: "home-all-done",
-                                    playback: playback,
-                                    onClick: ()=>toggleSpeak('home-all-done', `Parabéns! Você tomou todos os ${totalCount} remédios programados para hoje certinho.`),
-                                    ariaLabel: "Ouvir resumo do dia"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 255,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 251,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: "text-[20px] font-bold text-[#0F4F45]",
-                                    children: "Tudo certinho hoje"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 268,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-[14px] text-[#146356]/85 mt-1",
-                                    children: [
-                                        "Você completou ",
-                                        takenCount,
-                                        " de ",
-                                        totalCount,
-                                        " doses de hoje."
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 269,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 267,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>onOpenHistory(),
-                            className: "text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer",
-                            children: "Ver horários registrados ›"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 273,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 273,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuietListenButton"], {
+                                sectionId: "home-all-done",
+                                playback: playback,
+                                onClick: ()=>toggleSpeak('home-all-done', `Parabéns! Você tomou todos os ${totalCount} remédios de hoje certinho.`),
+                                ariaLabel: "Ouvir resumo de hoje"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 286,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/HomeView.tsx",
+                        lineNumber: 272,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/src/components/HomeView.tsx",
-                    lineNumber: 250,
+                    lineNumber: 271,
                     columnNumber: 11
                 }, this) : pausedCycle?.cycle ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-[#FDF2F6] rounded-[28px] p-5 border border-[#FBCFE8]/60 space-y-2",
+                    className: "bg-[#FDF2F8] rounded-[26px] p-5 border-2 border-[#F472B6]/40 space-y-1.5",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[12px] font-semibold uppercase tracking-wide text-[#9D174D]",
+                            className: "text-[14px] font-extrabold text-[#9D174D] uppercase",
                             children: [
                                 "Dia de pausa · ",
                                 pausedCycle.cycle.dayInPhase,
@@ -3821,269 +3769,398 @@ function HomeView({ medications, medicationPhotos, schedules, dosesToday, last7D
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 283,
+                            lineNumber: 301,
                             columnNumber: 13
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                            className: "text-[19px] font-bold text-[#1C1917]",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            className: "text-[20px] font-extrabold text-[#111827]",
                             children: [
                                 "Hoje não precisa tomar ",
                                 pausedCycle.med?.name ?? 'sua cartela'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 286,
+                            lineNumber: 304,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[14px] text-[#6B6560]",
-                            children: "O alarme volta automaticamente no início da próxima cartela."
+                            className: "text-[15px] text-[#374151]",
+                            children: "O alarme volta sozinho na próxima cartela."
                         }, void 0, false, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 289,
+                            lineNumber: 307,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/HomeView.tsx",
-                    lineNumber: 282,
+                    lineNumber: 300,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-[28px] p-6 border border-black/[0.05] shadow-[0_6px_28px_rgba(28,25,23,0.04)] space-y-3",
+                    className: "bg-white rounded-[26px] p-5 border-2 border-slate-200 space-y-3",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                            className: "text-[19px] font-bold text-[#1C1917]",
-                            children: "Nenhum alarme ativo hoje"
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            className: "text-[20px] font-extrabold text-[#111827]",
+                            children: "Nenhum alarme para hoje"
                         }, void 0, false, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 295,
+                            lineNumber: 313,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-[14px] text-[#6B6560] leading-relaxed",
-                            children: "Crie um lembrete calmo com voz natural para nunca esquecer seu horário."
+                            className: "text-[15px] text-[#374151]",
+                            children: "Crie um lembrete para o celular te avisar com voz na hora certa."
                         }, void 0, false, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 296,
+                            lineNumber: 316,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: onOpenAddAlarm,
-                            className: "mt-1 py-3 px-5 rounded-full bg-[#146356] text-white text-[14px] font-semibold inline-flex items-center gap-2 cursor-pointer",
+                            className: "w-full min-h-[52px] rounded-2xl bg-[#047857] text-white text-[16px] font-extrabold inline-flex items-center justify-center gap-2 cursor-pointer",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                    className: "w-4 h-4"
+                                    className: "w-5 h-5 stroke-[2.8]"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 304,
+                                    lineNumber: 324,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: "Criar lembrete"
+                                    children: "Criar meu alarme"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/HomeView.tsx",
-                                    lineNumber: 305,
+                                    lineNumber: 325,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/HomeView.tsx",
-                            lineNumber: 299,
+                            lineNumber: 319,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/HomeView.tsx",
-                    lineNumber: 294,
+                    lineNumber: 312,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/HomeView.tsx",
-                lineNumber: 117,
+                lineNumber: 127,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                "aria-label": "Adicionar remédio fácil",
+                className: "grid grid-cols-2 gap-3",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: ()=>onOpenAddWithStep('scan'),
+                        className: "p-4 rounded-[24px] bg-[#0F766E] hover:bg-[#115E59] text-white text-left shadow-sm flex flex-col justify-between min-h-[124px] active:scale-[0.98] transition-all cursor-pointer",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
+                                    className: "w-7 h-7 stroke-[2.2]"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/HomeView.tsx",
+                                    lineNumber: 339,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 338,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "mt-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[17px] font-extrabold leading-tight",
+                                        children: "Foto da receita"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/HomeView.tsx",
+                                        lineNumber: 342,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[13.5px] text-white/90 font-medium mt-0.5",
+                                        children: "Caixa ou print"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/HomeView.tsx",
+                                        lineNumber: 343,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 341,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/HomeView.tsx",
+                        lineNumber: 333,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: ()=>onOpenAddWithStep('voice'),
+                        className: "p-4 rounded-[24px] bg-[#1D4ED8] hover:bg-[#1E40AF] text-white text-left shadow-sm flex flex-col justify-between min-h-[124px] active:scale-[0.98] transition-all cursor-pointer",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {
+                                    className: "w-7 h-7 stroke-[2.2]"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/HomeView.tsx",
+                                    lineNumber: 353,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 352,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "mt-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[17px] font-extrabold leading-tight",
+                                        children: "Falar o nome"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/HomeView.tsx",
+                                        lineNumber: 356,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-[13.5px] text-white/90 font-medium mt-0.5",
+                                        children: "Sem digitar"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/HomeView.tsx",
+                                        lineNumber: 357,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/HomeView.tsx",
+                                lineNumber: 355,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/HomeView.tsx",
+                        lineNumber: 347,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/components/HomeView.tsx",
+                lineNumber: 332,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 "aria-label": "Sua semana",
-                className: "space-y-2.5",
+                className: "bg-white rounded-[24px] p-4 border border-slate-200 space-y-3",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center justify-between px-1",
+                        className: "flex items-center justify-between",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "text-[14px] font-semibold text-[#57534E]",
-                                children: "Sua semana"
+                                className: "text-[17px] font-extrabold text-[#111827]",
+                                children: "Tomei certinho?"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 314,
+                                lineNumber: 365,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
                                 onClick: ()=>onOpenHistory(),
-                                className: "text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer",
-                                children: "Histórico ›"
+                                className: "px-3 py-1.5 rounded-full bg-[#F3F4F6] text-[#111827] text-[14px] font-bold cursor-pointer",
+                                children: "Ver dias ›"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 315,
+                                lineNumber: 366,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 313,
+                        lineNumber: 364,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white rounded-[24px] p-4 border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] grid grid-cols-7 gap-1",
+                        className: "grid grid-cols-7 gap-1",
                         children: last7Days.map((day)=>{
-                            const dotCls = day.status === 'complete' ? 'bg-[#146356] text-white' : day.status === 'partial' ? 'bg-[#FEF3DD] text-[#B45309] ring-1 ring-[#F59E0B]/30' : day.status === 'missed' ? 'bg-[#FEECEF] text-[#BE123C]' : 'bg-[#F3EFE8] text-[#A8A29E]';
+                            const dotCls = day.status === 'complete' ? 'bg-[#047857] text-white' : day.status === 'partial' ? 'bg-[#F59E0B] text-[#111827]' : day.status === 'missed' ? 'bg-[#DC2626] text-white' : 'bg-[#E5E7EB] text-[#374151]';
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
                                 onClick: ()=>onOpenHistory(day.dateStr),
-                                "aria-label": `Ver dia ${day.dayNumber}: ${day.takenCount} de ${day.totalScheduled} tomados`,
-                                className: "flex flex-col items-center py-1 rounded-xl hover:bg-[#F6F4EF] transition-colors cursor-pointer",
+                                "aria-label": `Dia ${day.dayNumber}: ${day.takenCount} de ${day.totalScheduled} tomados`,
+                                className: "flex flex-col items-center py-1 rounded-xl hover:bg-slate-100 cursor-pointer",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: `text-[11px] font-medium ${day.isToday ? 'text-[#146356] font-bold' : 'text-[#78716C]'}`,
+                                        className: "text-[12.5px] font-bold text-[#374151]",
                                         children: day.weekdayShort.slice(0, 3)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 343,
+                                        lineNumber: 394,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: `mt-1.5 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold ${dotCls} ${day.isToday ? 'ring-2 ring-[#146356]/30 ring-offset-2' : ''}`,
+                                        className: `mt-1.5 w-9 h-9 rounded-full flex items-center justify-center text-[13.5px] font-extrabold ${dotCls} ${day.isToday ? 'ring-2 ring-[#111827] ring-offset-2' : ''}`,
                                         children: day.status === 'complete' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {
-                                            className: "w-4 h-4 stroke-[2.6]"
+                                            className: "w-5 h-5 stroke-[3]"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/HomeView.tsx",
-                                            lineNumber: 355,
+                                            lineNumber: 402,
                                             columnNumber: 48
                                         }, this) : day.dayNumber
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 350,
+                                        lineNumber: 397,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, day.dateStr, true, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 336,
+                                lineNumber: 387,
                                 columnNumber: 15
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 324,
+                        lineNumber: 375,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HomeView.tsx",
-                lineNumber: 312,
+                lineNumber: 363,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 "aria-label": "Seus remédios",
-                className: "space-y-2.5",
+                className: "space-y-3",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center justify-between px-1",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "text-[14px] font-semibold text-[#57534E]",
+                                className: "text-[18px] font-extrabold text-[#111827]",
                                 children: "Seus remédios"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 366,
+                                lineNumber: 413,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
-                                onClick: onOpenAdd,
-                                className: "text-[13px] font-semibold text-[#146356] hover:underline cursor-pointer",
-                                children: "+ Adicionar"
+                                onClick: ()=>onOpenAddWithStep('search'),
+                                className: "px-3.5 py-1.5 rounded-full bg-[#ECFDF5] text-[#065F46] text-[14px] font-extrabold cursor-pointer",
+                                children: "+ Buscar"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 367,
+                                lineNumber: 414,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 365,
+                        lineNumber: 412,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-white rounded-[24px] border border-black/[0.05] shadow-[0_2px_14px_rgba(28,25,23,0.03)] divide-y divide-black/[0.05] overflow-hidden",
-                        children: medications.map((med)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: ()=>onSelectMedication(med.id),
-                                className: "w-full px-4 py-3.5 flex items-center gap-3.5 text-left hover:bg-[#FAF9F6] active:bg-[#F3EFE8] transition-colors cursor-pointer",
+                        className: "space-y-2.5",
+                        children: medications.map((med)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "bg-white rounded-[22px] p-3.5 border border-slate-200 shadow-xs flex items-center gap-3",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MedicationAvatar"], {
-                                        medication: med,
-                                        photoOverride: medicationPhotos[med.id],
-                                        size: "sm"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 384,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "min-w-0 flex-1",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>onSelectMedication(med.id),
+                                        className: "flex items-center gap-3.5 flex-1 min-w-0 text-left cursor-pointer",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-[16px] font-bold text-[#1C1917] truncate",
-                                                children: med.name
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$MedicationAvatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MedicationAvatar"], {
+                                                medication: med,
+                                                photoOverride: medicationPhotos[med.id],
+                                                size: "md"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 390,
+                                                lineNumber: 434,
                                                 columnNumber: 17
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-[13px] text-[#78716C] truncate mt-0.5",
-                                                children: med.purposeSimple
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "min-w-0 flex-1",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-[18px] font-extrabold text-[#111827] truncate",
+                                                        children: med.name
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/HomeView.tsx",
+                                                        lineNumber: 440,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-[14px] font-medium text-[#374151] line-clamp-2 leading-snug mt-0.5",
+                                                        children: med.purposeSimple
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/HomeView.tsx",
+                                                        lineNumber: 441,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/HomeView.tsx",
+                                                lineNumber: 439,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
+                                                className: "w-5 h-5 text-[#4B5563] shrink-0"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/HomeView.tsx",
-                                                lineNumber: 391,
+                                                lineNumber: 445,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 389,
+                                        lineNumber: 429,
                                         columnNumber: 15
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
-                                        className: "w-4.5 h-4.5 text-[#A8A29E] shrink-0"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AudioPlayerBar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuietListenButton"], {
+                                        sectionId: `home-med-${med.id}`,
+                                        playback: playback,
+                                        onClick: ()=>toggleSpeak(`home-med-${med.id}`, `${med.name}. ${med.purposeSimple}`),
+                                        ariaLabel: `Ouvir para que serve ${med.name}`
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/HomeView.tsx",
-                                        lineNumber: 393,
+                                        lineNumber: 448,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, med.id, true, {
                                 fileName: "[project]/src/components/HomeView.tsx",
-                                lineNumber: 378,
+                                lineNumber: 425,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/HomeView.tsx",
-                        lineNumber: 376,
+                        lineNumber: 423,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/HomeView.tsx",
-                lineNumber: 364,
+                lineNumber: 411,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/HomeView.tsx",
-        lineNumber: 107,
+        lineNumber: 113,
         columnNumber: 5
     }, this);
 }
