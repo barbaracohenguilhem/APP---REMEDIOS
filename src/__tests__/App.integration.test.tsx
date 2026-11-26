@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import * as ocrScanner from '../services/ocrScanner';
 import { MEDICATIONS_CATALOG } from '../data/medications';
+import { STORAGE_KEY, createDefaultState } from '../services/storage';
 
 // Mock Web Speech API cleanly for jsdom
 function installSpeechMocks() {
@@ -462,5 +463,202 @@ describe('Meu Remédio — Integration Flows', () => {
         writable: true,
       });
     }
+  });
+
+  it('scrolls first-ever voice search into view, rejects 1-char noise, and ignores stale in-flight OCR', async () => {
+    const user = userEvent.setup();
+    installSpeechMocks();
+
+    const origCreateObjectURL = Object.getOwnPropertyDescriptor(URL, 'createObjectURL');
+    const origRevokeObjectURL = Object.getOwnPropertyDescriptor(URL, 'revokeObjectURL');
+    Object.defineProperty(URL, 'createObjectURL', {
+      value: vi.fn(() => 'blob:slow-ocr-preview'),
+      configurable: true,
+      writable: true,
+    });
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      value: vi.fn(),
+      configurable: true,
+      writable: true,
+    });
+
+    const scrollIntoViewMock = vi.fn();
+    const origScrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = scrollIntoViewMock;
+
+    const rafSpy = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((cb: FrameRequestCallback) => {
+        cb(0);
+        return 1;
+      });
+
+    let resolveSlowOcr: ((value: ocrScanner.ScanResult) => void) | null = null;
+    const ocrSpy = vi.spyOn(ocrScanner, 'scanImageForMedications').mockImplementation(
+      () =>
+        new Promise<ocrScanner.ScanResult>((resolve) => {
+          resolveSlowOcr = resolve;
+        })
+    );
+
+    let nextTranscript = 'Dipirona 1g 6/6h';
+    class FakeSpeechRecognition {
+      lang = '';
+      continuous = false;
+      interimResults = false;
+      maxAlternatives = 1;
+      onresult: ((e: { results: Array<Array<{ transcript: string }>> }) => void) | null = null;
+      onerror: ((e: { error?: string }) => void) | null = null;
+      onend: (() => void) | null = null;
+      start() {
+        this.onresult?.({ results: [[{ transcript: nextTranscript }]] });
+        this.onend?.();
+      }
+      stop() {
+        this.onend?.();
+      }
+    }
+
+    const origRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition;
+    Object.defineProperty(window, 'SpeechRecognition', {
+      value: FakeSpeechRecognition,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      render(<App />);
+      await user.click(screen.getByRole('button', { name: /Adicionar/i }));
+      await user.click(screen.getByRole('tab', { name: /Falar o Nome/i }));
+
+      // 1. First-ever voice search (results section was NOT previously mounted) MUST still scroll into view
+      scrollIntoViewMock.mockClear();
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+      expect(screen.getByText(/Encontramos 1 remédio pelo que você falou!/i)).toBeInTheDocument();
+      expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
+
+      // 2. 1-character noisy transcript ("a") must NOT fall back to matching Iumi
+      nextTranscript = 'a';
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+      expect(screen.queryByText(/Encontramos Iumi/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/Ouvi "a", mas não achei no catálogo/i)).toBeInTheDocument();
+
+      // 3. Start a slow in-flight OCR scan, switch to Voice before OCR completes, and finish a voice search
+      await user.click(screen.getByRole('tab', { name: /Foto da Receita/i }));
+      const photoInput = screen.getByLabelText(/Escolher foto ou print da galeria/i);
+      const fakeFile = new File(['slow-image'], 'lenta.jpg', { type: 'image/jpeg' });
+      await user.upload(photoInput, fakeFile);
+      expect(screen.getByText(/Preparando imagem/i)).toBeInTheDocument();
+
+      await user.click(screen.getByRole('tab', { name: /Falar o Nome/i }));
+      nextTranscript = 'Amoxicilina 500mg 8/8h';
+      await user.click(screen.getByRole('button', { name: /Tocar para falar o nome do remédio/i }));
+
+      // Voice result MUST immediately dismiss OCR loading state and render Amoxicilina
+      expect(screen.queryByText(/Preparando imagem/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/Encontramos 1 remédio pelo que você falou!/i)).toBeInTheDocument();
+      expect(screen.getByText('Amoxil / Amoxicilina')).toBeInTheDocument();
+
+      // Late-resolving stale OCR promise MUST be ignored and not overwrite Amoxicilina with Iumi
+      const iumiMed = MEDICATIONS_CATALOG.find((m) => m.id === 'iumi')!;
+      await act(async () => {
+        resolveSlowOcr?.({
+          extractedText: 'Foto atrasada: Iumi 21:00',
+          matches: [
+            {
+              medication: iumiMed,
+              matchedTerm: 'iumi',
+              detectedTimes: ['21:00'],
+              detectedDosage: '1 comprimido',
+              confidence: 'alta',
+            },
+          ],
+          usedOcr: true,
+        });
+      });
+
+      expect(screen.getByText('Amoxil / Amoxicilina')).toBeInTheDocument();
+      expect(screen.queryByText(/Encontramos 1 remédio\(s\) na imagem!/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Ver texto lido da receita/i)).not.toBeInTheDocument();
+    } finally {
+      ocrSpy.mockRestore();
+      if (origCreateObjectURL) {
+        Object.defineProperty(URL, 'createObjectURL', origCreateObjectURL);
+      } else {
+        delete (URL as unknown as Record<string, unknown>).createObjectURL;
+      }
+      if (origRevokeObjectURL) {
+        Object.defineProperty(URL, 'revokeObjectURL', origRevokeObjectURL);
+      } else {
+        delete (URL as unknown as Record<string, unknown>).revokeObjectURL;
+      }
+      rafSpy.mockRestore();
+      Element.prototype.scrollIntoView = origScrollIntoView;
+      Object.defineProperty(window, 'SpeechRecognition', {
+        value: origRecognition,
+        configurable: true,
+        writable: true,
+      });
+    }
+  });
+
+  it('announces contraceptive pause days via SpeakButton in Horários and stops cabinet speech on navigation', async () => {
+    const user = userEvent.setup();
+    const { speakMock, cancelMock } = installSpeechMocks();
+
+    // Seed localStorage with a single Iumi 24+4 schedule created 25 days ago -> today is Pause Day 2 of 4
+    const baseState = createDefaultState();
+    const created25DaysAgo = new Date();
+    created25DaysAgo.setDate(created25DaysAgo.getDate() - 25);
+    baseState.schedules = [
+      {
+        id: 'sched-iumi-pause',
+        medicationId: 'iumi',
+        dosage: '1 comprimido',
+        times: ['21:00'],
+        daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+        cycleMode: '24_4',
+        enabled: true,
+        notes: 'Cartela 24 + 4',
+        createdAt: created25DaysAgo.toISOString(),
+      },
+    ];
+    baseState.doseLogs = [];
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(baseState));
+
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /Horários/i }));
+    speakMock.mockClear();
+    cancelMock.mockClear();
+
+    // Pause banner renders WITHOUT contradictory "Nenhum alarme ativo para hoje" empty box
+    expect(screen.getByText(/Iumi — Dia de pausa \(2 de 4\)/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Nenhum alarme ativo para hoje/i)).not.toBeInTheDocument();
+
+    // Pause banner SpeakButton speaks pause instructions and toggles stop
+    const pauseSpeakBtn = screen.getByRole('button', { name: /Ouvir aviso de pausa de Iumi/i });
+    await user.click(pauseSpeakBtn);
+    expect(speakMock).toHaveBeenCalledTimes(1);
+    expect(speakMock.mock.calls[0][0].text).toMatch(/dia de pausa, dia 2 de 4/i);
+
+    await user.click(
+      screen.getByRole('button', { name: /Parar leitura: Ouvir aviso de pausa de Iumi/i })
+    );
+    expect(cancelMock).toHaveBeenCalled();
+    expect(speakMock).toHaveBeenCalledTimes(1);
+
+    // Top Horários summary SpeakButton announces pause day instead of "não tem alarmes cadastrados"
+    await user.click(
+      screen.getByRole('button', { name: /Ouvir seus horários de remédios de hoje/i })
+    );
+    expect(speakMock.mock.calls[1][0].text).toMatch(/Hoje é dia de pausa para Iumi/i);
+
+    // Selecting a medication from Meus Remédios stops active cabinet-intro playback
+    await user.click(screen.getByRole('button', { name: /Entender/i }));
+    await user.click(screen.getByRole('button', { name: /Voltar para Meus Remédios/i }));
+    cancelMock.mockClear();
+    await user.click(screen.getByRole('button', { name: /Ouvir lista dos meus remédios/i }));
+    await user.click(screen.getByText('Glifage XR'));
+    expect(cancelMock).toHaveBeenCalled();
   });
 });

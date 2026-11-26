@@ -120,10 +120,12 @@ function splitPrescriptionLines(rawText: string): string[] {
 }
 
 function findClauseSplitOffset(between: string): number | null {
-  // Find candidate clause separators between two medications on the same line:
-  // commas, standalone conjunctions ("e", "ou"), pipes/pluses, spaced dashes, or non-interval slashes
+  // Primary clause separators (commas, conjunctions, pipes, pluses, non-interval slashes)
+  // take precedence over spaced dashes (" - "), which often link a time to its own drug
+  // (e.g., "08:00 - Losartana 50mg e 20:00 - Glifage XR 500mg").
   const sepRegex = /,|\||\+|\s+[-–—]\s+|\s+(?:e|ou)\s+|\s*\/\s*/gi;
-  let lastSplit: number | null = null;
+  let lastPrimarySplit: number | null = null;
+  let lastDashSplit: number | null = null;
   let match: RegExpExecArray | null;
 
   while ((match = sepRegex.exec(between)) !== null) {
@@ -132,6 +134,11 @@ function findClauseSplitOffset(between: string): number | null {
     const endIdx = startIdx + token.length;
     const left = between.slice(0, startIdx);
     const right = between.slice(endIdx);
+
+    if (/^\s+[-–—]\s+$/.test(token)) {
+      lastDashSplit = endIdx;
+      continue;
+    }
 
     if (token.includes('/')) {
       // Never split inside slash intervals like "6/6h", "8 / 8h", "8h / 8h" or dates like "8/8/2026"
@@ -155,10 +162,10 @@ function findClauseSplitOffset(between: string): number | null {
       }
     }
 
-    lastSplit = endIdx;
+    lastPrimarySplit = endIdx;
   }
 
-  return lastSplit;
+  return lastPrimarySplit ?? lastDashSplit;
 }
 
 function stripLeadingPrescriptionHeader(prefix: string): string {

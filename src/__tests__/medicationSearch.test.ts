@@ -185,4 +185,132 @@ describe('medicationSearch service', () => {
     expect(extractTimesFromSnippet('Tomar 12 / 12 horas')).toEqual(['08:00', '20:00']);
     expect(extractTimesFromSnippet('Dipirona 6h/6h')).toEqual(['06:00', '12:00', '18:00', '00:00']);
   });
+
+  it('handles pre-drug times, mixed schedules, comp./caps. abbreviations, slash variants, dates, and salt prefixes accurately', () => {
+    // Pre-positioned clock times on shared line must not steal the next medication's time
+    const preClock = parsePrescriptionText(
+      'Às 09:00 Losartana 50mg e às 18:00 Amoxicilina 500mg',
+      MEDICATIONS_CATALOG
+    );
+    expect(preClock.find((m) => m.medication.id === 'losartana')?.detectedTimes).toEqual(['09:00']);
+    expect(preClock.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '18:00',
+    ]);
+
+    // Pre-positioned times with spaced dashes ("08:00 - Drug e 20:00 - Drug")
+    const preDash = parsePrescriptionText(
+      '08:00 - Losartana 50mg e 20:00 - Glifage XR 500mg',
+      MEDICATIONS_CATALOG
+    );
+    expect(preDash.find((m) => m.medication.id === 'losartana')?.detectedTimes).toEqual(['08:00']);
+    expect(preDash.find((m) => m.medication.id === 'glifage-xr')?.detectedTimes).toEqual(['20:00']);
+
+    // Pre-positioned slash intervals on shared line
+    const preSlash = parsePrescriptionText(
+      '6/6h Dipirona 1g e 8/8h Amoxicilina 500mg',
+      MEDICATIONS_CATALOG
+    );
+    expect(preSlash.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(preSlash.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+
+    // Mixed post-drug slash interval + pre-drug explicit time
+    const mixed = parsePrescriptionText('Dipirona 1g 6/6h, às 21:00 Iumi', MEDICATIONS_CATALOG);
+    expect(mixed.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(mixed.find((m) => m.medication.id === 'iumi')?.detectedTimes).toEqual(['21:00']);
+
+    // Pre-positioned period labels ("Manhã: ... e Noite: ...")
+    const prePeriod = parsePrescriptionText(
+      'Manhã: Losartana 50mg e Noite: Atorvastatina 20mg',
+      MEDICATIONS_CATALOG
+    );
+    expect(prePeriod.find((m) => m.medication.id === 'losartana')?.detectedTimes).toEqual(['08:00']);
+    expect(prePeriod.find((m) => m.medication.id === 'lipitor')?.detectedTimes).toEqual(['22:00']);
+
+    // Paired clock times without comma before next medication
+    const pairedNoComma = parsePrescriptionText(
+      'Losartana 50mg às 08:00 e 20:00 Amoxicilina 500mg 8/8h',
+      MEDICATIONS_CATALOG
+    );
+    expect(pairedNoComma.find((m) => m.medication.id === 'losartana')?.detectedTimes).toEqual([
+      '08:00',
+      '20:00',
+    ]);
+    expect(pairedNoComma.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+
+    // Common Portuguese abbreviations (comp., caps.) must not split sentence prematurely
+    const withAbbrev = parsePrescriptionText(
+      'Dipirona 500mg 1 comp. 6/6h e Amoxicilina 500mg 1 caps. 8/8h',
+      MEDICATIONS_CATALOG
+    );
+    expect(withAbbrev.find((m) => m.medication.id === 'novalgina')?.detectedTimes).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(withAbbrev.find((m) => m.medication.id === 'amoxicilina')?.detectedTimes).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+
+    // Extended slash/hour unit variants and calendar-date non-false-positive
+    expect(extractTimesFromSnippet('Dipirona 1g 6hs/6hs')).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(extractTimesFromSnippet('Amoxicilina 8 horas / 8 horas')).toEqual([
+      '07:00',
+      '15:00',
+      '23:00',
+    ]);
+    expect(extractTimesFromSnippet('Dipirona de 6 horas em 6 horas')).toEqual([
+      '06:00',
+      '12:00',
+      '18:00',
+      '00:00',
+    ]);
+    expect(extractTimesFromSnippet('Dipirona 6/6')).toEqual(['06:00', '12:00', '18:00', '00:00']);
+    expect(extractTimesFromSnippet('Receita 8/8/2026 - Losartana 50mg')).toEqual([]);
+    expect(extractTimesFromSnippet('Data 6/6/26')).toEqual([]);
+
+    const dateRx = parsePrescriptionText('Receita 8/8/2026 - Losartana 50mg', MEDICATIONS_CATALOG);
+    expect(dateRx.find((m) => m.medication.id === 'losartana')?.detectedTimes).toEqual(['08:00']);
+
+    // Salt prefix ("Cloridrato") must not cross-match diabetes medicine Glifage XR on Allegra prescription
+    const saltRx = parsePrescriptionText(
+      'Cloridrato de Fexofenadina 120mg 12/12h',
+      MEDICATIONS_CATALOG
+    );
+    expect(saltRx.map((m) => m.medication.id)).toEqual(['allegra']);
+    expect(saltRx[0]?.detectedTimes).toEqual(['08:00', '20:00']);
+
+    // Custom medication without activeIngredient must not falsely match generic word "medicamento"
+    const customMed = createCustomMedication({ name: 'Vitamina D 2000UI' });
+    const withCustom = parsePrescriptionText('Tomar medicamento Losartana 50mg às 08:00', [
+      ...MEDICATIONS_CATALOG,
+      customMed,
+    ]);
+    expect(withCustom.map((m) => m.medication.id)).toEqual(['losartana']);
+  });
 });

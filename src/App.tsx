@@ -514,12 +514,14 @@ export function App() {
               activeMedicationId={activeMedication.id}
               selectedUf={state.selectedUf}
               onSelectMedication={(medId) => {
+                speechService.stop();
                 setState((prev) => ({ ...prev, activeMedicationId: medId }));
                 setShowCabinet(false);
                 setActiveTab('entender');
               }}
               onRemoveMedication={handleRemoveMedication}
               onOpenAdd={() => {
+                speechService.stop();
                 setShowCabinet(false);
                 setActiveTab('adicionar');
               }}
@@ -538,7 +540,10 @@ export function App() {
               onOpenComparar={() => handleSelectTab('comparar')}
               onOpenAddAlarm={() => setShowAddAlarmSheet(true)}
               savedCount={myMedications.length}
-              onOpenCabinet={() => setShowCabinet(true)}
+              onOpenCabinet={() => {
+                speechService.stop();
+                setShowCabinet(true);
+              }}
             />
           ) : activeTab === 'comparar' ? (
             <CompararView
@@ -585,6 +590,7 @@ export function App() {
                 speakAlarmNotice(dose, true);
               }}
               onOpenMedicationBula={(medId) => {
+                speechService.stop();
                 setState((prev) => ({ ...prev, activeMedicationId: medId }));
                 setActiveTab('entender');
               }}

@@ -57,7 +57,7 @@ export function Header({
                   ? 'Leitura devagar ativada (toque para normal)'
                   : 'Velocidade normal (toque para falar mais devagar)'
               }
-              className={`inline-flex items-center gap-1 px-2 min-[412px]:px-2.5 py-1.5 rounded-full text-[11px] min-[412px]:text-xs font-bold transition-all active:scale-95 cursor-pointer shrink-0 ${
+              className={`inline-flex items-center justify-center gap-1 min-w-[34px] min-h-[34px] px-2 min-[412px]:px-2.5 py-1.5 rounded-full text-[11px] min-[412px]:text-xs font-bold transition-all active:scale-95 cursor-pointer shrink-0 ${
                 voice.rate === 'slow'
                   ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-300'
                   : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200 hover:bg-slate-200/80'
@@ -75,7 +75,7 @@ export function Header({
             onClick={onToggleVoice}
             aria-pressed={voice.enabled}
             aria-label={voice.enabled ? 'Desativar leitura em voz alta' : 'Ativar leitura em voz alta'}
-            className={`inline-flex items-center gap-1 min-[412px]:gap-1.5 px-2.5 min-[412px]:px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer shrink-0 ${
+            className={`inline-flex items-center justify-center gap-1 min-[412px]:gap-1.5 min-h-[34px] px-2.5 min-[412px]:px-3 py-1.5 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer shrink-0 ${
               voice.enabled
                 ? 'bg-[#D6F5E3] text-[#057A55] ring-1 ring-[#A7F3D0]'
                 : 'bg-slate-100 text-slate-600 ring-1 ring-slate-200'

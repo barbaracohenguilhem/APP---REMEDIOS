@@ -40,7 +40,13 @@ export function MedicineCabinetView({
 
   return (
     <section aria-label="Meus Remédios" className="px-4 py-4 space-y-4 pb-12">
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
+      <div
+        className={`bg-white rounded-2xl p-4 shadow-sm border flex items-center justify-between gap-3 transition-all ${
+          speakingId === 'cabinet-intro'
+            ? 'border-blue-400 ring-2 ring-blue-200'
+            : 'border-slate-100'
+        }`}
+      >
         <div>
           <h2 className="text-lg font-extrabold text-slate-900">Sua Caixinha de Remédios</h2>
           <p className="text-sm text-slate-600 mt-0.5">
